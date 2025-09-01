@@ -39,7 +39,7 @@ if __name__ == '__main__':
         torch.cuda.set_device(args.local_rank)
         torch.distributed.init_process_group(backend="nccl", init_method="env://")
         synchronize()
-    
+
     device = "cuda"
     cur_time = time.strftime("%Y%m%d_%H%M%S", time.localtime())
     args.output_dir = op.join(args.output_dir, args.dataset_name, f'{cur_time}_{name}')
@@ -75,3 +75,14 @@ if __name__ == '__main__':
         start_epoch = checkpoint['epoch']
 
     do_train(start_epoch, args, model, train_loader, evaluator, optimizer, scheduler, checkpointer)
+
+
+# python train.py \
+# --name iira \
+# --img_aug \
+# --batch_size 64 \
+# --MLM \
+# --loss_names 'sdm+mlm+id' \
+# --dataset_name 'CUHK-PEDES' \
+# --root_dir 'your dataset root dir' \
+# --num_epoch 60

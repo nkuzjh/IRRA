@@ -50,13 +50,15 @@ class Evaluator():
         device = next(model.parameters()).device
 
         qids, gids, qfeats, gfeats = [], [], [], []
+        captions, imgs = [], []
         # text
         for pid, caption in self.txt_loader:
             caption = caption.to(device)
             with torch.no_grad():
                 text_feat = model.encode_text(caption)
-            qids.append(pid.view(-1)) # flatten 
+            qids.append(pid.view(-1)) # flatten
             qfeats.append(text_feat)
+            captions.append(caption.cpu())
         qids = torch.cat(qids, 0)
         qfeats = torch.cat(qfeats, 0)
 
@@ -65,29 +67,30 @@ class Evaluator():
             img = img.to(device)
             with torch.no_grad():
                 img_feat = model.encode_image(img)
-            gids.append(pid.view(-1)) # flatten 
+            gids.append(pid.view(-1)) # flatten
             gfeats.append(img_feat)
+            imgs.append(img.cpu())
         gids = torch.cat(gids, 0)
         gfeats = torch.cat(gfeats, 0)
 
-        return qfeats, gfeats, qids, gids
-    
+        return qfeats, gfeats, qids, gids, captions, imgs
+
     def eval(self, model, i2t_metric=False):
 
-        qfeats, gfeats, qids, gids = self._compute_embedding(model)
+        qfeats, gfeats, qids, gids, captions, imgs = self._compute_embedding(model)
 
-        qfeats = F.normalize(qfeats, p=2, dim=1) # text features
-        gfeats = F.normalize(gfeats, p=2, dim=1) # image features
+        qfeats_norm = F.normalize(qfeats, p=2, dim=1) # text features
+        gfeats_norm = F.normalize(gfeats, p=2, dim=1) # image features
 
-        similarity = qfeats @ gfeats.t()
+        similarity = qfeats_norm @ gfeats_norm.t()#2000,1000
 
-        t2i_cmc, t2i_mAP, t2i_mINP, _ = rank(similarity=similarity, q_pids=qids, g_pids=gids, max_rank=10, get_mAP=True)
+        t2i_cmc, t2i_mAP, t2i_mINP, _ = rank(similarity=similarity.cpu(), q_pids=qids.cpu(), g_pids=gids.cpu(), max_rank=10, get_mAP=True)
         t2i_cmc, t2i_mAP, t2i_mINP = t2i_cmc.numpy(), t2i_mAP.numpy(), t2i_mINP.numpy()
         table = PrettyTable(["task", "R1", "R5", "R10", "mAP", "mINP"])
         table.add_row(['t2i', t2i_cmc[0], t2i_cmc[4], t2i_cmc[9], t2i_mAP, t2i_mINP])
 
         if i2t_metric:
-            i2t_cmc, i2t_mAP, i2t_mINP, _ = rank(similarity=similarity.t(), q_pids=gids, g_pids=qids, max_rank=10, get_mAP=True)
+            i2t_cmc, i2t_mAP, i2t_mINP, _ = rank(similarity=similarity.cpu().t(), q_pids=gids.cpu(), g_pids=qids.cpu(), max_rank=10, get_mAP=True)
             i2t_cmc, i2t_mAP, i2t_mINP = i2t_cmc.numpy(), i2t_mAP.numpy(), i2t_mINP.numpy()
             table.add_row(['i2t', i2t_cmc[0], i2t_cmc[4], i2t_cmc[9], i2t_mAP, i2t_mINP])
         # table.float_format = '.4'
@@ -97,5 +100,13 @@ class Evaluator():
         table.custom_format["mAP"] = lambda f, v: f"{v:.3f}"
         table.custom_format["mINP"] = lambda f, v: f"{v:.3f}"
         self.logger.info('\n' + str(table))
-        
-        return t2i_cmc[0]
+
+        eval_result = {
+            'R1': t2i_cmc[0],
+            'R5': t2i_cmc[4],
+            'R10': t2i_cmc[9],
+            'mAP': t2i_mAP,
+            'mINP': t2i_mINP,
+        }
+
+        return eval_result, t2i_cmc[0], similarity.cpu(), qfeats.cpu(), gfeats.cpu(), qids.cpu(), gids.cpu(), captions, imgs

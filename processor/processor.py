@@ -74,7 +74,7 @@ def do_train(start_epoch, args, model, train_loader, evaluator, optimizer,
                         info_str += f", {k}: {v.avg:.4f}"
                 info_str += f", Base Lr: {scheduler.get_lr()[0]:.2e}"
                 logger.info(info_str)
-        
+
         tb_writer.add_scalar('lr', scheduler.get_lr()[0], epoch)
         tb_writer.add_scalar('temperature', ret['temperature'], epoch)
         for k, v in meters.items():
@@ -107,10 +107,12 @@ def do_train(start_epoch, args, model, train_loader, evaluator, optimizer,
         logger.info(f"best R1: {best_top1} at epoch {arguments['epoch']}")
 
 
+@torch.no_grad()
 def do_inference(model, test_img_loader, test_txt_loader):
 
     logger = logging.getLogger("IRRA.test")
     logger.info("Enter inferencing")
 
     evaluator = Evaluator(test_img_loader, test_txt_loader)
-    top1 = evaluator.eval(model.eval())
+    eval_result, top1, similarity, qfeats, gfeats, qids, gids, captions, imgs = evaluator.eval(model.eval())
+    return eval_result, top1, similarity, qfeats, gfeats, qids, gids, captions, imgs
