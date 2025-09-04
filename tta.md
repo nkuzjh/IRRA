@@ -1,3 +1,11 @@
+# env
+conda create -n irra python=3.9
+conda activate irra
+pip install torch torchvision
+pip install easydict prettytable
+pip install tqdm tensorboard pyyaml matplotlib regex ftfy
+
+
 # baseline score
 
 ## irra_cuhk
