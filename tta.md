@@ -91,7 +91,7 @@
 
 ## exp0
 **entropy**
-- nohup CUDA_VISIBLE_DEVICES=1 python3 tta.py --config_file tta_configs/ham_rstp_tta/exp0.0.0.yaml > logs/ham_rstp_tta/exp0.0.0.log 2>&1 &
+- nohup CUDA_VISIBLE_DEVICES=1 python3 tta.py --config_file tta_configs/ham_rstp_tta/exp0.0.0.yaml > logs_rerun/ham_rstp_tta/exp0.0.0.log 2>&1 &
 
     0.0
 

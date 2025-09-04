@@ -27,7 +27,7 @@ class IRRA_tta_dataset(Dataset):
     def __init__(
         self,
         config, test_transforms,
-        sims_matrix_t2i, qids, gids, captions, imgs,
+        sims_topk_matrix_t2i, qids, gids, captions, imgs,
         recall_types,
         ss_idxs_list,
         uncertaintys_list,
@@ -36,7 +36,7 @@ class IRRA_tta_dataset(Dataset):
     ):
         self.config = config
         self.transform = test_transforms
-        self.sims_matrix_t2i = sims_matrix_t2i
+        self.sims_topk_matrix_t2i = sims_topk_matrix_t2i
         self.qids = qids
         self.gids = gids
         self.captions = captions
@@ -49,7 +49,7 @@ class IRRA_tta_dataset(Dataset):
             self.proba_inversed_sim_list = proba_inversed_sim_list
 
         if config.get('sample_selection', 'all') == 'top1':
-            self.sims_matrix_t2i = sims_matrix_t2i[ss_idxs_list]
+            self.sims_topk_matrix_t2i = sims_topk_matrix_t2i[ss_idxs_list]
             self.qids = qids[ss_idxs_list]
             self.captions = captions[ss_idxs_list]
             # self.recall_types = [recall_types[i] for i in ss_idxs_list]
@@ -60,10 +60,10 @@ class IRRA_tta_dataset(Dataset):
                 self.proba_inversed_sim_list = [proba_inversed_sim_list[i] for i in ss_idxs_list]
 
     def __len__(self):
-        return len(self.sims_matrix_t2i)
+        return len(self.sims_topk_matrix_t2i)
 
     def __getitem__(self, index):
-        topk_sim, topk_idx = self.sims_matrix_t2i[index].topk(k=self.config['k_tta'], dim=0) #[k_tta]
+        topk_idx = self.sims_topk_matrix_t2i[index]
         gids_topk = self.gids[topk_idx] #([8])
         imgs_topk = self.imgs[topk_idx] #[8, 3, 384, 128])
 
@@ -91,7 +91,7 @@ def create_tta_loader(datasets, batch_size, num_workers, is_trains, collate_fns)
             dataset,
             batch_size=bs,
             num_workers=n_worker,
-            pin_memory=True,
+            pin_memory=False,
             shuffle=shuffle,
             collate_fn=collate_fn,
             drop_last=drop_last,

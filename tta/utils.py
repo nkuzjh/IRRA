@@ -56,6 +56,29 @@ def compute_uncertainty_itc(config, sims_matrix_t2i, sims_matrix_i2t):
     return uncertaintys_list, proba_top1_sim_list, proba_inversed_sim_list
 
 
+def sample_neg_idxs(sims_matrix_i2t, k_tta, k_test, neg_sample_range=[32, 128]):
+    """
+    Sample negative indices from the similarity matrix.
+    Args:
+        sims_matrix_i2t: Similarity matrix of shape (num_images, num_texts).
+        k_tta: Number of negative samples to sample.
+        k_test: Number of top-k samples to consider.
+    Returns:
+        neg_sims: Negative similarities of shape (num_images, k_tta-1).
+        neg_idxs: Indices of the negative samples.
+    """
+    num_images, num_texts = sims_matrix_i2t.shape
+    neg_idxs = []
+    neg_sims = []
+    for i in range(num_images):
+        topk_sim_i2t, topk_idx_i2t = sims_matrix_i2t[i].topk(k=k_test, dim=0)
+        # random_idx = torch.randperm(k_test-2*k_tta)[:k_tta-1] + 2*k_tta # 随机采样k_tta-1个负样本索引
+        random_idx = torch.randperm(neg_sample_range[1] - neg_sample_range[0])[:k_tta-1] + neg_sample_range[0]
+        neg_sims.append(topk_sim_i2t[random_idx])
+        neg_idxs.append(topk_idx_i2t[random_idx])
+    return torch.stack(neg_sims, dim=0), torch.stack(neg_idxs, dim=0)
+
+
 def preprocess_tta_coefficients(config, sims_matrix_t2i):
     print(f"     preprocess_tta_coefficients  start")
 
@@ -79,5 +102,31 @@ def preprocess_tta_coefficients(config, sims_matrix_t2i):
     else:
         uncertaintys_list, proba_top1_sim_list, proba_inversed_sim_list = torch.ones(sims_matrix_t2i.size(0)) , torch.ones(sims_matrix_t2i.size(0)), torch.ones(sims_matrix_t2i.size(0))
 
+    print(f"     pos/neg sampling ...")
+    if config.get('neg_sample_range', None) is None:
+        topk_sim, topk_idx = sims_matrix_t2i[index].topk(k=config['k_tta'], dim=0) #[k_tta]
+    else:
+        ## sampling stretegy
+        ## 采样正样本
+        # pos_sample_range =  tta_cfg.pos_sample_range if hasattr(tta_cfg, "pos_sample_range") else [0, 1] # 正样本采样范围
+        top1_sims, top1_idxs = sims_matrix_t2i.topk(k=1, dim=1) #正样本直接使用top1 or 使用top5采样一个正样本；但是这里相似度top5不一定就是5个label, 根据训练top5分数分布，已确认无需使用top5采样正样本
+        neg_sample_range = config['neg_sample_range'] #neg_sample_range = tta_cfg.neg_sample_range if hasattr(tta_cfg, "neg_sample_range") else [32, 128] # 负样本采样范围
+        top1_sims, top1_idxs =top1_sims[:,0], top1_idxs[:,0]
+        ## 采样困难负样本
+        neg_sims, neg_idxs = sample_neg_idxs(sims_matrix_t2i, config['k_tta'], config['k_test'], neg_sample_range) # 负样本采样k_tta-1个, 根据score数值可视化差异确定采样范围
+        ## 拼接正负样本
+        sampled_sims_matrix_t2i = []
+        sampled_sims_idx_t2i = []
+        for i in range(sims_matrix_t2i.size(0)):
+            sampled_sim = torch.cat((sims_matrix_t2i[i,top1_idxs[i]].reshape(-1), sims_matrix_t2i[i,neg_idxs[i]]))
+            sampled_idx = torch.cat((top1_idxs[i].reshape(-1), neg_idxs[i]))
+            sampled_sims_matrix_t2i.append(sampled_sim)
+            sampled_sims_idx_t2i.append(sampled_idx)
+        sampled_sims_matrix_t2i = torch.stack(sampled_sims_matrix_t2i) # shape=(5000, k_tta)
+        sampled_sims_idx_t2i = torch.stack(sampled_sims_idx_t2i) # shape=(5000, k_tta)
+        print("      number of sample after pos/neg sampling: {}".format(sampled_sims_matrix_t2i.size()))
+
+        topk_idx = sampled_sims_idx_t2i
+
     print(f"     preprocess_tta_coefficients  end")
-    return recall_types, ss_idxs_list, uncertaintys_list, proba_top1_sim_list, proba_inversed_sim_list
+    return topk_idx, recall_types, ss_idxs_list, uncertaintys_list, proba_top1_sim_list, proba_inversed_sim_list

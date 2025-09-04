@@ -209,7 +209,7 @@ if __name__ == '__main__':
             sims_matrix_t2i = similarity.cpu()
         else:
             sims_matrix_t2i = qfeats.cpu() @ gfeats.t().cpu()
-        recall_types, ss_idxs_list, uncertaintys_list, proba_top1_sim_list, proba_inversed_sim_list  = preprocess_tta_coefficients(config, sims_matrix_t2i)
+        sims_topk_matrix_t2i, recall_types, ss_idxs_list, uncertaintys_list, proba_top1_sim_list, proba_inversed_sim_list  = preprocess_tta_coefficients(config, sims_matrix_t2i)
 
         print("### Creating TTA dataset")
         is_img_aug = config.get('is_image_augmentation', False)
@@ -217,7 +217,7 @@ if __name__ == '__main__':
         tta_dataset = IRRA_tta_dataset(
             config,
             test_transforms,
-            sims_matrix_t2i.cpu(),
+            sims_topk_matrix_t2i.cpu(),
             qids.cpu(), gids.cpu(), torch.cat(captions, dim=0).cpu(), torch.cat(imgs, dim=0).cpu(),
             recall_types,
             ss_idxs_list,
@@ -226,8 +226,8 @@ if __name__ == '__main__':
             proba_inversed_sim_list,
         )
         print(f"     tta_dataset: {len(tta_dataset)}")
-        # sample = next(iter(tta_dataset))
-        # print(sample)
+        sample = next(iter(tta_dataset))
+        print(sample)
 
         print("### Creating tta dataloader")
         tta_loader = create_tta_loader(
@@ -238,8 +238,8 @@ if __name__ == '__main__':
             collate_fns=[None]
         )[0]
         print(f"     tta_loader: {len(tta_loader)}")
-        # batch = next(iter(tta_loader))
-        # print(batch)
+        batch = next(iter(tta_loader))
+        print(batch)
 
 
         print("### Configure adapted weights")

@@ -3,7 +3,7 @@
 # 设置基础参数
 # num_gpus=1
 task_name="ham_cuhk_tta"
-log_dir="./logs"
+log_dir="./logs_rerun"
 mkdir -p $log_dir/$task_name
 
 

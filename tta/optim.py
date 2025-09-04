@@ -13,7 +13,7 @@ class AttrDict(dict):
         self.__dict__ = self
 
 
-def configure_model_irra(model):
+def configure_model_irra(model, config):
     """Configure model for use with tent."""
     model.train()
     model.requires_grad_(False)
@@ -24,6 +24,17 @@ def configure_model_irra(model):
             m.track_running_stats = False
             m.running_mean = None
             m.running_var = None
+    text_encoder_no_tta_layers = config.get('text_encoder_no_tta_layer', [])
+    if len(text_encoder_no_tta_layers) > 0:
+        for text_encoder_layer_index in text_encoder_no_tta_layers: # 针对cmp_xvlm模型关闭bert前6层仅用作text_encoder的梯度更新功能
+            text_encoder_no_tta_layer = model.base_model.transformer.resblocks[text_encoder_layer_index]
+            for m in text_encoder_no_tta_layer.modules(): # 针对blip模型结构，仅tta更新Qformer参数；freeze visual_encoder/query_tokens/temp(erature)/image_proj/text_proj/itm_head的参数；
+                if isinstance(m, nn.BatchNorm2d) or isinstance(m, nn.LayerNorm):
+                    m.requires_grad_(False)
+                    # force use of batch stats in train and eval modes
+                    m.track_running_stats = False
+                    m.running_mean = None
+                    m.running_var = None
 
     for m in model.base_model.ln_final.modules():
         if isinstance(m, nn.BatchNorm2d) or isinstance(m, nn.LayerNorm):
@@ -61,7 +72,7 @@ def collect_params_irra(model):
     return params, names
 
 def configure_tta_model(config, model):
-    model = configure_model_irra(model)
+    model = configure_model_irra(model, config)
     if config.get("uncertainty_temper_is_learnable", False) == True:
         model.uncertainty_temper.requires_grad_(True)
     if config.get("is_prompt_learning", False) == True:
