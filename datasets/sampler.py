@@ -5,6 +5,8 @@ import random
 import numpy as np
 
 class RandomIdentitySampler(Sampler):
+    ### 每次迭代时，随机采样N个身份，然后对于每个身份，随机采样K个实例，因此批量大小为N*K。
+    ### __iter__()返回一个索引列表，该列表为一个identity(pid)的num_instances个实例的索引（实例的索引为 data_source中所有（id，img，cap）的样本三元组的组合 的索引）。
     """
     Randomly sample N identities, then for each identity,
     randomly sample K instances, therefore batch size is N*K.
