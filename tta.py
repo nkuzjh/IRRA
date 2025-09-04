@@ -226,8 +226,8 @@ if __name__ == '__main__':
             proba_inversed_sim_list,
         )
         print(f"     tta_dataset: {len(tta_dataset)}")
-        sample = next(iter(tta_dataset))
-        print(sample)
+        # sample = next(iter(tta_dataset))
+        # print(sample)
 
         print("### Creating tta dataloader")
         tta_loader = create_tta_loader(
@@ -238,8 +238,8 @@ if __name__ == '__main__':
             collate_fns=[None]
         )[0]
         print(f"     tta_loader: {len(tta_loader)}")
-        batch = next(iter(tta_loader))
-        print(batch)
+        # batch = next(iter(tta_loader))
+        # print(batch)
 
 
         print("### Configure adapted weights")

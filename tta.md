@@ -148,3 +148,64 @@
 **entropy + ss + unc + pl + iaug**
 - 由于PAB CMP_exp8效果不好，不试验exp9的setting了
 
+
+# exp rerun
+
+## exp0
+**entropy**
+- nohup CUDA_VISIBLE_DEVICES=1 python3 tta.py --config_file tta_configs/ham_rstp_tta/exp0.0.0.yaml > logs_rerun/ham_rstp_tta/exp0.0.0.log 2>&1 &
+
+    0.0
+
+    0.1
+
+    0.2
+
+    0.3
+
+    0.4
+
+    0.5
+
+## exp1
+**entropy + ss**
+- nohup CUDA_VISIBLE_DEVICES=1 python3 tta.py --config_file tta_configs/ham_rstp_tta/exp1.0.0.yaml > logs/ham_rstp_tta/exp1.0.0.log 2>&1 &
+
+    1.0
+
+    1.1
+
+    1.2
+
+    1.3
+
+    1.4
+
+    1.5
+
+## exp2
+**entropy + ss + unc**
+- nohup CUDA_VISIBLE_DEVICES=1 python3 tta.py --config_file tta_configs/ham_rstp_tta/exp2.0.0.yaml > logs/ham_rstp_tta/exp2.0.0.log 2>&1 &
+
+## exp3
+**entropy + unc**
+- nohup CUDA_VISIBLE_DEVICES=1 python3 tta.py --config_file tta_configs/ham_rstp_tta/exp3.0.0.yaml > logs/ham_rstp_tta/exp3.0.0.log 2>&1 &
+
+## exp4
+**entropy + unc_temper_learn**
+
+## exp5
+**entropy + ss + unc_temper_learn**
+
+## exp6
+**entropy + pl**
+
+## exp7
+**entropy + ss + unc + pl**
+
+## exp8
+**entropy + iaug**
+
+## exp9
+**entropy + ss + unc + pl + iaug**
+- 由于PAB CMP_exp8效果不好，不试验exp9的setting了

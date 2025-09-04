@@ -20,6 +20,11 @@ exp_names=(
     "exp3.1.2"
     "exp3.1.3"
     "exp3.1.4"
+    "exp3.2.0"
+    "exp3.2.1"
+    "exp3.2.2"
+    "exp3.2.3"
+    "exp3.2.4"
 )
 
 # 按顺序执行每个训练任务
@@ -34,7 +39,7 @@ do
 
 
     # CUDA_VISIBLE_DEVICES=1 nohup python3 tta.py --config_file tta_configs/ham_cuhk_tta/exp1.yaml > logs/ham_cuhk_tta/exp1.log 2>&1 &
-    CUDA_VISIBLE_DEVICES=0 nohup python3 tta.py --config_file tta_configs/$task_name/$exp_name.yaml > logs/$task_name/$exp_name.log 2>&1 &
+    CUDA_VISIBLE_DEVICES=0 nohup python3 tta.py --config_file tta_configs/$task_name/$exp_name.yaml > $log_dir/$task_name/$exp_name.log 2>&1 &
 
 
     # 等待当前任务完成
