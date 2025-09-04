@@ -1,0 +1,65 @@
+Not using distributed mode
+### Hyper-parameters:
+     output_dir: output/ham_icfg_tta_best1/exp1.1.0/2025090211175
+     seed: 42
+     device: cuda
+     batch_size_tta: 32
+     epochs: 30
+     lr: 1e-05
+### Creating test dataset
+     test_txt_set: 19848    test_img_set: 19848
+     test_txt_loader: 39    test_img_loader: 39
+### Creating model
+Training Model with ['sdm', 'id', 'mlm'] tasks
+Resized position embedding from size:torch.Size([1, 197, 768]) to size: torch.Size([1, 193, 768]) with height:24 width: 8
+     Total Params Sum:  190482206
+### Zero-Shot Score: 
+/data2/jiahao/task/IRRA/tta.py:261: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler()  # bf16
++-------+--------+--------+--------+--------+-------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP |
++-------+--------+--------+--------+--------+-------+
+|  -999 | 60.268 | 76.708 | 82.633 | 35.227 | 5.902 |
++-------+--------+--------+--------+--------+-------+
+### TTA:
+### Compute Cos Similarity Uncertainty
+     preprocess_tta_coefficients  start
+     sample selection ...
+     number of sample after sample_selection: 4934
+     uncertainty ...
+     preprocess_tta_coefficients  end
+### Creating TTA dataset
+     tta_dataset: 4934
+### Creating tta dataloader
+### be careful: func create_loader returns a list length of 1
+     tta_loader: 154
+### Configure adapted weights
+     TTA Dropout Modules: 
+ []
+     TTA Require Gradient Params: 
+ [('base_model.transformer.resblocks.0.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.0.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.0.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.0.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.1.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.1.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.1.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.1.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.2.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.2.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.2.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.2.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.3.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.3.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.3.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.3.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.4.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.4.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.4.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.4.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.5.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.5.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.5.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.5.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.6.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.6.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.6.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.6.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.7.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.7.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.7.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.7.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.8.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.8.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.8.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.8.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.9.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.9.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.9.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.9.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.10.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.10.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.10.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.10.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.11.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.11.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.11.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.11.ln_2.bias', torch.Size([512])), ('base_model.ln_final.weight', torch.Size([512])), ('base_model.ln_final.bias', torch.Size([512]))]
+     TTA Dropout Modules Number: 
+ 0
+     TTA Require Gradient Params Sum: 
+ 25600
+Using 5.0 times learning rate for random init module 
+### Start Test Time Adaptation
+/data2/jiahao/task/IRRA/tta.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=True):
+     Epoch[0] Iteration[10/154], entropy: 0.9869, loss: 0.9869, lr: 9.05e-06
+     Epoch[0] Iteration[20/154], entropy: 0.9418, loss: 0.9418, lr: 3.45e-06
+     Epoch[0] Iteration[30/154], entropy: 0.8865, loss: 0.8865, lr: 0.00e+00
+     Epoch[0] Iteration[40/154], entropy: 0.9142, loss: 0.9142, lr: 3.45e-06
+     Epoch[0] Iteration[50/154], entropy: 0.8377, loss: 0.8377, lr: 9.05e-06
+     Epoch[0] Iteration[60/154], entropy: 0.9472, loss: 0.9472, lr: 9.05e-06
+     Epoch[0] Iteration[70/154], entropy: 0.9367, loss: 0.9367, lr: 3.45e-06
+     Epoch[0] Iteration[80/154], entropy: 0.8494, loss: 0.8494, lr: 0.00e+00
+     Epoch[0] Iteration[90/154], entropy: 0.9346, loss: 0.9346, lr: 3.45e-06
+     Epoch[0] Iteration[100/154], entropy: 0.9112, loss: 0.9112, lr: 9.05e-06
+     Epoch[0] Iteration[110/154], entropy: 0.9177, loss: 0.9177, lr: 9.05e-06
+     Epoch[0] Iteration[120/154], entropy: 0.9618, loss: 0.9618, lr: 3.45e-06
+     Epoch[0] Iteration[130/154], entropy: 0.8253, loss: 0.8253, lr: 0.00e+00
+     Epoch[0] Iteration[140/154], entropy: 0.8752, loss: 0.8752, lr: 3.45e-06
+     Epoch[0] Iteration[150/154], entropy: 0.9144, loss: 0.9144, lr: 9.05e-06
+     Averaged stats: entropy: 0.9284, loss: 0.9284, lr: 9.96e-06
+     itm tta time 0:00:21

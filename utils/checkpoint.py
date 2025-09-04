@@ -145,4 +145,13 @@ def load_state_dict(model, loaded_state_dict, except_keys=None):
     align_and_update_state_dicts(model_state_dict, loaded_state_dict, except_keys)
 
     # use strict loading
-    model.load_state_dict(model_state_dict)
+    try:
+        model.load_state_dict(model_state_dict)
+    except:
+        _model_state_dict = {}
+        for n, m in model_state_dict.items():
+            if "classifier.weight" in n or "classifier.bias" in n:
+                continue
+            else:
+                _model_state_dict[n]=m
+        model.load_state_dict(_model_state_dict, strict=False)

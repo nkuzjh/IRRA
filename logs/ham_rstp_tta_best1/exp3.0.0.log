@@ -1,0 +1,1145 @@
+Not using distributed mode
+### Hyper-parameters:
+     output_dir: output/ham_rstp_tta_best1/exp3.0.0/2025090120125
+     seed: 42
+     device: cuda
+     batch_size_tta: 16
+     epochs: 30
+     lr: 1e-05
+### Creating test dataset
+     test_txt_set: 2000    test_img_set: 1000
+     test_txt_loader: 4    test_img_loader: 2
+### Creating model
+Training Model with ['sdm', 'id', 'mlm'] tasks
+Resized position embedding from size:torch.Size([1, 197, 768]) to size: torch.Size([1, 193, 768]) with height:24 width: 8
+     Total Params Sum:  190789493
+### Zero-Shot Score: 
+/data2/jiahao/task/IRRA/tta.py:261: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler()  # bf16
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
++-------+--------+--------+--------+--------+--------+
+### TTA:
+### Compute Cos Similarity Uncertainty
+     preprocess_tta_coefficients  start
+     sample selection ...
+     number of sample after sample_selection: 2000
+     uncertainty ...
+     preprocess_tta_coefficients  end
+### Creating TTA dataset
+     tta_dataset: 2000
+### Creating tta dataloader
+### be careful: func create_loader returns a list length of 1
+     tta_loader: 125
+### Configure adapted weights
+     TTA Dropout Modules: 
+ []
+     TTA Require Gradient Params: 
+ [('base_model.transformer.resblocks.0.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.0.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.0.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.0.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.1.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.1.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.1.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.1.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.2.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.2.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.2.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.2.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.3.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.3.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.3.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.3.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.4.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.4.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.4.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.4.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.5.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.5.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.5.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.5.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.6.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.6.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.6.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.6.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.7.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.7.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.7.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.7.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.8.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.8.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.8.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.8.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.9.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.9.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.9.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.9.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.10.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.10.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.10.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.10.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.11.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.11.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.11.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.11.ln_2.bias', torch.Size([512])), ('base_model.ln_final.weight', torch.Size([512])), ('base_model.ln_final.bias', torch.Size([512]))]
+     TTA Dropout Modules Number: 
+ 0
+     TTA Require Gradient Params Sum: 
+ 25600
+Using 5.0 times learning rate for random init module 
+### Start Test Time Adaptation
+/data2/jiahao/task/IRRA/tta.py:65: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=True):
+     Epoch[0] Iteration[10/125], entropy: 1.0869, loss: 2.5256, lr: 9.38e-06
+     Epoch[0] Iteration[20/125], entropy: 0.7913, loss: 2.2320, lr: 4.06e-06
+     Epoch[0] Iteration[30/125], entropy: 0.7346, loss: 2.1878, lr: 3.94e-08
+     Epoch[0] Iteration[40/125], entropy: 0.8747, loss: 2.2779, lr: 2.87e-06
+     Epoch[0] Iteration[50/125], entropy: 0.8734, loss: 2.3163, lr: 8.64e-06
+     Epoch[0] Iteration[60/125], entropy: 1.1405, loss: 2.6066, lr: 9.38e-06
+     Epoch[0] Iteration[70/125], entropy: 1.0977, loss: 2.5384, lr: 4.06e-06
+     Epoch[0] Iteration[80/125], entropy: 1.1706, loss: 2.5679, lr: 3.94e-08
+     Epoch[0] Iteration[90/125], entropy: 1.0000, loss: 2.4747, lr: 2.87e-06
+     Epoch[0] Iteration[100/125], entropy: 1.1087, loss: 2.5680, lr: 8.64e-06
+     Epoch[0] Iteration[110/125], entropy: 1.0847, loss: 2.5316, lr: 9.38e-06
+     Epoch[0] Iteration[120/125], entropy: 0.8571, loss: 2.3400, lr: 4.06e-06
+     Averaged stats: entropy: 0.9586, loss: 2.3812, lr: 1.36e-06
+     itm tta time 0:00:15
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 0, 'R1': 56.95, 'R5': 78.85, 'R10': 86.85, 'mAP': 43.194, 'mINP': 20.247, 'entropy': 0.9850247253974279, 'loss': 2.4305548071861267, 'lr': 5.2870522356075575e-06}
+     Epoch[1] Iteration[10/125], entropy: 1.3069, loss: 2.7278, lr: 6.18e-07
+     Epoch[1] Iteration[20/125], entropy: 1.1755, loss: 2.5397, lr: 5.94e-06
+     Epoch[1] Iteration[30/125], entropy: 0.9866, loss: 2.4282, lr: 9.96e-06
+     Epoch[1] Iteration[40/125], entropy: 1.1404, loss: 2.5407, lr: 7.13e-06
+     Epoch[1] Iteration[50/125], entropy: 0.9083, loss: 2.3122, lr: 1.36e-06
+     Epoch[1] Iteration[60/125], entropy: 1.0085, loss: 2.5104, lr: 6.18e-07
+     Epoch[1] Iteration[70/125], entropy: 0.8541, loss: 2.3916, lr: 5.94e-06
+     Epoch[1] Iteration[80/125], entropy: 1.0743, loss: 2.5385, lr: 9.96e-06
+     Epoch[1] Iteration[90/125], entropy: 1.0820, loss: 2.5557, lr: 7.13e-06
+     Epoch[1] Iteration[100/125], entropy: 1.1548, loss: 2.5020, lr: 1.36e-06
+     Epoch[1] Iteration[110/125], entropy: 1.0154, loss: 2.4961, lr: 6.18e-07
+     Epoch[1] Iteration[120/125], entropy: 1.1331, loss: 2.4894, lr: 5.94e-06
+     Averaged stats: entropy: 1.0097, loss: 2.4356, lr: 8.64e-06
+     itm tta time 0:00:14
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 1, 'R1': 57.05, 'R5': 78.55, 'R10': 86.85, 'mAP': 43.2, 'mINP': 20.248, 'entropy': 1.0700028538703918, 'loss': 2.5026991963386536, 'lr': 4.712947764392442e-06}
+     Epoch[2] Iteration[10/125], entropy: 1.1760, loss: 2.6650, lr: 9.38e-06
+     Epoch[2] Iteration[20/125], entropy: 1.1894, loss: 2.6945, lr: 4.06e-06
+     Epoch[2] Iteration[30/125], entropy: 1.0389, loss: 2.5672, lr: 3.94e-08
+     Epoch[2] Iteration[40/125], entropy: 1.1493, loss: 2.5960, lr: 2.87e-06
+     Epoch[2] Iteration[50/125], entropy: 0.9220, loss: 2.4218, lr: 8.64e-06
+     Epoch[2] Iteration[60/125], entropy: 0.9843, loss: 2.4544, lr: 9.38e-06
+     Epoch[2] Iteration[70/125], entropy: 0.9786, loss: 2.3809, lr: 4.06e-06
+     Epoch[2] Iteration[80/125], entropy: 1.0791, loss: 2.5106, lr: 3.94e-08
+     Epoch[2] Iteration[90/125], entropy: 0.9466, loss: 2.4810, lr: 2.87e-06
+     Epoch[2] Iteration[100/125], entropy: 1.0509, loss: 2.5106, lr: 8.64e-06
+     Epoch[2] Iteration[110/125], entropy: 1.1883, loss: 2.6356, lr: 9.38e-06
+     Epoch[2] Iteration[120/125], entropy: 1.0970, loss: 2.5493, lr: 4.06e-06
+     Averaged stats: entropy: 0.9691, loss: 2.4410, lr: 1.36e-06
+     itm tta time 0:00:14
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 2, 'R1': 57.0, 'R5': 78.6, 'R10': 86.85, 'mAP': 43.193, 'mINP': 20.251, 'entropy': 1.0667152206103008, 'loss': 2.538904865582784, 'lr': 5.287052235607551e-06}
+     Epoch[3] Iteration[10/125], entropy: 1.1691, loss: 2.6179, lr: 6.18e-07
+     Epoch[3] Iteration[20/125], entropy: 1.2606, loss: 2.7013, lr: 5.94e-06
+     Epoch[3] Iteration[30/125], entropy: 0.9275, loss: 2.4613, lr: 9.96e-06
+     Epoch[3] Iteration[40/125], entropy: 1.1111, loss: 2.5413, lr: 7.13e-06
+     Epoch[3] Iteration[50/125], entropy: 1.1301, loss: 2.6262, lr: 1.36e-06
+     Epoch[3] Iteration[60/125], entropy: 0.8041, loss: 2.1329, lr: 6.18e-07
+     Epoch[3] Iteration[70/125], entropy: 1.0798, loss: 2.5694, lr: 5.94e-06
+     Epoch[3] Iteration[80/125], entropy: 0.9259, loss: 2.3965, lr: 9.96e-06
+     Epoch[3] Iteration[90/125], entropy: 0.9082, loss: 2.3591, lr: 7.13e-06
+     Epoch[3] Iteration[100/125], entropy: 1.1298, loss: 2.6050, lr: 1.36e-06
+     Epoch[3] Iteration[110/125], entropy: 1.0903, loss: 2.5746, lr: 6.18e-07
+     Epoch[3] Iteration[120/125], entropy: 0.9864, loss: 2.4555, lr: 5.94e-06
+     Averaged stats: entropy: 1.0221, loss: 2.5338, lr: 8.64e-06
+     itm tta time 0:00:15
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 3, 'R1': 57.0, 'R5': 78.65, 'R10': 86.85, 'mAP': 43.191, 'mINP': 20.247, 'entropy': 1.043572187423706, 'loss': 2.5034146110216775, 'lr': 4.7129477643924315e-06}
+     Epoch[4] Iteration[10/125], entropy: 1.2012, loss: 2.6565, lr: 9.38e-06
+     Epoch[4] Iteration[20/125], entropy: 1.1410, loss: 2.6083, lr: 4.06e-06
+     Epoch[4] Iteration[30/125], entropy: 1.1101, loss: 2.5388, lr: 3.94e-08
+     Epoch[4] Iteration[40/125], entropy: 1.1120, loss: 2.5289, lr: 2.87e-06
+     Epoch[4] Iteration[50/125], entropy: 0.7684, loss: 2.2939, lr: 8.64e-06
+     Epoch[4] Iteration[60/125], entropy: 1.2164, loss: 2.6108, lr: 9.38e-06
+     Epoch[4] Iteration[70/125], entropy: 1.1117, loss: 2.5434, lr: 4.06e-06
+     Epoch[4] Iteration[80/125], entropy: 1.1143, loss: 2.5786, lr: 3.94e-08
+     Epoch[4] Iteration[90/125], entropy: 1.1764, loss: 2.6042, lr: 2.87e-06
+     Epoch[4] Iteration[100/125], entropy: 0.9994, loss: 2.4136, lr: 8.64e-06
+     Epoch[4] Iteration[110/125], entropy: 0.8017, loss: 2.2422, lr: 9.38e-06
+     Epoch[4] Iteration[120/125], entropy: 0.9696, loss: 2.3952, lr: 4.06e-06
+     Averaged stats: entropy: 0.9803, loss: 2.3751, lr: 1.36e-06
+     itm tta time 0:00:13
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 4, 'R1': 57.0, 'R5': 78.6, 'R10': 86.8, 'mAP': 43.189, 'mINP': 20.248, 'entropy': 1.0601826608181, 'loss': 2.501198172569275, 'lr': 5.287052235607574e-06}
+     Epoch[5] Iteration[10/125], entropy: 1.0555, loss: 2.5141, lr: 6.18e-07
+     Epoch[5] Iteration[20/125], entropy: 1.0375, loss: 2.4767, lr: 5.94e-06
+     Epoch[5] Iteration[30/125], entropy: 0.8387, loss: 2.3819, lr: 9.96e-06
+     Epoch[5] Iteration[40/125], entropy: 0.8755, loss: 2.3798, lr: 7.13e-06
+     Epoch[5] Iteration[50/125], entropy: 0.9540, loss: 2.5295, lr: 1.36e-06
+     Epoch[5] Iteration[60/125], entropy: 0.9363, loss: 2.3329, lr: 6.18e-07
+     Epoch[5] Iteration[70/125], entropy: 1.1273, loss: 2.5005, lr: 5.94e-06
+     Epoch[5] Iteration[80/125], entropy: 1.0950, loss: 2.5576, lr: 9.96e-06
+     Epoch[5] Iteration[90/125], entropy: 1.0433, loss: 2.4645, lr: 7.13e-06
+     Epoch[5] Iteration[100/125], entropy: 0.9226, loss: 2.3274, lr: 1.36e-06
+     Epoch[5] Iteration[110/125], entropy: 0.8354, loss: 2.3657, lr: 6.18e-07
+     Epoch[5] Iteration[120/125], entropy: 0.9845, loss: 2.4178, lr: 5.94e-06
+     Averaged stats: entropy: 1.1421, loss: 2.5727, lr: 8.64e-06
+     itm tta time 0:00:13
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 5, 'R1': 56.95, 'R5': 78.7, 'R10': 86.8, 'mAP': 43.185, 'mINP': 20.238, 'entropy': 0.9754658987124761, 'loss': 2.437382916609446, 'lr': 4.712947764392435e-06}
+     Epoch[6] Iteration[10/125], entropy: 0.8699, loss: 2.2542, lr: 9.38e-06
+     Epoch[6] Iteration[20/125], entropy: 1.2828, loss: 2.7357, lr: 4.06e-06
+     Epoch[6] Iteration[30/125], entropy: 1.1734, loss: 2.5843, lr: 3.94e-08
+     Epoch[6] Iteration[40/125], entropy: 0.9162, loss: 2.3733, lr: 2.87e-06
+     Epoch[6] Iteration[50/125], entropy: 0.9999, loss: 2.3429, lr: 8.64e-06
+     Epoch[6] Iteration[60/125], entropy: 1.1480, loss: 2.5592, lr: 9.38e-06
+     Epoch[6] Iteration[70/125], entropy: 1.2317, loss: 2.7428, lr: 4.06e-06
+     Epoch[6] Iteration[80/125], entropy: 0.9567, loss: 2.4172, lr: 3.94e-08
+     Epoch[6] Iteration[90/125], entropy: 1.1238, loss: 2.5856, lr: 2.87e-06
+     Epoch[6] Iteration[100/125], entropy: 1.0898, loss: 2.5627, lr: 8.64e-06
+     Epoch[6] Iteration[110/125], entropy: 1.1292, loss: 2.5067, lr: 9.38e-06
+     Epoch[6] Iteration[120/125], entropy: 1.2265, loss: 2.6792, lr: 4.06e-06
+     Averaged stats: entropy: 1.0522, loss: 2.4880, lr: 1.36e-06
+     itm tta time 0:00:14
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 6, 'R1': 56.9, 'R5': 78.7, 'R10': 86.85, 'mAP': 43.17, 'mINP': 20.217, 'entropy': 1.0956659466028214, 'loss': 2.528650383154551, 'lr': 5.287052235607562e-06}
+     Epoch[7] Iteration[10/125], entropy: 0.9508, loss: 2.3528, lr: 6.18e-07
+     Epoch[7] Iteration[20/125], entropy: 1.0218, loss: 2.4239, lr: 5.94e-06
+     Epoch[7] Iteration[30/125], entropy: 1.0421, loss: 2.4785, lr: 9.96e-06
+     Epoch[7] Iteration[40/125], entropy: 0.8617, loss: 2.3014, lr: 7.13e-06
+     Epoch[7] Iteration[50/125], entropy: 1.3135, loss: 2.6899, lr: 1.36e-06
+     Epoch[7] Iteration[60/125], entropy: 0.9733, loss: 2.4096, lr: 6.18e-07
+     Epoch[7] Iteration[70/125], entropy: 1.0870, loss: 2.4875, lr: 5.94e-06
+     Epoch[7] Iteration[80/125], entropy: 1.0839, loss: 2.5648, lr: 9.96e-06
+     Epoch[7] Iteration[90/125], entropy: 1.2192, loss: 2.7034, lr: 7.13e-06
+     Epoch[7] Iteration[100/125], entropy: 1.1225, loss: 2.5763, lr: 1.36e-06
+     Epoch[7] Iteration[110/125], entropy: 1.0612, loss: 2.5331, lr: 6.18e-07
+     Epoch[7] Iteration[120/125], entropy: 0.9558, loss: 2.4254, lr: 5.94e-06
+     Averaged stats: entropy: 1.2259, loss: 2.7278, lr: 8.64e-06
+     itm tta time 0:00:13
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 7, 'R1': 56.85, 'R5': 78.7, 'R10': 86.7, 'mAP': 43.152, 'mINP': 20.242, 'entropy': 1.0577271829048793, 'loss': 2.4955482880274453, 'lr': 4.712947764392443e-06}
+     Epoch[8] Iteration[10/125], entropy: 0.9468, loss: 2.4596, lr: 9.38e-06
+     Epoch[8] Iteration[20/125], entropy: 0.9977, loss: 2.5001, lr: 4.06e-06
+     Epoch[8] Iteration[30/125], entropy: 1.0386, loss: 2.4913, lr: 3.94e-08
+     Epoch[8] Iteration[40/125], entropy: 0.9552, loss: 2.4129, lr: 2.87e-06
+     Epoch[8] Iteration[50/125], entropy: 1.1302, loss: 2.5779, lr: 8.64e-06
+     Epoch[8] Iteration[60/125], entropy: 1.0976, loss: 2.5661, lr: 9.38e-06
+     Epoch[8] Iteration[70/125], entropy: 0.9999, loss: 2.5006, lr: 4.06e-06
+     Epoch[8] Iteration[80/125], entropy: 0.8521, loss: 2.3172, lr: 3.94e-08
+     Epoch[8] Iteration[90/125], entropy: 1.2318, loss: 2.6742, lr: 2.87e-06
+     Epoch[8] Iteration[100/125], entropy: 0.9321, loss: 2.4464, lr: 8.64e-06
+     Epoch[8] Iteration[110/125], entropy: 1.0873, loss: 2.5359, lr: 9.38e-06
+     Epoch[8] Iteration[120/125], entropy: 1.0618, loss: 2.5144, lr: 4.06e-06
+     Averaged stats: entropy: 1.0463, loss: 2.4171, lr: 1.36e-06
+     itm tta time 0:00:14
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
+|   8   | 56.950 | 78.700 | 86.700 | 43.139 | 20.225 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 8, 'R1': 56.95, 'R5': 78.7, 'R10': 86.7, 'mAP': 43.139, 'mINP': 20.225, 'entropy': 1.0275897830724716, 'loss': 2.499718725681305, 'lr': 5.287052235607555e-06}
+     Epoch[9] Iteration[10/125], entropy: 1.0169, loss: 2.3766, lr: 6.18e-07
+     Epoch[9] Iteration[20/125], entropy: 1.0638, loss: 2.5371, lr: 5.94e-06
+     Epoch[9] Iteration[30/125], entropy: 1.1576, loss: 2.6320, lr: 9.96e-06
+     Epoch[9] Iteration[40/125], entropy: 1.0334, loss: 2.4621, lr: 7.13e-06
+     Epoch[9] Iteration[50/125], entropy: 1.1471, loss: 2.6052, lr: 1.36e-06
+     Epoch[9] Iteration[60/125], entropy: 1.0122, loss: 2.4911, lr: 6.18e-07
+     Epoch[9] Iteration[70/125], entropy: 1.0462, loss: 2.4884, lr: 5.94e-06
+     Epoch[9] Iteration[80/125], entropy: 1.0056, loss: 2.4848, lr: 9.96e-06
+     Epoch[9] Iteration[90/125], entropy: 0.8700, loss: 2.3301, lr: 7.13e-06
+     Epoch[9] Iteration[100/125], entropy: 1.0001, loss: 2.5036, lr: 1.36e-06
+     Epoch[9] Iteration[110/125], entropy: 0.8881, loss: 2.3107, lr: 6.18e-07
+     Epoch[9] Iteration[120/125], entropy: 1.0821, loss: 2.5335, lr: 5.94e-06
+     Averaged stats: entropy: 1.1414, loss: 2.5955, lr: 8.64e-06
+     itm tta time 0:00:13
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
+|   8   | 56.950 | 78.700 | 86.700 | 43.139 | 20.225 |
+|   9   | 56.800 | 78.650 | 86.750 | 43.098 | 20.215 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 9, 'R1': 56.8, 'R5': 78.65, 'R10': 86.75, 'mAP': 43.098, 'mINP': 20.215, 'entropy': 1.026907503604889, 'loss': 2.4795953234036765, 'lr': 4.712947764392439e-06}
+     Epoch[10] Iteration[10/125], entropy: 0.7640, loss: 2.2179, lr: 9.38e-06
+     Epoch[10] Iteration[20/125], entropy: 0.9015, loss: 2.3026, lr: 4.06e-06
+     Epoch[10] Iteration[30/125], entropy: 1.2973, loss: 2.7914, lr: 3.94e-08
+     Epoch[10] Iteration[40/125], entropy: 0.8840, loss: 2.3265, lr: 2.87e-06
+     Epoch[10] Iteration[50/125], entropy: 1.0615, loss: 2.5008, lr: 8.64e-06
+     Epoch[10] Iteration[60/125], entropy: 1.0369, loss: 2.5221, lr: 9.38e-06
+     Epoch[10] Iteration[70/125], entropy: 0.8622, loss: 2.2709, lr: 4.06e-06
+     Epoch[10] Iteration[80/125], entropy: 1.2476, loss: 2.7366, lr: 3.94e-08
+     Epoch[10] Iteration[90/125], entropy: 1.1276, loss: 2.6157, lr: 2.87e-06
+     Epoch[10] Iteration[100/125], entropy: 0.9969, loss: 2.3992, lr: 8.64e-06
+     Epoch[10] Iteration[110/125], entropy: 1.0385, loss: 2.4391, lr: 9.38e-06
+     Epoch[10] Iteration[120/125], entropy: 1.0144, loss: 2.4400, lr: 4.06e-06
+     Averaged stats: entropy: 1.2453, loss: 2.6987, lr: 1.36e-06
+     itm tta time 0:00:14
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
+|   8   | 56.950 | 78.700 | 86.700 | 43.139 | 20.225 |
+|   9   | 56.800 | 78.650 | 86.750 | 43.098 | 20.215 |
+|   10  | 56.800 | 78.550 | 86.750 | 43.064 | 20.215 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 10, 'R1': 56.8, 'R5': 78.55, 'R10': 86.75, 'mAP': 43.064, 'mINP': 20.215, 'entropy': 1.0193732927242916, 'loss': 2.463561713695526, 'lr': 5.287052235607558e-06}
+     Epoch[11] Iteration[10/125], entropy: 1.0813, loss: 2.5562, lr: 6.18e-07
+     Epoch[11] Iteration[20/125], entropy: 0.8931, loss: 2.3420, lr: 5.94e-06
+     Epoch[11] Iteration[30/125], entropy: 1.1877, loss: 2.6747, lr: 9.96e-06
+     Epoch[11] Iteration[40/125], entropy: 1.1900, loss: 2.6300, lr: 7.13e-06
+     Epoch[11] Iteration[50/125], entropy: 1.0279, loss: 2.5873, lr: 1.36e-06
+     Epoch[11] Iteration[60/125], entropy: 0.8750, loss: 2.3671, lr: 6.18e-07
+     Epoch[11] Iteration[70/125], entropy: 0.7641, loss: 2.1914, lr: 5.94e-06
+     Epoch[11] Iteration[80/125], entropy: 0.9557, loss: 2.3693, lr: 9.96e-06
+     Epoch[11] Iteration[90/125], entropy: 0.9164, loss: 2.3780, lr: 7.13e-06
+     Epoch[11] Iteration[100/125], entropy: 0.8843, loss: 2.4146, lr: 1.36e-06
+     Epoch[11] Iteration[110/125], entropy: 0.9815, loss: 2.4620, lr: 6.18e-07
+     Epoch[11] Iteration[120/125], entropy: 0.9674, loss: 2.4177, lr: 5.94e-06
+     Averaged stats: entropy: 0.9623, loss: 2.4328, lr: 8.64e-06
+     itm tta time 0:00:14
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
+|   8   | 56.950 | 78.700 | 86.700 | 43.139 | 20.225 |
+|   9   | 56.800 | 78.650 | 86.750 | 43.098 | 20.215 |
+|   10  | 56.800 | 78.550 | 86.750 | 43.064 | 20.215 |
+|   11  | 56.800 | 78.650 | 86.750 | 43.052 | 20.187 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 11, 'R1': 56.8, 'R5': 78.65, 'R10': 86.75, 'mAP': 43.052, 'mINP': 20.187, 'entropy': 0.9770255833864212, 'loss': 2.4491926431655884, 'lr': 4.7129477643924315e-06}
+     Epoch[12] Iteration[10/125], entropy: 1.1604, loss: 2.5889, lr: 9.38e-06
+     Epoch[12] Iteration[20/125], entropy: 1.1448, loss: 2.6363, lr: 4.06e-06
+     Epoch[12] Iteration[30/125], entropy: 0.9731, loss: 2.3917, lr: 3.94e-08
+     Epoch[12] Iteration[40/125], entropy: 1.1089, loss: 2.5303, lr: 2.87e-06
+     Epoch[12] Iteration[50/125], entropy: 1.0478, loss: 2.4890, lr: 8.64e-06
+     Epoch[12] Iteration[60/125], entropy: 0.8494, loss: 2.2915, lr: 9.38e-06
+     Epoch[12] Iteration[70/125], entropy: 1.2191, loss: 2.6105, lr: 4.06e-06
+     Epoch[12] Iteration[80/125], entropy: 1.3451, loss: 2.7772, lr: 3.94e-08
+     Epoch[12] Iteration[90/125], entropy: 0.9579, loss: 2.3987, lr: 2.87e-06
+     Epoch[12] Iteration[100/125], entropy: 1.0612, loss: 2.4931, lr: 8.64e-06
+     Epoch[12] Iteration[110/125], entropy: 0.8129, loss: 2.2659, lr: 9.38e-06
+     Epoch[12] Iteration[120/125], entropy: 1.1130, loss: 2.6346, lr: 4.06e-06
+     Averaged stats: entropy: 1.0345, loss: 2.5056, lr: 1.36e-06
+     itm tta time 0:00:14
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
+|   8   | 56.950 | 78.700 | 86.700 | 43.139 | 20.225 |
+|   9   | 56.800 | 78.650 | 86.750 | 43.098 | 20.215 |
+|   10  | 56.800 | 78.550 | 86.750 | 43.064 | 20.215 |
+|   11  | 56.800 | 78.650 | 86.750 | 43.052 | 20.187 |
+|   12  | 56.850 | 78.500 | 86.750 | 43.046 | 20.177 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 12, 'R1': 56.85, 'R5': 78.5, 'R10': 86.75, 'mAP': 43.046, 'mINP': 20.177, 'entropy': 1.0661464383204777, 'loss': 2.5089847445487976, 'lr': 5.287052235607558e-06}
+     Epoch[13] Iteration[10/125], entropy: 0.9240, loss: 2.4458, lr: 6.18e-07
+     Epoch[13] Iteration[20/125], entropy: 1.1331, loss: 2.5406, lr: 5.94e-06
+     Epoch[13] Iteration[30/125], entropy: 0.8504, loss: 2.3258, lr: 9.96e-06
+     Epoch[13] Iteration[40/125], entropy: 0.9810, loss: 2.4634, lr: 7.13e-06
+     Epoch[13] Iteration[50/125], entropy: 1.2038, loss: 2.6731, lr: 1.36e-06
+     Epoch[13] Iteration[60/125], entropy: 1.1325, loss: 2.5914, lr: 6.18e-07
+     Epoch[13] Iteration[70/125], entropy: 0.9684, loss: 2.4447, lr: 5.94e-06
+     Epoch[13] Iteration[80/125], entropy: 1.1138, loss: 2.5586, lr: 9.96e-06
+     Epoch[13] Iteration[90/125], entropy: 1.2878, loss: 2.6928, lr: 7.13e-06
+     Epoch[13] Iteration[100/125], entropy: 1.0912, loss: 2.5363, lr: 1.36e-06
+     Epoch[13] Iteration[110/125], entropy: 1.3580, loss: 2.8156, lr: 6.18e-07
+     Epoch[13] Iteration[120/125], entropy: 1.0351, loss: 2.4542, lr: 5.94e-06
+     Averaged stats: entropy: 1.2643, loss: 2.7121, lr: 8.64e-06
+     itm tta time 0:00:13
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
+|   8   | 56.950 | 78.700 | 86.700 | 43.139 | 20.225 |
+|   9   | 56.800 | 78.650 | 86.750 | 43.098 | 20.215 |
+|   10  | 56.800 | 78.550 | 86.750 | 43.064 | 20.215 |
+|   11  | 56.800 | 78.650 | 86.750 | 43.052 | 20.187 |
+|   12  | 56.850 | 78.500 | 86.750 | 43.046 | 20.177 |
+|   13  | 56.850 | 78.500 | 86.700 | 43.024 | 20.143 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 13, 'R1': 56.85, 'R5': 78.5, 'R10': 86.7, 'mAP': 43.024, 'mINP': 20.143, 'entropy': 1.0899252146482468, 'loss': 2.5451943476994834, 'lr': 4.712947764392424e-06}
+     Epoch[14] Iteration[10/125], entropy: 1.0142, loss: 2.4263, lr: 9.38e-06
+     Epoch[14] Iteration[20/125], entropy: 1.0748, loss: 2.5184, lr: 4.06e-06
+     Epoch[14] Iteration[30/125], entropy: 1.0924, loss: 2.5931, lr: 3.94e-08
+     Epoch[14] Iteration[40/125], entropy: 1.0965, loss: 2.5083, lr: 2.87e-06
+     Epoch[14] Iteration[50/125], entropy: 0.7749, loss: 2.2531, lr: 8.64e-06
+     Epoch[14] Iteration[60/125], entropy: 0.9804, loss: 2.4172, lr: 9.38e-06
+     Epoch[14] Iteration[70/125], entropy: 1.0213, loss: 2.4949, lr: 4.06e-06
+     Epoch[14] Iteration[80/125], entropy: 1.2662, loss: 2.6344, lr: 3.94e-08
+     Epoch[14] Iteration[90/125], entropy: 1.1082, loss: 2.5082, lr: 2.87e-06
+     Epoch[14] Iteration[100/125], entropy: 1.0150, loss: 2.4650, lr: 8.64e-06
+     Epoch[14] Iteration[110/125], entropy: 0.7717, loss: 2.2270, lr: 9.38e-06
+     Epoch[14] Iteration[120/125], entropy: 1.0270, loss: 2.4148, lr: 4.06e-06
+     Averaged stats: entropy: 1.0306, loss: 2.4679, lr: 1.36e-06
+     itm tta time 0:00:13
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
+|   8   | 56.950 | 78.700 | 86.700 | 43.139 | 20.225 |
+|   9   | 56.800 | 78.650 | 86.750 | 43.098 | 20.215 |
+|   10  | 56.800 | 78.550 | 86.750 | 43.064 | 20.215 |
+|   11  | 56.800 | 78.650 | 86.750 | 43.052 | 20.187 |
+|   12  | 56.850 | 78.500 | 86.750 | 43.046 | 20.177 |
+|   13  | 56.850 | 78.500 | 86.700 | 43.024 | 20.143 |
+|   14  | 56.900 | 78.600 | 86.650 | 43.015 | 20.143 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 14, 'R1': 56.9, 'R5': 78.6, 'R10': 86.65, 'mAP': 43.015, 'mINP': 20.143, 'entropy': 1.020204409956932, 'loss': 2.4550577998161316, 'lr': 5.287052235607581e-06}
+     Epoch[15] Iteration[10/125], entropy: 1.1250, loss: 2.6537, lr: 6.18e-07
+     Epoch[15] Iteration[20/125], entropy: 1.1371, loss: 2.5348, lr: 5.94e-06
+     Epoch[15] Iteration[30/125], entropy: 0.8137, loss: 2.3505, lr: 9.96e-06
+     Epoch[15] Iteration[40/125], entropy: 1.0177, loss: 2.4685, lr: 7.13e-06
+     Epoch[15] Iteration[50/125], entropy: 0.8167, loss: 2.2472, lr: 1.36e-06
+     Epoch[15] Iteration[60/125], entropy: 1.2678, loss: 2.6958, lr: 6.18e-07
+     Epoch[15] Iteration[70/125], entropy: 1.1102, loss: 2.4776, lr: 5.94e-06
+     Epoch[15] Iteration[80/125], entropy: 1.0196, loss: 2.4525, lr: 9.96e-06
+     Epoch[15] Iteration[90/125], entropy: 0.9733, loss: 2.4281, lr: 7.13e-06
+     Epoch[15] Iteration[100/125], entropy: 1.2084, loss: 2.6766, lr: 1.36e-06
+     Epoch[15] Iteration[110/125], entropy: 1.0272, loss: 2.4847, lr: 6.18e-07
+     Epoch[15] Iteration[120/125], entropy: 1.0342, loss: 2.4667, lr: 5.94e-06
+     Averaged stats: entropy: 0.9576, loss: 2.4450, lr: 8.64e-06
+     itm tta time 0:00:13
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
+|   8   | 56.950 | 78.700 | 86.700 | 43.139 | 20.225 |
+|   9   | 56.800 | 78.650 | 86.750 | 43.098 | 20.215 |
+|   10  | 56.800 | 78.550 | 86.750 | 43.064 | 20.215 |
+|   11  | 56.800 | 78.650 | 86.750 | 43.052 | 20.187 |
+|   12  | 56.850 | 78.500 | 86.750 | 43.046 | 20.177 |
+|   13  | 56.850 | 78.500 | 86.700 | 43.024 | 20.143 |
+|   14  | 56.900 | 78.600 | 86.650 | 43.015 | 20.143 |
+|   15  | 56.950 | 78.600 | 86.850 | 42.999 | 20.127 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 15, 'R1': 56.95, 'R5': 78.6, 'R10': 86.85, 'mAP': 42.999, 'mINP': 20.127, 'entropy': 1.0459036032358806, 'loss': 2.4947200814882913, 'lr': 4.712947764392432e-06}
+     Epoch[16] Iteration[10/125], entropy: 1.0563, loss: 2.5557, lr: 9.65e-06
+     Epoch[16] Iteration[20/125], entropy: 1.0121, loss: 2.4426, lr: 4.69e-06
+     Epoch[16] Iteration[30/125], entropy: 1.0139, loss: 2.4569, lr: 1.57e-07
+     Epoch[16] Iteration[40/125], entropy: 1.1675, loss: 2.6750, lr: 2.32e-06
+     Epoch[16] Iteration[50/125], entropy: 1.1417, loss: 2.6412, lr: 8.19e-06
+     Epoch[16] Iteration[60/125], entropy: 0.9445, loss: 2.3848, lr: 9.65e-06
+     Epoch[16] Iteration[70/125], entropy: 0.9007, loss: 2.3511, lr: 4.69e-06
+     Epoch[16] Iteration[80/125], entropy: 1.0996, loss: 2.5350, lr: 1.57e-07
+     Epoch[16] Iteration[90/125], entropy: 0.9317, loss: 2.3787, lr: 2.32e-06
+     Epoch[16] Iteration[100/125], entropy: 0.7770, loss: 2.1755, lr: 8.19e-06
+     Epoch[16] Iteration[110/125], entropy: 1.1229, loss: 2.5651, lr: 9.65e-06
+     Epoch[16] Iteration[120/125], entropy: 1.0061, loss: 2.4638, lr: 4.69e-06
+     Averaged stats: entropy: 0.9928, loss: 2.4240, lr: 1.81e-06
+     itm tta time 0:00:13
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
+|   8   | 56.950 | 78.700 | 86.700 | 43.139 | 20.225 |
+|   9   | 56.800 | 78.650 | 86.750 | 43.098 | 20.215 |
+|   10  | 56.800 | 78.550 | 86.750 | 43.064 | 20.215 |
+|   11  | 56.800 | 78.650 | 86.750 | 43.052 | 20.187 |
+|   12  | 56.850 | 78.500 | 86.750 | 43.046 | 20.177 |
+|   13  | 56.850 | 78.500 | 86.700 | 43.024 | 20.143 |
+|   14  | 56.900 | 78.600 | 86.650 | 43.015 | 20.143 |
+|   15  | 56.950 | 78.600 | 86.850 | 42.999 | 20.127 |
+|   16  | 56.750 | 78.650 | 86.900 | 42.939 | 20.092 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 16, 'R1': 56.75, 'R5': 78.65, 'R10': 86.9, 'mAP': 42.939, 'mINP': 20.092, 'entropy': 1.014505684375763, 'loss': 2.4687902331352234, 'lr': 5.361244152649529e-06}
+     Epoch[17] Iteration[10/125], entropy: 0.9258, loss: 2.4036, lr: 3.51e-07
+     Epoch[17] Iteration[20/125], entropy: 0.9729, loss: 2.3839, lr: 5.31e-06
+     Epoch[17] Iteration[30/125], entropy: 0.8050, loss: 2.2586, lr: 9.84e-06
+     Epoch[17] Iteration[40/125], entropy: 0.8542, loss: 2.2775, lr: 7.68e-06
+     Epoch[17] Iteration[50/125], entropy: 1.0222, loss: 2.3918, lr: 1.81e-06
+     Epoch[17] Iteration[60/125], entropy: 0.8895, loss: 2.3335, lr: 3.51e-07
+     Epoch[17] Iteration[70/125], entropy: 0.7817, loss: 2.2925, lr: 5.31e-06
+     Epoch[17] Iteration[80/125], entropy: 1.0934, loss: 2.6382, lr: 9.84e-06
+     Epoch[17] Iteration[90/125], entropy: 1.1107, loss: 2.6347, lr: 7.68e-06
+     Epoch[17] Iteration[100/125], entropy: 1.0668, loss: 2.5380, lr: 1.81e-06
+     Epoch[17] Iteration[110/125], entropy: 1.1046, loss: 2.5466, lr: 3.51e-07
+     Epoch[17] Iteration[120/125], entropy: 0.8018, loss: 2.1979, lr: 5.31e-06
+     Averaged stats: entropy: 1.0719, loss: 2.4669, lr: 8.19e-06
+     itm tta time 0:00:13
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
+|   8   | 56.950 | 78.700 | 86.700 | 43.139 | 20.225 |
+|   9   | 56.800 | 78.650 | 86.750 | 43.098 | 20.215 |
+|   10  | 56.800 | 78.550 | 86.750 | 43.064 | 20.215 |
+|   11  | 56.800 | 78.650 | 86.750 | 43.052 | 20.187 |
+|   12  | 56.850 | 78.500 | 86.750 | 43.046 | 20.177 |
+|   13  | 56.850 | 78.500 | 86.700 | 43.024 | 20.143 |
+|   14  | 56.900 | 78.600 | 86.650 | 43.015 | 20.143 |
+|   15  | 56.950 | 78.600 | 86.850 | 42.999 | 20.127 |
+|   16  | 56.750 | 78.650 | 86.900 | 42.939 | 20.092 |
+|   17  | 56.800 | 78.650 | 86.900 | 42.912 | 20.074 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 17, 'R1': 56.8, 'R5': 78.65, 'R10': 86.9, 'mAP': 42.912, 'mINP': 20.074, 'entropy': 0.9523726652065913, 'loss': 2.4080658157666526, 'lr': 4.63875584735046e-06}
+     Epoch[18] Iteration[10/125], entropy: 1.0099, loss: 2.4984, lr: 9.65e-06
+     Epoch[18] Iteration[20/125], entropy: 0.8906, loss: 2.4031, lr: 4.69e-06
+     Epoch[18] Iteration[30/125], entropy: 1.0992, loss: 2.5663, lr: 1.57e-07
+     Epoch[18] Iteration[40/125], entropy: 0.8664, loss: 2.3370, lr: 2.32e-06
+     Epoch[18] Iteration[50/125], entropy: 0.7732, loss: 2.1890, lr: 8.19e-06
+     Epoch[18] Iteration[60/125], entropy: 1.0625, loss: 2.4679, lr: 9.65e-06
+     Epoch[18] Iteration[70/125], entropy: 0.8956, loss: 2.3724, lr: 4.69e-06
+     Epoch[18] Iteration[80/125], entropy: 1.0481, loss: 2.4714, lr: 1.57e-07
+     Epoch[18] Iteration[90/125], entropy: 1.0701, loss: 2.5849, lr: 2.32e-06
+     Epoch[18] Iteration[100/125], entropy: 1.1759, loss: 2.5563, lr: 8.19e-06
+     Epoch[18] Iteration[110/125], entropy: 0.9735, loss: 2.4196, lr: 9.65e-06
+     Epoch[18] Iteration[120/125], entropy: 0.8633, loss: 2.3634, lr: 4.69e-06
+     Averaged stats: entropy: 0.9781, loss: 2.4219, lr: 1.81e-06
+     itm tta time 0:00:13
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
+|   8   | 56.950 | 78.700 | 86.700 | 43.139 | 20.225 |
+|   9   | 56.800 | 78.650 | 86.750 | 43.098 | 20.215 |
+|   10  | 56.800 | 78.550 | 86.750 | 43.064 | 20.215 |
+|   11  | 56.800 | 78.650 | 86.750 | 43.052 | 20.187 |
+|   12  | 56.850 | 78.500 | 86.750 | 43.046 | 20.177 |
+|   13  | 56.850 | 78.500 | 86.700 | 43.024 | 20.143 |
+|   14  | 56.900 | 78.600 | 86.650 | 43.015 | 20.143 |
+|   15  | 56.950 | 78.600 | 86.850 | 42.999 | 20.127 |
+|   16  | 56.750 | 78.650 | 86.900 | 42.939 | 20.092 |
+|   17  | 56.800 | 78.650 | 86.900 | 42.912 | 20.074 |
+|   18  | 56.750 | 78.700 | 86.900 | 42.881 | 20.044 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 18, 'R1': 56.75, 'R5': 78.7, 'R10': 86.9, 'mAP': 42.881, 'mINP': 20.044, 'entropy': 0.9773584405581156, 'loss': 2.435814062754313, 'lr': 5.361244152649539e-06}
+     Epoch[19] Iteration[10/125], entropy: 0.9919, loss: 2.5229, lr: 3.51e-07
+     Epoch[19] Iteration[20/125], entropy: 0.7774, loss: 2.1746, lr: 5.31e-06
+     Epoch[19] Iteration[30/125], entropy: 1.0648, loss: 2.4700, lr: 9.84e-06
+     Epoch[19] Iteration[40/125], entropy: 1.0933, loss: 2.4745, lr: 7.68e-06
+     Epoch[19] Iteration[50/125], entropy: 1.0427, loss: 2.4185, lr: 1.81e-06
+     Epoch[19] Iteration[60/125], entropy: 0.9420, loss: 2.3961, lr: 3.51e-07
+     Epoch[19] Iteration[70/125], entropy: 1.0816, loss: 2.4578, lr: 5.31e-06
+     Epoch[19] Iteration[80/125], entropy: 1.0185, loss: 2.5536, lr: 9.84e-06
+     Epoch[19] Iteration[90/125], entropy: 0.9875, loss: 2.4162, lr: 7.68e-06
+     Epoch[19] Iteration[100/125], entropy: 1.0321, loss: 2.5923, lr: 1.81e-06
+     Epoch[19] Iteration[110/125], entropy: 1.1389, loss: 2.6034, lr: 3.51e-07
+     Epoch[19] Iteration[120/125], entropy: 0.8571, loss: 2.3425, lr: 5.31e-06
+     Averaged stats: entropy: 1.0150, loss: 2.4414, lr: 8.19e-06
+     itm tta time 0:00:13
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
+|   8   | 56.950 | 78.700 | 86.700 | 43.139 | 20.225 |
+|   9   | 56.800 | 78.650 | 86.750 | 43.098 | 20.215 |
+|   10  | 56.800 | 78.550 | 86.750 | 43.064 | 20.215 |
+|   11  | 56.800 | 78.650 | 86.750 | 43.052 | 20.187 |
+|   12  | 56.850 | 78.500 | 86.750 | 43.046 | 20.177 |
+|   13  | 56.850 | 78.500 | 86.700 | 43.024 | 20.143 |
+|   14  | 56.900 | 78.600 | 86.650 | 43.015 | 20.143 |
+|   15  | 56.950 | 78.600 | 86.850 | 42.999 | 20.127 |
+|   16  | 56.750 | 78.650 | 86.900 | 42.939 | 20.092 |
+|   17  | 56.800 | 78.650 | 86.900 | 42.912 | 20.074 |
+|   18  | 56.750 | 78.700 | 86.900 | 42.881 | 20.044 |
+|   19  | 56.700 | 78.800 | 86.850 | 42.844 | 20.032 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 19, 'R1': 56.7, 'R5': 78.8, 'R10': 86.85, 'mAP': 42.844, 'mINP': 20.032, 'entropy': 1.002316450079282, 'loss': 2.451863785584768, 'lr': 4.638755847350455e-06}
+     Epoch[20] Iteration[10/125], entropy: 0.8690, loss: 2.3073, lr: 9.65e-06
+     Epoch[20] Iteration[20/125], entropy: 0.9550, loss: 2.4025, lr: 4.69e-06
+     Epoch[20] Iteration[30/125], entropy: 1.2005, loss: 2.6223, lr: 1.57e-07
+     Epoch[20] Iteration[40/125], entropy: 0.9659, loss: 2.3989, lr: 2.32e-06
+     Epoch[20] Iteration[50/125], entropy: 0.9379, loss: 2.4937, lr: 8.19e-06
+     Epoch[20] Iteration[60/125], entropy: 0.8233, loss: 2.2818, lr: 9.65e-06
+     Epoch[20] Iteration[70/125], entropy: 0.9907, loss: 2.5432, lr: 4.69e-06
+     Epoch[20] Iteration[80/125], entropy: 1.0282, loss: 2.5330, lr: 1.57e-07
+     Epoch[20] Iteration[90/125], entropy: 1.0001, loss: 2.4492, lr: 2.32e-06
+     Epoch[20] Iteration[100/125], entropy: 0.9198, loss: 2.4476, lr: 8.19e-06
+     Epoch[20] Iteration[110/125], entropy: 0.7695, loss: 2.1982, lr: 9.65e-06
+     Epoch[20] Iteration[120/125], entropy: 1.0377, loss: 2.5426, lr: 4.69e-06
+     Averaged stats: entropy: 0.9295, loss: 2.3521, lr: 1.81e-06
+     itm tta time 0:00:13
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
+|   8   | 56.950 | 78.700 | 86.700 | 43.139 | 20.225 |
+|   9   | 56.800 | 78.650 | 86.750 | 43.098 | 20.215 |
+|   10  | 56.800 | 78.550 | 86.750 | 43.064 | 20.215 |
+|   11  | 56.800 | 78.650 | 86.750 | 43.052 | 20.187 |
+|   12  | 56.850 | 78.500 | 86.750 | 43.046 | 20.177 |
+|   13  | 56.850 | 78.500 | 86.700 | 43.024 | 20.143 |
+|   14  | 56.900 | 78.600 | 86.650 | 43.015 | 20.143 |
+|   15  | 56.950 | 78.600 | 86.850 | 42.999 | 20.127 |
+|   16  | 56.750 | 78.650 | 86.900 | 42.939 | 20.092 |
+|   17  | 56.800 | 78.650 | 86.900 | 42.912 | 20.074 |
+|   18  | 56.750 | 78.700 | 86.900 | 42.881 | 20.044 |
+|   19  | 56.700 | 78.800 | 86.850 | 42.844 | 20.032 |
+|   20  | 56.700 | 78.800 | 86.850 | 42.820 | 20.026 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 20, 'R1': 56.7, 'R5': 78.8, 'R10': 86.85, 'mAP': 42.82, 'mINP': 20.026, 'entropy': 0.9581192483504614, 'loss': 2.435031791528066, 'lr': 5.361244152649569e-06}
+     Epoch[21] Iteration[10/125], entropy: 1.0471, loss: 2.4213, lr: 3.51e-07
+     Epoch[21] Iteration[20/125], entropy: 0.8960, loss: 2.3451, lr: 5.31e-06
+     Epoch[21] Iteration[30/125], entropy: 1.0660, loss: 2.4938, lr: 9.84e-06
+     Epoch[21] Iteration[40/125], entropy: 1.0466, loss: 2.5823, lr: 7.68e-06
+     Epoch[21] Iteration[50/125], entropy: 1.0489, loss: 2.5277, lr: 1.81e-06
+     Epoch[21] Iteration[60/125], entropy: 0.8296, loss: 2.2627, lr: 3.51e-07
+     Epoch[21] Iteration[70/125], entropy: 1.1680, loss: 2.6963, lr: 5.31e-06
+     Epoch[21] Iteration[80/125], entropy: 0.8946, loss: 2.2540, lr: 9.84e-06
+     Epoch[21] Iteration[90/125], entropy: 1.0148, loss: 2.4301, lr: 7.68e-06
+     Epoch[21] Iteration[100/125], entropy: 0.9432, loss: 2.4426, lr: 1.81e-06
+     Epoch[21] Iteration[110/125], entropy: 0.9200, loss: 2.3525, lr: 3.51e-07
+     Epoch[21] Iteration[120/125], entropy: 1.1660, loss: 2.6318, lr: 5.31e-06
+     Averaged stats: entropy: 0.9765, loss: 2.5624, lr: 8.19e-06
+     itm tta time 0:00:13
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
+|   8   | 56.950 | 78.700 | 86.700 | 43.139 | 20.225 |
+|   9   | 56.800 | 78.650 | 86.750 | 43.098 | 20.215 |
+|   10  | 56.800 | 78.550 | 86.750 | 43.064 | 20.215 |
+|   11  | 56.800 | 78.650 | 86.750 | 43.052 | 20.187 |
+|   12  | 56.850 | 78.500 | 86.750 | 43.046 | 20.177 |
+|   13  | 56.850 | 78.500 | 86.700 | 43.024 | 20.143 |
+|   14  | 56.900 | 78.600 | 86.650 | 43.015 | 20.143 |
+|   15  | 56.950 | 78.600 | 86.850 | 42.999 | 20.127 |
+|   16  | 56.750 | 78.650 | 86.900 | 42.939 | 20.092 |
+|   17  | 56.800 | 78.650 | 86.900 | 42.912 | 20.074 |
+|   18  | 56.750 | 78.700 | 86.900 | 42.881 | 20.044 |
+|   19  | 56.700 | 78.800 | 86.850 | 42.844 | 20.032 |
+|   20  | 56.700 | 78.800 | 86.850 | 42.820 | 20.026 |
+|   21  | 56.750 | 78.800 | 86.850 | 42.791 | 20.006 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 21, 'R1': 56.75, 'R5': 78.8, 'R10': 86.85, 'mAP': 42.791, 'mINP': 20.006, 'entropy': 1.0034136325120926, 'loss': 2.453356146812439, 'lr': 4.638755847350434e-06}
+     Epoch[22] Iteration[10/125], entropy: 0.7951, loss: 2.2944, lr: 9.65e-06
+     Epoch[22] Iteration[20/125], entropy: 1.0512, loss: 2.5055, lr: 4.69e-06
+     Epoch[22] Iteration[30/125], entropy: 1.1288, loss: 2.5279, lr: 1.57e-07
+     Epoch[22] Iteration[40/125], entropy: 0.8797, loss: 2.3976, lr: 2.32e-06
+     Epoch[22] Iteration[50/125], entropy: 0.6808, loss: 2.1632, lr: 8.19e-06
+     Epoch[22] Iteration[60/125], entropy: 0.9729, loss: 2.4403, lr: 9.65e-06
+     Epoch[22] Iteration[70/125], entropy: 1.1108, loss: 2.5649, lr: 4.69e-06
+     Epoch[22] Iteration[80/125], entropy: 0.9627, loss: 2.4444, lr: 1.57e-07
+     Epoch[22] Iteration[90/125], entropy: 1.1991, loss: 2.6821, lr: 2.32e-06
+     Epoch[22] Iteration[100/125], entropy: 1.0090, loss: 2.4606, lr: 8.19e-06
+     Epoch[22] Iteration[110/125], entropy: 1.1041, loss: 2.5259, lr: 9.65e-06
+     Epoch[22] Iteration[120/125], entropy: 0.8929, loss: 2.3607, lr: 4.69e-06
+     Averaged stats: entropy: 0.8742, loss: 2.2595, lr: 1.81e-06
+     itm tta time 0:00:14
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
+|   8   | 56.950 | 78.700 | 86.700 | 43.139 | 20.225 |
+|   9   | 56.800 | 78.650 | 86.750 | 43.098 | 20.215 |
+|   10  | 56.800 | 78.550 | 86.750 | 43.064 | 20.215 |
+|   11  | 56.800 | 78.650 | 86.750 | 43.052 | 20.187 |
+|   12  | 56.850 | 78.500 | 86.750 | 43.046 | 20.177 |
+|   13  | 56.850 | 78.500 | 86.700 | 43.024 | 20.143 |
+|   14  | 56.900 | 78.600 | 86.650 | 43.015 | 20.143 |
+|   15  | 56.950 | 78.600 | 86.850 | 42.999 | 20.127 |
+|   16  | 56.750 | 78.650 | 86.900 | 42.939 | 20.092 |
+|   17  | 56.800 | 78.650 | 86.900 | 42.912 | 20.074 |
+|   18  | 56.750 | 78.700 | 86.900 | 42.881 | 20.044 |
+|   19  | 56.700 | 78.800 | 86.850 | 42.844 | 20.032 |
+|   20  | 56.700 | 78.800 | 86.850 | 42.820 | 20.026 |
+|   21  | 56.750 | 78.800 | 86.850 | 42.791 | 20.006 |
+|   22  | 56.600 | 78.800 | 86.850 | 42.725 | 19.980 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 22, 'R1': 56.6, 'R5': 78.8, 'R10': 86.85, 'mAP': 42.725, 'mINP': 19.98, 'entropy': 0.9822444468736649, 'loss': 2.447283089160919, 'lr': 5.3612441526495655e-06}
+     Epoch[23] Iteration[10/125], entropy: 0.7536, loss: 2.2705, lr: 3.51e-07
+     Epoch[23] Iteration[20/125], entropy: 1.1076, loss: 2.5753, lr: 5.31e-06
+     Epoch[23] Iteration[30/125], entropy: 1.2589, loss: 2.7383, lr: 9.84e-06
+     Epoch[23] Iteration[40/125], entropy: 0.9679, loss: 2.4692, lr: 7.68e-06
+     Epoch[23] Iteration[50/125], entropy: 1.2872, loss: 2.6982, lr: 1.81e-06
+     Epoch[23] Iteration[60/125], entropy: 0.9035, loss: 2.3735, lr: 3.51e-07
+     Epoch[23] Iteration[70/125], entropy: 0.8530, loss: 2.3728, lr: 5.31e-06
+     Epoch[23] Iteration[80/125], entropy: 1.0244, loss: 2.4100, lr: 9.84e-06
+     Epoch[23] Iteration[90/125], entropy: 1.1250, loss: 2.5635, lr: 7.68e-06
+     Epoch[23] Iteration[100/125], entropy: 0.9179, loss: 2.3845, lr: 1.81e-06
+     Epoch[23] Iteration[110/125], entropy: 1.1505, loss: 2.6773, lr: 3.51e-07
+     Epoch[23] Iteration[120/125], entropy: 0.9336, loss: 2.4167, lr: 5.31e-06
+     Averaged stats: entropy: 1.2188, loss: 2.6936, lr: 8.19e-06
+     itm tta time 0:00:13
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
+|   8   | 56.950 | 78.700 | 86.700 | 43.139 | 20.225 |
+|   9   | 56.800 | 78.650 | 86.750 | 43.098 | 20.215 |
+|   10  | 56.800 | 78.550 | 86.750 | 43.064 | 20.215 |
+|   11  | 56.800 | 78.650 | 86.750 | 43.052 | 20.187 |
+|   12  | 56.850 | 78.500 | 86.750 | 43.046 | 20.177 |
+|   13  | 56.850 | 78.500 | 86.700 | 43.024 | 20.143 |
+|   14  | 56.900 | 78.600 | 86.650 | 43.015 | 20.143 |
+|   15  | 56.950 | 78.600 | 86.850 | 42.999 | 20.127 |
+|   16  | 56.750 | 78.650 | 86.900 | 42.939 | 20.092 |
+|   17  | 56.800 | 78.650 | 86.900 | 42.912 | 20.074 |
+|   18  | 56.750 | 78.700 | 86.900 | 42.881 | 20.044 |
+|   19  | 56.700 | 78.800 | 86.850 | 42.844 | 20.032 |
+|   20  | 56.700 | 78.800 | 86.850 | 42.820 | 20.026 |
+|   21  | 56.750 | 78.800 | 86.850 | 42.791 | 20.006 |
+|   22  | 56.600 | 78.800 | 86.850 | 42.725 | 19.980 |
+|   23  | 56.550 | 78.750 | 86.850 | 42.704 | 19.959 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 23, 'R1': 56.55, 'R5': 78.75, 'R10': 86.85, 'mAP': 42.704, 'mINP': 19.959, 'entropy': 1.0236082424720128, 'loss': 2.4958152969678244, 'lr': 4.638755847350443e-06}
+     Epoch[24] Iteration[10/125], entropy: 1.0237, loss: 2.4536, lr: 9.65e-06
+     Epoch[24] Iteration[20/125], entropy: 1.0668, loss: 2.5509, lr: 4.69e-06
+     Epoch[24] Iteration[30/125], entropy: 0.8246, loss: 2.3892, lr: 1.57e-07
+     Epoch[24] Iteration[40/125], entropy: 1.1837, loss: 2.6921, lr: 2.32e-06
+     Epoch[24] Iteration[50/125], entropy: 1.0666, loss: 2.4773, lr: 8.19e-06
+     Epoch[24] Iteration[60/125], entropy: 1.0996, loss: 2.6231, lr: 9.65e-06
+     Epoch[24] Iteration[70/125], entropy: 0.8912, loss: 2.3568, lr: 4.69e-06
+     Epoch[24] Iteration[80/125], entropy: 0.9007, loss: 2.4139, lr: 1.57e-07
+     Epoch[24] Iteration[90/125], entropy: 0.9191, loss: 2.3465, lr: 2.32e-06
+     Epoch[24] Iteration[100/125], entropy: 0.9463, loss: 2.3586, lr: 8.19e-06
+     Epoch[24] Iteration[110/125], entropy: 1.3161, loss: 2.8027, lr: 9.65e-06
+     Epoch[24] Iteration[120/125], entropy: 1.0985, loss: 2.5214, lr: 4.69e-06
+     Averaged stats: entropy: 0.8331, loss: 2.2568, lr: 1.81e-06
+     itm tta time 0:00:13
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
+|   8   | 56.950 | 78.700 | 86.700 | 43.139 | 20.225 |
+|   9   | 56.800 | 78.650 | 86.750 | 43.098 | 20.215 |
+|   10  | 56.800 | 78.550 | 86.750 | 43.064 | 20.215 |
+|   11  | 56.800 | 78.650 | 86.750 | 43.052 | 20.187 |
+|   12  | 56.850 | 78.500 | 86.750 | 43.046 | 20.177 |
+|   13  | 56.850 | 78.500 | 86.700 | 43.024 | 20.143 |
+|   14  | 56.900 | 78.600 | 86.650 | 43.015 | 20.143 |
+|   15  | 56.950 | 78.600 | 86.850 | 42.999 | 20.127 |
+|   16  | 56.750 | 78.650 | 86.900 | 42.939 | 20.092 |
+|   17  | 56.800 | 78.650 | 86.900 | 42.912 | 20.074 |
+|   18  | 56.750 | 78.700 | 86.900 | 42.881 | 20.044 |
+|   19  | 56.700 | 78.800 | 86.850 | 42.844 | 20.032 |
+|   20  | 56.700 | 78.800 | 86.850 | 42.820 | 20.026 |
+|   21  | 56.750 | 78.800 | 86.850 | 42.791 | 20.006 |
+|   22  | 56.600 | 78.800 | 86.850 | 42.725 | 19.980 |
+|   23  | 56.550 | 78.750 | 86.850 | 42.704 | 19.959 |
+|   24  | 56.350 | 78.650 | 86.850 | 42.623 | 19.929 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 24, 'R1': 56.35, 'R5': 78.65, 'R10': 86.85, 'mAP': 42.623, 'mINP': 19.929, 'entropy': 1.0280717412630718, 'loss': 2.4988476037979126, 'lr': 5.361244152649556e-06}
+     Epoch[25] Iteration[10/125], entropy: 0.9556, loss: 2.3761, lr: 3.51e-07
+     Epoch[25] Iteration[20/125], entropy: 0.6684, loss: 2.0893, lr: 5.31e-06
+     Epoch[25] Iteration[30/125], entropy: 1.2156, loss: 2.6155, lr: 9.84e-06
+     Epoch[25] Iteration[40/125], entropy: 1.1507, loss: 2.6071, lr: 7.68e-06
+     Epoch[25] Iteration[50/125], entropy: 0.9462, loss: 2.4573, lr: 1.81e-06
+     Epoch[25] Iteration[60/125], entropy: 1.0055, loss: 2.4460, lr: 3.51e-07
+     Epoch[25] Iteration[70/125], entropy: 0.8905, loss: 2.3576, lr: 5.31e-06
+     Epoch[25] Iteration[80/125], entropy: 1.0716, loss: 2.5380, lr: 9.84e-06
+     Epoch[25] Iteration[90/125], entropy: 1.0016, loss: 2.4827, lr: 7.68e-06
+     Epoch[25] Iteration[100/125], entropy: 0.9333, loss: 2.4548, lr: 1.81e-06
+     Epoch[25] Iteration[110/125], entropy: 1.0094, loss: 2.5780, lr: 3.51e-07
+     Epoch[25] Iteration[120/125], entropy: 0.9152, loss: 2.4470, lr: 5.31e-06
+     Averaged stats: entropy: 0.8565, loss: 2.3309, lr: 8.19e-06
+     itm tta time 0:00:13
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
+|   8   | 56.950 | 78.700 | 86.700 | 43.139 | 20.225 |
+|   9   | 56.800 | 78.650 | 86.750 | 43.098 | 20.215 |
+|   10  | 56.800 | 78.550 | 86.750 | 43.064 | 20.215 |
+|   11  | 56.800 | 78.650 | 86.750 | 43.052 | 20.187 |
+|   12  | 56.850 | 78.500 | 86.750 | 43.046 | 20.177 |
+|   13  | 56.850 | 78.500 | 86.700 | 43.024 | 20.143 |
+|   14  | 56.900 | 78.600 | 86.650 | 43.015 | 20.143 |
+|   15  | 56.950 | 78.600 | 86.850 | 42.999 | 20.127 |
+|   16  | 56.750 | 78.650 | 86.900 | 42.939 | 20.092 |
+|   17  | 56.800 | 78.650 | 86.900 | 42.912 | 20.074 |
+|   18  | 56.750 | 78.700 | 86.900 | 42.881 | 20.044 |
+|   19  | 56.700 | 78.800 | 86.850 | 42.844 | 20.032 |
+|   20  | 56.700 | 78.800 | 86.850 | 42.820 | 20.026 |
+|   21  | 56.750 | 78.800 | 86.850 | 42.791 | 20.006 |
+|   22  | 56.600 | 78.800 | 86.850 | 42.725 | 19.980 |
+|   23  | 56.550 | 78.750 | 86.850 | 42.704 | 19.959 |
+|   24  | 56.350 | 78.650 | 86.850 | 42.623 | 19.929 |
+|   25  | 56.250 | 78.550 | 86.850 | 42.588 | 19.921 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 25, 'R1': 56.25, 'R5': 78.55, 'R10': 86.85, 'mAP': 42.588, 'mINP': 19.921, 'entropy': 0.9802997410297394, 'loss': 2.454113245010376, 'lr': 4.638755847350446e-06}
+     Epoch[26] Iteration[10/125], entropy: 0.9927, loss: 2.4941, lr: 9.65e-06
+     Epoch[26] Iteration[20/125], entropy: 1.3133, loss: 2.7892, lr: 4.69e-06
+     Epoch[26] Iteration[30/125], entropy: 0.8533, loss: 2.3359, lr: 1.57e-07
+     Epoch[26] Iteration[40/125], entropy: 1.1007, loss: 2.6339, lr: 2.32e-06
+     Epoch[26] Iteration[50/125], entropy: 1.0164, loss: 2.4849, lr: 8.19e-06
+     Epoch[26] Iteration[60/125], entropy: 1.0456, loss: 2.4883, lr: 9.65e-06
+     Epoch[26] Iteration[70/125], entropy: 1.0214, loss: 2.4566, lr: 4.69e-06
+     Epoch[26] Iteration[80/125], entropy: 0.8139, loss: 2.2933, lr: 1.57e-07
+     Epoch[26] Iteration[90/125], entropy: 0.9910, loss: 2.4926, lr: 2.32e-06
+     Epoch[26] Iteration[100/125], entropy: 1.0083, loss: 2.4489, lr: 8.19e-06
+     Epoch[26] Iteration[110/125], entropy: 1.0466, loss: 2.5584, lr: 9.65e-06
+     Epoch[26] Iteration[120/125], entropy: 0.9553, loss: 2.3824, lr: 4.69e-06
+     Averaged stats: entropy: 0.8032, loss: 2.2596, lr: 1.81e-06
+     itm tta time 0:00:13
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
+|   8   | 56.950 | 78.700 | 86.700 | 43.139 | 20.225 |
+|   9   | 56.800 | 78.650 | 86.750 | 43.098 | 20.215 |
+|   10  | 56.800 | 78.550 | 86.750 | 43.064 | 20.215 |
+|   11  | 56.800 | 78.650 | 86.750 | 43.052 | 20.187 |
+|   12  | 56.850 | 78.500 | 86.750 | 43.046 | 20.177 |
+|   13  | 56.850 | 78.500 | 86.700 | 43.024 | 20.143 |
+|   14  | 56.900 | 78.600 | 86.650 | 43.015 | 20.143 |
+|   15  | 56.950 | 78.600 | 86.850 | 42.999 | 20.127 |
+|   16  | 56.750 | 78.650 | 86.900 | 42.939 | 20.092 |
+|   17  | 56.800 | 78.650 | 86.900 | 42.912 | 20.074 |
+|   18  | 56.750 | 78.700 | 86.900 | 42.881 | 20.044 |
+|   19  | 56.700 | 78.800 | 86.850 | 42.844 | 20.032 |
+|   20  | 56.700 | 78.800 | 86.850 | 42.820 | 20.026 |
+|   21  | 56.750 | 78.800 | 86.850 | 42.791 | 20.006 |
+|   22  | 56.600 | 78.800 | 86.850 | 42.725 | 19.980 |
+|   23  | 56.550 | 78.750 | 86.850 | 42.704 | 19.959 |
+|   24  | 56.350 | 78.650 | 86.850 | 42.623 | 19.929 |
+|   25  | 56.250 | 78.550 | 86.850 | 42.588 | 19.921 |
+|   26  | 56.400 | 78.600 | 86.750 | 42.563 | 19.908 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 26, 'R1': 56.4, 'R5': 78.6, 'R10': 86.75, 'mAP': 42.563, 'mINP': 19.908, 'entropy': 1.0132034520308177, 'loss': 2.488210598627726, 'lr': 5.361244152649522e-06}
+     Epoch[27] Iteration[10/125], entropy: 1.1677, loss: 2.6202, lr: 3.51e-07
+     Epoch[27] Iteration[20/125], entropy: 0.7291, loss: 2.2706, lr: 5.31e-06
+     Epoch[27] Iteration[30/125], entropy: 0.8652, loss: 2.3610, lr: 9.84e-06
+     Epoch[27] Iteration[40/125], entropy: 0.9875, loss: 2.4346, lr: 7.68e-06
+     Epoch[27] Iteration[50/125], entropy: 1.0394, loss: 2.4518, lr: 1.81e-06
+     Epoch[27] Iteration[60/125], entropy: 1.2146, loss: 2.6823, lr: 3.51e-07
+     Epoch[27] Iteration[70/125], entropy: 0.9025, loss: 2.3629, lr: 5.31e-06
+     Epoch[27] Iteration[80/125], entropy: 0.7967, loss: 2.2367, lr: 9.84e-06
+     Epoch[27] Iteration[90/125], entropy: 1.1408, loss: 2.6067, lr: 7.68e-06
+     Epoch[27] Iteration[100/125], entropy: 0.8908, loss: 2.2242, lr: 1.81e-06
+     Epoch[27] Iteration[110/125], entropy: 0.9654, loss: 2.3811, lr: 3.51e-07
+     Epoch[27] Iteration[120/125], entropy: 1.1197, loss: 2.5442, lr: 5.31e-06
+     Averaged stats: entropy: 0.9614, loss: 2.4171, lr: 8.19e-06
+     itm tta time 0:00:13
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
+|   8   | 56.950 | 78.700 | 86.700 | 43.139 | 20.225 |
+|   9   | 56.800 | 78.650 | 86.750 | 43.098 | 20.215 |
+|   10  | 56.800 | 78.550 | 86.750 | 43.064 | 20.215 |
+|   11  | 56.800 | 78.650 | 86.750 | 43.052 | 20.187 |
+|   12  | 56.850 | 78.500 | 86.750 | 43.046 | 20.177 |
+|   13  | 56.850 | 78.500 | 86.700 | 43.024 | 20.143 |
+|   14  | 56.900 | 78.600 | 86.650 | 43.015 | 20.143 |
+|   15  | 56.950 | 78.600 | 86.850 | 42.999 | 20.127 |
+|   16  | 56.750 | 78.650 | 86.900 | 42.939 | 20.092 |
+|   17  | 56.800 | 78.650 | 86.900 | 42.912 | 20.074 |
+|   18  | 56.750 | 78.700 | 86.900 | 42.881 | 20.044 |
+|   19  | 56.700 | 78.800 | 86.850 | 42.844 | 20.032 |
+|   20  | 56.700 | 78.800 | 86.850 | 42.820 | 20.026 |
+|   21  | 56.750 | 78.800 | 86.850 | 42.791 | 20.006 |
+|   22  | 56.600 | 78.800 | 86.850 | 42.725 | 19.980 |
+|   23  | 56.550 | 78.750 | 86.850 | 42.704 | 19.959 |
+|   24  | 56.350 | 78.650 | 86.850 | 42.623 | 19.929 |
+|   25  | 56.250 | 78.550 | 86.850 | 42.588 | 19.921 |
+|   26  | 56.400 | 78.600 | 86.750 | 42.563 | 19.908 |
+|   27  | 56.350 | 78.700 | 86.750 | 42.527 | 19.919 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 27, 'R1': 56.35, 'R5': 78.7, 'R10': 86.75, 'mAP': 42.527, 'mINP': 19.919, 'entropy': 0.9849410057067871, 'loss': 2.43137260278066, 'lr': 4.63875584735048e-06}
+     Epoch[28] Iteration[10/125], entropy: 0.8415, loss: 2.3948, lr: 9.65e-06
+     Epoch[28] Iteration[20/125], entropy: 0.8601, loss: 2.2743, lr: 4.69e-06
+     Epoch[28] Iteration[30/125], entropy: 0.8951, loss: 2.4104, lr: 1.57e-07
+     Epoch[28] Iteration[40/125], entropy: 1.1993, loss: 2.6311, lr: 2.32e-06
+     Epoch[28] Iteration[50/125], entropy: 1.0218, loss: 2.5410, lr: 8.19e-06
+     Epoch[28] Iteration[60/125], entropy: 1.1423, loss: 2.5253, lr: 9.65e-06
+     Epoch[28] Iteration[70/125], entropy: 1.0362, loss: 2.5335, lr: 4.69e-06
+     Epoch[28] Iteration[80/125], entropy: 1.0688, loss: 2.4687, lr: 1.57e-07
+     Epoch[28] Iteration[90/125], entropy: 1.1375, loss: 2.5873, lr: 2.32e-06
+     Epoch[28] Iteration[100/125], entropy: 0.8605, loss: 2.3649, lr: 8.19e-06
+     Epoch[28] Iteration[110/125], entropy: 1.1389, loss: 2.6150, lr: 9.65e-06
+     Epoch[28] Iteration[120/125], entropy: 1.0666, loss: 2.5604, lr: 4.69e-06
+     Averaged stats: entropy: 1.0725, loss: 2.5148, lr: 1.81e-06
+     itm tta time 0:00:13
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
+|   8   | 56.950 | 78.700 | 86.700 | 43.139 | 20.225 |
+|   9   | 56.800 | 78.650 | 86.750 | 43.098 | 20.215 |
+|   10  | 56.800 | 78.550 | 86.750 | 43.064 | 20.215 |
+|   11  | 56.800 | 78.650 | 86.750 | 43.052 | 20.187 |
+|   12  | 56.850 | 78.500 | 86.750 | 43.046 | 20.177 |
+|   13  | 56.850 | 78.500 | 86.700 | 43.024 | 20.143 |
+|   14  | 56.900 | 78.600 | 86.650 | 43.015 | 20.143 |
+|   15  | 56.950 | 78.600 | 86.850 | 42.999 | 20.127 |
+|   16  | 56.750 | 78.650 | 86.900 | 42.939 | 20.092 |
+|   17  | 56.800 | 78.650 | 86.900 | 42.912 | 20.074 |
+|   18  | 56.750 | 78.700 | 86.900 | 42.881 | 20.044 |
+|   19  | 56.700 | 78.800 | 86.850 | 42.844 | 20.032 |
+|   20  | 56.700 | 78.800 | 86.850 | 42.820 | 20.026 |
+|   21  | 56.750 | 78.800 | 86.850 | 42.791 | 20.006 |
+|   22  | 56.600 | 78.800 | 86.850 | 42.725 | 19.980 |
+|   23  | 56.550 | 78.750 | 86.850 | 42.704 | 19.959 |
+|   24  | 56.350 | 78.650 | 86.850 | 42.623 | 19.929 |
+|   25  | 56.250 | 78.550 | 86.850 | 42.588 | 19.921 |
+|   26  | 56.400 | 78.600 | 86.750 | 42.563 | 19.908 |
+|   27  | 56.350 | 78.700 | 86.750 | 42.527 | 19.919 |
+|   28  | 56.350 | 78.950 | 86.750 | 42.485 | 19.902 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 28, 'R1': 56.35, 'R5': 78.95, 'R10': 86.75, 'mAP': 42.485, 'mINP': 19.902, 'entropy': 1.0223869234323502, 'loss': 2.4922211170196533, 'lr': 5.36124415264952e-06}
+     Epoch[29] Iteration[10/125], entropy: 1.1451, loss: 2.5942, lr: 3.51e-07
+     Epoch[29] Iteration[20/125], entropy: 0.6188, loss: 2.0568, lr: 5.31e-06
+     Epoch[29] Iteration[30/125], entropy: 0.7247, loss: 2.2874, lr: 9.84e-06
+     Epoch[29] Iteration[40/125], entropy: 0.9926, loss: 2.4566, lr: 7.68e-06
+     Epoch[29] Iteration[50/125], entropy: 0.9903, loss: 2.3939, lr: 1.81e-06
+     Epoch[29] Iteration[60/125], entropy: 0.8199, loss: 2.1971, lr: 3.51e-07
+     Epoch[29] Iteration[70/125], entropy: 0.9925, loss: 2.4375, lr: 5.31e-06
+     Epoch[29] Iteration[80/125], entropy: 1.1241, loss: 2.5282, lr: 9.84e-06
+     Epoch[29] Iteration[90/125], entropy: 0.9497, loss: 2.4209, lr: 7.68e-06
+     Epoch[29] Iteration[100/125], entropy: 1.0893, loss: 2.5704, lr: 1.81e-06
+     Epoch[29] Iteration[110/125], entropy: 1.0778, loss: 2.5626, lr: 3.51e-07
+     Epoch[29] Iteration[120/125], entropy: 0.9711, loss: 2.3996, lr: 5.31e-06
+     Averaged stats: entropy: 0.9978, loss: 2.4754, lr: 8.19e-06
+     itm tta time 0:00:14
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 56.850 | 78.850 | 86.750 | 43.218 | 20.269 |
+|   0   | 56.950 | 78.850 | 86.850 | 43.194 | 20.247 |
+|   1   | 57.050 | 78.550 | 86.850 | 43.200 | 20.248 |
+|   2   | 57.000 | 78.600 | 86.850 | 43.193 | 20.251 |
+|   3   | 57.000 | 78.650 | 86.850 | 43.191 | 20.247 |
+|   4   | 57.000 | 78.600 | 86.800 | 43.189 | 20.248 |
+|   5   | 56.950 | 78.700 | 86.800 | 43.185 | 20.238 |
+|   6   | 56.900 | 78.700 | 86.850 | 43.170 | 20.217 |
+|   7   | 56.850 | 78.700 | 86.700 | 43.152 | 20.242 |
+|   8   | 56.950 | 78.700 | 86.700 | 43.139 | 20.225 |
+|   9   | 56.800 | 78.650 | 86.750 | 43.098 | 20.215 |
+|   10  | 56.800 | 78.550 | 86.750 | 43.064 | 20.215 |
+|   11  | 56.800 | 78.650 | 86.750 | 43.052 | 20.187 |
+|   12  | 56.850 | 78.500 | 86.750 | 43.046 | 20.177 |
+|   13  | 56.850 | 78.500 | 86.700 | 43.024 | 20.143 |
+|   14  | 56.900 | 78.600 | 86.650 | 43.015 | 20.143 |
+|   15  | 56.950 | 78.600 | 86.850 | 42.999 | 20.127 |
+|   16  | 56.750 | 78.650 | 86.900 | 42.939 | 20.092 |
+|   17  | 56.800 | 78.650 | 86.900 | 42.912 | 20.074 |
+|   18  | 56.750 | 78.700 | 86.900 | 42.881 | 20.044 |
+|   19  | 56.700 | 78.800 | 86.850 | 42.844 | 20.032 |
+|   20  | 56.700 | 78.800 | 86.850 | 42.820 | 20.026 |
+|   21  | 56.750 | 78.800 | 86.850 | 42.791 | 20.006 |
+|   22  | 56.600 | 78.800 | 86.850 | 42.725 | 19.980 |
+|   23  | 56.550 | 78.750 | 86.850 | 42.704 | 19.959 |
+|   24  | 56.350 | 78.650 | 86.850 | 42.623 | 19.929 |
+|   25  | 56.250 | 78.550 | 86.850 | 42.588 | 19.921 |
+|   26  | 56.400 | 78.600 | 86.750 | 42.563 | 19.908 |
+|   27  | 56.350 | 78.700 | 86.750 | 42.527 | 19.919 |
+|   28  | 56.350 | 78.950 | 86.750 | 42.485 | 19.902 |
+|   29  | 56.250 | 78.950 | 86.750 | 42.423 | 19.855 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 29, 'R1': 56.25, 'R5': 78.95, 'R10': 86.75, 'mAP': 42.423, 'mINP': 19.855, 'entropy': 0.9579824656248093, 'loss': 2.408773501714071, 'lr': 4.638755847350495e-06}
+### best epoch 1 : {'epo': '1', 'R1': '57.05', 'R5': '78.55', 'R10': '86.85', 'mAP': '43.2', 'mINP': '20.248', 'entropy': '1.0700028538703918', 'loss': '2.5026991963386536', 'lr': '4.712947764392442e-06'}
+### Time 0:09:28
