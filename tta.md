@@ -138,7 +138,7 @@ pip install tqdm tensorboard pyyaml matplotlib regex ftfy
 +------+--------+--------+--------+--------+--------+
 | task |   R1   |   R5   |  R10   |  mAP   |  mINP  |
 +------+--------+--------+--------+--------+--------+
-| t2i  | 49.000 | 73.450 | 82.150 | 37.237 | 15.914 |
+| t2i  | 49.000 | 73.450 | 82.150 | 37.237 | 15.914 |     mllm_rstp_tta |  -999 | 49.050 | 73.450 | 82.150 | 37.244 | 15.907 |
 +------+--------+--------+--------+--------+--------+
 - best1.pth
 +------+--------+--------+--------+--------+--------+
@@ -220,6 +220,7 @@ pip install tqdm tensorboard pyyaml matplotlib regex ftfy
 ## exp0
 **entropy**
 - nohup CUDA_VISIBLE_DEVICES=1 python3 tta.py --config_file tta_configs/ham_rstp_tta/exp0.0.0.yaml > logs_rerun/ham_rstp_tta/exp0.0.0.log 2>&1 &
+- nohup CUDA_VISIBLE_DEVICES=1 python3 tta.py --config_file tta_configs/mllm_rstp_tta/exp_debug.yaml > logs_rerun/mllm_rstp_tta/exp_debug.log 2>&1 &
 
     0.0
 
