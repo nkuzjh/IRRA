@@ -34,7 +34,7 @@ do
 
 
     # nohup python3 tta.py --config_file tta_configs/mllm_rstp_tta/exp0.0.0.yaml > logs/mllm_rstp_tta/exp0.0.0.log 2>&1 &
-    CUDA_VISIBLE_DEVICES=1 nohup python3 tta.py --config_file tta_configs/$task_name/$exp_name.yaml > $log_dir/$task_name/$exp_name.log 2>&1 &
+    CUDA_VISIBLE_DEVICES=0 nohup python3 tta.py --config_file tta_configs/$task_name/$exp_name.yaml > $log_dir/$task_name/$exp_name.log 2>&1 &
 
 
     # 等待当前任务完成
