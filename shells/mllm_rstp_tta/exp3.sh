@@ -2,7 +2,7 @@
 
 # 设置基础参数
 # num_gpus=1
-task_name="mllm_rstp_tta"
+task_name="mllm_rstp_tta_best2"
 log_dir="./logs_rerun"
 mkdir -p $log_dir/$task_name
 
