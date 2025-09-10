@@ -1,12 +1,68 @@
+Not using distributed mode
+### Hyper-parameters:
+     output_dir: output_rerun/ham_icfg_tta/exp1.0.4/2025090505375
+     seed: 42
+     device: cuda
+     batch_size_tta: 16
+     epochs: 30
+     lr: 0.001
+### Creating test dataset
+     test_txt_set: 19848    test_img_set: 19848
+     test_txt_loader: 39    test_img_loader: 39
+### Creating model
+Training Model with ['sdm', 'id', 'mlm'] tasks
+Resized position embedding from size:torch.Size([1, 197, 768]) to size: torch.Size([1, 193, 768]) with height:24 width: 8
+     Total Params Sum:  190482206
+### Zero-Shot Score: 
 Traceback (most recent call last):
-  File "/home/jiahao/task/IRRA/tta.py", line 9, in <module>
-    from datasets import build_dataloader
-  File "/home/jiahao/task/IRRA/datasets/__init__.py", line 1, in <module>
-    from .build import build_dataloader
-  File "/home/jiahao/task/IRRA/datasets/build.py", line 11, in <module>
-    from .bases import ImageDataset, TextDataset, ImageTextDataset, ImageTextMLMDataset
-  File "/home/jiahao/task/IRRA/datasets/bases.py", line 7, in <module>
-    from utils.simple_tokenizer import SimpleTokenizer
-  File "/home/jiahao/task/IRRA/utils/simple_tokenizer.py", line 6, in <module>
-    import ftfy
-ModuleNotFoundError: No module named 'ftfy'
+  File "/home/jiahao/task/IRRA/tta.py", line 196, in <module>
+    test_result, recall1, similarity, qfeats, gfeats, qids, gids, captions, imgs = do_inference(model, test_img_loader, test_txt_loader)
+  File "/home/jiahao/miniconda3/envs/irra/lib/python3.9/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/jiahao/task/IRRA/processor/processor.py", line 117, in do_inference
+    eval_result, top1, similarity, qfeats, gfeats, qids, gids, captions, imgs = evaluator.eval(model.eval())
+  File "/home/jiahao/task/IRRA/utils/metrics.py", line 80, in eval
+    qfeats, gfeats, qids, gids, captions, imgs = self._compute_embedding(model)
+  File "/home/jiahao/task/IRRA/utils/metrics.py", line 69, in _compute_embedding
+    img_feat = model.encode_image(img)
+  File "/home/jiahao/task/IRRA/model/build.py", line 82, in encode_image
+    x = self.base_model.encode_image(image)
+  File "/home/jiahao/task/IRRA/model/clip_model.py", line 409, in encode_image
+    return self.visual(image.type(self.dtype))
+  File "/home/jiahao/miniconda3/envs/irra/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/jiahao/miniconda3/envs/irra/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/jiahao/task/IRRA/model/clip_model.py", line 296, in forward
+    x = self.transformer(x)
+  File "/home/jiahao/miniconda3/envs/irra/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/jiahao/miniconda3/envs/irra/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/jiahao/task/IRRA/model/clip_model.py", line 262, in forward
+    return self.resblocks(x)
+  File "/home/jiahao/miniconda3/envs/irra/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/jiahao/miniconda3/envs/irra/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/jiahao/miniconda3/envs/irra/lib/python3.9/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/home/jiahao/miniconda3/envs/irra/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/jiahao/miniconda3/envs/irra/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/jiahao/task/IRRA/model/clip_model.py", line 250, in forward
+    x = x + self.mlp(self.ln_2(x))
+  File "/home/jiahao/miniconda3/envs/irra/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/jiahao/miniconda3/envs/irra/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/jiahao/miniconda3/envs/irra/lib/python3.9/site-packages/torch/nn/modules/container.py", line 244, in forward
+    input = module(input)
+  File "/home/jiahao/miniconda3/envs/irra/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/jiahao/miniconda3/envs/irra/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/jiahao/task/IRRA/model/clip_model.py", line 227, in forward
+    return x * torch.sigmoid(1.702 * x)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 580.00 MiB. GPU 0 has a total capacity of 23.55 GiB of which 104.81 MiB is free. Process 2381835 has 19.93 GiB memory in use. Including non-PyTorch memory, this process has 3.48 GiB memory in use. Of the allocated memory 2.58 GiB is allocated by PyTorch, and 462.55 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)

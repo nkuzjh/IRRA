@@ -10,14 +10,14 @@ mkdir -p $log_dir/$task_name
 
 # 定义实验名
 exp_names=(
-    "exp0.0.0"
-    "exp0.0.1"
-    "exp0.0.2"
-    "exp0.0.3"
-    "exp0.0.4"
-    "exp0.1.0"
-    "exp0.1.1"
-    "exp0.1.2"
+    # "exp0.0.0"
+    # "exp0.0.1"
+    # "exp0.0.2"
+    # "exp0.0.3"
+    # "exp0.0.4"
+    # "exp0.1.0"
+    # "exp0.1.1"
+    # "exp0.1.2"
     "exp0.1.3"
     "exp0.1.4"
 )
