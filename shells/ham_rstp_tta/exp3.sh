@@ -39,7 +39,7 @@ do
 
 
     # CUDA_VISIBLE_DEVICES=1 nohup python3 tta.py --config_file tta_configs/ham_rstp_tta/exp1.yaml > logs/ham_rstp_tta/exp1.log 2>&1 &
-    CUDA_VISIBLE_DEVICES=1 nohup python3 tta.py --config_file tta_configs/$task_name/$exp_name.yaml > $log_dir/$task_name/$exp_name.log 2>&1 &
+    CUDA_VISIBLE_DEVICES=2 nohup python3 tta.py --config_file tta_configs/$task_name/$exp_name.yaml > $log_dir/$task_name/$exp_name.log 2>&1 &
 
 
     # 等待当前任务完成
