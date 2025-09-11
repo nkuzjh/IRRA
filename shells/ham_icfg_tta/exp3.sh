@@ -10,21 +10,21 @@ mkdir -p $log_dir/$task_name
 
 # 定义实验名
 exp_names=(
-    "exp3.0.0"
-    "exp3.0.1"
-    "exp3.0.2"
-    "exp3.0.3"
-    "exp3.0.4"
-    "exp3.1.0"
-    "exp3.1.1"
-    "exp3.1.2"
-    "exp3.1.3"
-    "exp3.1.4"
-    "exp3.2.0"
+    # "exp3.0.0"
+    # "exp3.0.1"
+    # "exp3.0.2"
+    # "exp3.0.3"
+    # "exp3.0.4"
+    # "exp3.1.0"
+    # "exp3.1.1"
+    # "exp3.1.2"
+    # "exp3.1.3"
+    # "exp3.1.4"
+    # "exp3.2.0"
     "exp3.2.1"
     "exp3.2.2"
-    "exp3.2.3"
-    "exp3.2.4"
+    # "exp3.2.3"
+    # "exp3.2.4"
 )
 
 # 按顺序执行每个训练任务
@@ -39,7 +39,7 @@ do
 
 
     # CUDA_VISIBLE_DEVICES=1 nohup python3 tta.py --config_file tta_configs/ham_icfg_tta/exp1.yaml > logs/ham_icfg_tta/exp1.log 2>&1 &
-    CUDA_VISIBLE_DEVICES=2 nohup python3 tta.py --config_file tta_configs/$task_name/$exp_name.yaml > $log_dir/$task_name/$exp_name.log 2>&1 &
+    CUDA_VISIBLE_DEVICES=1 nohup python3 tta.py --config_file tta_configs/$task_name/$exp_name.yaml > $log_dir/$task_name/$exp_name.log 2>&1 &
 
 
     # 等待当前任务完成
