@@ -104,7 +104,7 @@ def preprocess_tta_coefficients(config, sims_matrix_t2i):
 
     print(f"     pos/neg sampling ...")
     if config.get('neg_sample_range', None) is None:
-        topk_sim, topk_idx = sims_matrix_t2i[index].topk(k=config['k_tta'], dim=0) #[k_tta]
+        topk_sim, topk_idx = sims_matrix_t2i.topk(k=config['k_tta'], dim=1) #[k_tta]
     else:
         ## sampling stretegy
         ## 采样正样本
