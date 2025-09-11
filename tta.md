@@ -885,7 +885,7 @@ pip install tqdm tensorboard pyyaml matplotlib regex ftfy
 ### mllm_rstp_tta ckpt=best2
     best = exp3.0.3
         {'epo': '9', 'R1': '53.9', 'R5': '75.85', 'R10': '83.5', 'mAP': '39.888', 'mINP': '17.426', 'entropy': '0.5781783511241277', 'loss': '2.344040354092916', 'lr': '0.00023564738821962197'}
-### mllm_icfg_tta ckpt=best0 running~
+### mllm_icfg_tta ckpt=best0
     best = exp3.0.4
         {'epo': '7', 'R1': '39.994', 'R5': '57.809', 'R10': '65.795', 'mAP': '21.195', 'mINP': '2.222', 'entropy': '0.5648088762837071', 'loss': '2.5366444779980566', 'lr': '0.0005035334946775958'}
 ### mllm_icfg_tta ckpt=best1 waiting~
