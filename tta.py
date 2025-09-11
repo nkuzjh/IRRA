@@ -118,7 +118,7 @@ def do_tta(args, config, model, tta_loader, optimizer, scaler, epoch, device, sc
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="IRRA TTA")
-    parser.add_argument("--config_file", default='tta_configs/ham_rstp_tta/exp_debug.yaml')
+    parser.add_argument("--config_file", default='tta_configs/ham_cuhk_tta/exp_debug.yaml')
     args = parser.parse_args()
     with open(args.config_file, 'r') as f:
         args = edict( yaml.load(f, Loader=yaml.FullLoader) )
@@ -212,10 +212,11 @@ if __name__ == '__main__':
         # task_name = config['output_dir'].split('/')[1]
         # np.save(f'debug_embeddings/{task_name}/sims_matrix_t2i.npy', sims_matrix_t2i.detach().cpu().numpy())
         sims_topk_matrix_t2i, recall_types, ss_idxs_list, uncertaintys_list, proba_top1_sim_list, proba_inversed_sim_list  = preprocess_tta_coefficients(config, sims_matrix_t2i)
-        # ss=np.array(gids)
-        # print(ss.shape)
-        # task_name = config['output_dir'].split('/')[1]
-        # np.save(f'debug_embeddings/{task_name}/gids.npy', ss)
+# task_name = config['output_dir'].split('/')[1]
+# ss=np.array(gids)
+# print(ss.shape)
+# task_name = config['output_dir'].split('/')[1]
+# np.save(f'debug_embeddings/{task_name}/gids.npy', ss)
 
         print("### Creating TTA dataset")
         is_img_aug = config.get('is_image_augmentation', False)
