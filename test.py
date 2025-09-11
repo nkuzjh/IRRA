@@ -14,6 +14,8 @@ from model import build_model
 from utils.metrics import Evaluator
 import argparse
 from utils.iotools import load_train_configs
+import torch.backends.cudnn as cudnn
+import random
 
 
 if __name__ == '__main__':
@@ -21,6 +23,17 @@ if __name__ == '__main__':
     parser.add_argument("--config_file", default='logs/CUHK-PEDES/iira/configs.yaml')
     args = parser.parse_args()
     args = load_train_configs(args.config_file)
+
+    # seed = 42#args.seed
+    # torch.manual_seed(seed)
+    # torch.cuda.manual_seed(seed)
+    # torch.cuda.manual_seed_all(seed)
+    # np.random.seed(seed)
+    # random.seed(seed)
+    # cudnn.deterministic = True
+    # cudnn.benchmark = True
+    # print("     seed:", seed)
+
 
     args.training = False
     logger = setup_logger('IRRA', save_dir=args.output_dir, if_train=args.training)
