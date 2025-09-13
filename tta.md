@@ -2,7 +2,7 @@
 conda create -n irra python=3.9
 conda activate irra
 pip install torch torchvision
-pip install easydict prettytable
+pip install easydict prettytable tqdm tensorboard pyyaml matplotlib regex ftfy
 pip install tqdm tensorboard pyyaml matplotlib regex ftfy
 
 
@@ -906,7 +906,7 @@ pip install tqdm tensorboard pyyaml matplotlib regex ftfy
 
 
 # exp rerun 2
-- 同步为CMP的rerun2（随机数种子）和全新的uncertainty和sample_selection策略
+- 同步为CMP的rerun 3（随机数种子）和全新的uncertainty和sample_selection策略
 - uncertainty: |a-b|/(a+b)  and  |log(a)-log(b)|
 - sample_selection: 放宽到互为topk
 
