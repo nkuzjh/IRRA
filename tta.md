@@ -182,6 +182,7 @@ pip install tqdm tensorboard pyyaml matplotlib regex ftfy
 
 
 # exp rerun
+- 同步为CMP的rerun1原因
 ## **git版本导致的output缺失如下：**
 - mllm_icfg_tta在65上tta的output_dir错误设置成了ham_icfg_tta；
 - 而ham_icfg_tta在59上tta的中间部分exps的output/log.txt由于git merge被迁移到了65上；且由于59正在tmux tta，所以没有及时git pull，导致该部分exps的结果在59上缺失；
@@ -901,3 +902,16 @@ pip install tqdm tensorboard pyyaml matplotlib regex ftfy
     best = exp3.0.4
         {'epo': '7', 'R1': '39.994', 'R5': '57.809', 'R10': '65.795', 'mAP': '21.195', 'mINP': '2.222', 'entropy': '0.5648088762837071', 'loss': '2.5366444779980566', 'lr': '0.0005035334946775958'}
 ### mllm_icfg_tta ckpt=best1 waiting~
+
+
+
+# exp rerun 2
+- 同步为CMP的rerun2（随机数种子）和全新的uncertainty和sample_selection策略
+- uncertainty: |a-b|/(a+b)  and  |log(a)-log(b)|
+- sample_selection: 放宽到互为topk
+
+
+
+
+
+

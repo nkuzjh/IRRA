@@ -48,7 +48,8 @@ class IRRA_tta_dataset(Dataset):
             self.proba_top1_sim_list = proba_top1_sim_list
             self.proba_inversed_sim_list = proba_inversed_sim_list
 
-        if config.get('sample_selection', 'all') == 'top1':
+        # if config.get('sample_selection', 'all') == 'top1':
+        if len(ss_idxs_list) != len(self.sims_topk_matrix_t2i):
             self.sims_topk_matrix_t2i = sims_topk_matrix_t2i[ss_idxs_list]
             self.qids = qids[ss_idxs_list]
             self.captions = captions[ss_idxs_list]

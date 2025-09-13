@@ -7,7 +7,10 @@ device: cuda
 log_period: 10
 k_test: 128
 
-sample_selection: 'top1'
+sample_selection: 'all'
+# sample_selection: 'topk'
+# k_sample_selection: 5
+# sample_selection: 'top1'
 
 batch_size_tta: 16
 neg_sample_range: [5, 12]
@@ -15,11 +18,14 @@ k_tta: 8
 ## score_temper
 temperature: 0.02
 
-uncertainty: 'inversed_recall_proba'
+uncertainty_coeffi: 0.01 #1e-3 #1e-4
+# uncertainty: 'inversed_recall_proba'
+uncertainty: 'diff_div_sum'
+# uncertainty: 'abs_diff_log'
 uncertainty_temper: 1.0
 uncertainty_temper_is_learnable: False
-uncertainty_t2i_temper: 5.0
-uncertainty_i2t_temper: 5.0
+uncertainty_t2i_temper: 1.0 #5.0
+uncertainty_i2t_temper: 1.0 #5.0
 
 # is_prompt_learning: True
 # prompt_learning_token_num: 1
@@ -31,7 +37,7 @@ text_encoder_no_tta_layer: [0,6]
 
 ## optimizer
 # optimizer: {opt: adamW, lr: 1e-3, weight_decay: 0.01, lr_mult: 2}
-num_epoch: 30 #60
+num_epoch: 60 #60 # num_samples = 2000
 optimizer: Adam
 # momentum: 0.9
 alpha: 0.9

@@ -49,8 +49,10 @@ def do_tta(args, config, model, tta_loader, optimizer, scaler, epoch, device, sc
 
     start_time = time.time()
 
-    loss_iter_periods = []
     entropy_iter_periods = []
+    uncertainty_iter_periods = []
+    uncertainty_coeffi_iter_periods = []
+    loss_iter_periods = []
     lr_iter_periods = []
     for iter, (gids_topk, imgs_topk, qids_repeatk, captions_repeatk, uncertainty, proba_top1_sim, proba_inversed_sim) in enumerate(tta_loader):
         imgs_topk = imgs_topk.reshape(-1, imgs_topk.size(-3), imgs_topk.size(-2), imgs_topk.size(-1)).to(device)# [16, 8, 3, 384, 128]) -> [128, 3, 384, 128])
@@ -80,11 +82,20 @@ def do_tta(args, config, model, tta_loader, optimizer, scaler, epoch, device, sc
             cos_sims_inter = cos_sims / args.temperature
 
             entropy = -(F.softmax(cos_sims_inter, dim=-1) * F.log_softmax(cos_sims_inter, dim=-1)).sum(-1)
-            if config.get('uncertainty', None) == 'inversed_recall_proba' and config.get('uncertainty_temper_is_learnable', False):
+            if config.get('uncertainty_temper_is_learnable', False):
                 uncertainty_temper = model.uncertainty_temper
-                uncertainty = torch.exp( (1 - (proba_top1_sim + proba_inversed_sim) / 2) * uncertainty_temper )
+                if config.get('uncertainty', None) == 'inversed_recall_proba':
+                    uncertainty = torch.exp( (1 - (proba_top1_sim + proba_inversed_sim) / 2) * uncertainty_temper )
+                elif config.get('uncertainty', None) == 'diff_div_mean':
+                    uncertainty = torch.exp( torch.abs(proba_top1_sim - proba_inversed_sim) / ( (proba_top1_sim + proba_inversed_sim) / 2 ) * uncertainty_temper )
+                elif config.get('uncertainty', None) == 'abs_diff_log':
+                    assert "learnable uncertainty_temper is only used in inversed_recall_proba & diff_div_mean !"
+                else:
+                    assert "learnable uncertainty_temper is only used in inversed_recall_proba & diff_div_mean !"
+
+            uncertainty_coeffi = torch.tensor(config.get('uncertainty_coeffi', 1.0)).to(device)
             if config.get('uncertainty', None) is not None:
-                loss = entropy / uncertainty + uncertainty
+                loss = entropy / uncertainty + uncertainty * uncertainty_coeffi
             else:
                 loss = entropy
             loss = loss.mean()
@@ -99,27 +110,29 @@ def do_tta(args, config, model, tta_loader, optimizer, scaler, epoch, device, sc
         optimizer.zero_grad()
 
         if (iter + 1) % args.log_period == 0:
-            print(f"     Epoch[{epoch}] Iteration[{iter + 1}/{len(tta_loader)}], entropy: {entropy.mean().item():.4f}, loss: {loss.item():.4f}, lr: {optimizer.param_groups[0]['lr']:.2e}")
-            loss_iter_periods.append(loss.item())
+            print(f"     Epoch[{epoch}] Iteration[{iter + 1}/{len(tta_loader)}], entropy: {entropy.mean().item():.4f}, uncertainty: {uncertainty.mean().item():.4f}, uncertainty_coeffi: {uncertainty_coeffi.mean().item():.4f}, loss: {loss.item():.4f}, lr: {optimizer.param_groups[0]['lr']:.2e}")
             entropy_iter_periods.append(entropy.mean().item())
+            uncertainty_iter_periods.append(uncertainty.mean().item())
+            uncertainty_coeffi_iter_periods.append(uncertainty_coeffi.mean().item())
+            loss_iter_periods.append(loss.item())
             lr_iter_periods.append(optimizer.param_groups[0]["lr"])
 
-    print(f"     Averaged stats: entropy: {entropy.mean().item():.4f}, loss: {loss.item():.4f}, lr: {optimizer.param_groups[0]['lr']:.2e}")
+    # print(f"     Averaged stats: entropy: {entropy.mean().item():.4f}, loss: {loss.item():.4f}, lr: {optimizer.param_groups[0]['lr']:.2e}")
+    print(f"     Averaged stats: entropy_avg: {np.mean(entropy_iter_periods):.4f}, uncertainty_avg: {np.mean(uncertainty_iter_periods):.4f}, uncertainty_coeffi_avg: {np.mean(uncertainty_coeffi_iter_periods):.4f}, loss_avg: {np.mean(loss_iter_periods):.4f}, lr_avg: {np.mean(lr_iter_periods):.2e}")
 
     total_time = time.time() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))
     print('     itm tta time {}'.format(total_time_str))
     return {
         'entropy': np.mean(entropy_iter_periods),
+        'uncertainty': np.mean(uncertainty_iter_periods),
+        'uncertainty_coeffi': np.mean(uncertainty_coeffi_iter_periods),
         'loss': np.mean(loss_iter_periods),
         'lr': np.mean(lr_iter_periods),
     }
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="IRRA TTA")
-    parser.add_argument("--config_file", default='tta_configs/ham_cuhk_tta/exp_debug.yaml')
-    args = parser.parse_args()
+def main(args):
     with open(args.config_file, 'r') as f:
         args = edict( yaml.load(f, Loader=yaml.FullLoader) )
     args.output_dir = os.path.join(args.output_dir, f'{datetime.datetime.now().strftime("%Y%m%d%H%M%S")[:-1]}')
@@ -143,7 +156,8 @@ if __name__ == '__main__':
     np.random.seed(seed)
     random.seed(seed)
     cudnn.deterministic = True
-    cudnn.benchmark = True
+    cudnn.benchmark = False
+    os.environ['PYTHONHASHSEED'] = str(seed)
     print("     seed:", seed)
 
     device = torch.device(args.device)
@@ -209,8 +223,7 @@ if __name__ == '__main__':
             sims_matrix_t2i = similarity.cpu()
         else:
             sims_matrix_t2i = qfeats.cpu() @ gfeats.t().cpu()
-        # task_name = config['output_dir'].split('/')[1]
-        # np.save(f'debug_embeddings/{task_name}/sims_matrix_t2i.npy', sims_matrix_t2i.detach().cpu().numpy())
+
         sims_topk_matrix_t2i, recall_types, ss_idxs_list, uncertaintys_list, proba_top1_sim_list, proba_inversed_sim_list  = preprocess_tta_coefficients(config, sims_matrix_t2i)
 # task_name = config['output_dir'].split('/')[1]
 # ss=np.array(gids)
@@ -268,7 +281,7 @@ if __name__ == '__main__':
         scaler = GradScaler()  # bf16
 
 
-        print("### Start Test Time Adaptation")
+        print(f"### Start Test Time Adaptation : num_epoch = {args.num_epoch}")
         start_time = time.time()
         best = 0
         best_epoch = 0
@@ -276,29 +289,30 @@ if __name__ == '__main__':
         for epoch in range(args.num_epoch):
             train_stats = do_tta(args, config, model, tta_loader, optimizer, scaler, epoch, device, scheduler)
 
-            test_result, recall1, similarity, qfeats, gfeats, qids, gids, captions, imgs = do_inference(model, test_img_loader, test_txt_loader)
-            print("### TTA Eval Score: ")
-            table.add_row([
-                epoch, test_result['R1'], test_result['R5'], test_result['R10'], test_result['mAP'], test_result['mINP']
-            ])
-            print(table)
+            if epoch+1 in [1,2,3,5,10,20,30]:
+                test_result, recall1, similarity, qfeats, gfeats, qids, gids, captions, imgs = do_inference(model, test_img_loader, test_txt_loader)
+                print("### TTA Eval Score: ")
+                table.add_row([
+                    epoch, test_result['R1'], test_result['R5'], test_result['R10'], test_result['mAP'], test_result['mINP']
+                ])
+                print(table)
 
-            logs = {'epo': epoch}
-            for k, v in test_result.items():
-                logs[k] = np.around(v, 3)
-            for k, v in train_stats.items():
-                logs[k] = float(v)
-            print('     logs: ', logs)
-            for k, v in logs.items():
-                logs[k] = str(v)
-            with open(os.path.join(args.output_dir, "log.txt"), "a") as f:
-                f.write(json.dumps(logs) + "\n")
+                logs = {'epo': epoch}
+                for k, v in test_result.items():
+                    logs[k] = np.around(v, 3)
+                for k, v in train_stats.items():
+                    logs[k] = float(v)
+                print('     logs: ', logs)
+                for k, v in logs.items():
+                    logs[k] = str(v)
+                with open(os.path.join(args.output_dir, "log.txt"), "a") as f:
+                    f.write(json.dumps(logs) + "\n")
 
-            result = test_result['R1']
-            if result > best:
-                best = result
-                best_epoch = epoch
-                best_logs = logs
+                result = test_result['R1']
+                if result > best:
+                    best = result
+                    best_epoch = epoch
+                    best_logs = logs
 
             torch.cuda.empty_cache()
 
@@ -311,3 +325,9 @@ if __name__ == '__main__':
 
 
 
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="IRRA TTA")
+    parser.add_argument("--config_file", default='tta_configs_rerun2/ham_rstp_tta/exp_debug.yaml')
+    args = parser.parse_args()
+
+    main(args)

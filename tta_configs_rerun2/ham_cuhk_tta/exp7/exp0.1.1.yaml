@@ -1,0 +1,107 @@
+
+### TTA configuration
+output_dir: output_rerun2/ham_cuhk_tta/exp7/exp7.1.1
+
+num_epoch: 20 #60 # num_samples = 6156
+lr: 5.0e-05
+
+
+
+tta: True
+device: cuda
+log_period: 10
+k_test: 128
+
+# sample_selection: 'all'
+sample_selection: 'topk'
+k_sample_selection: 5
+# sample_selection: 'top1'
+
+batch_size_tta: 16
+neg_sample_range: [5, 12]
+k_tta: 8
+## score_temper
+temperature: 0.02
+
+# uncertainty_coeffi: 0.01 #1e-3 #1e-4
+# uncertainty: 'inversed_recall_proba'
+# uncertainty: 'diff_div_mean'
+# uncertainty: 'abs_diff_log'
+# uncertainty_temper: 1.0
+# uncertainty_temper_is_learnable: False
+# uncertainty_t2i_temper: 1.0 #5.0
+# uncertainty_i2t_temper: 1.0 #5.0
+
+# is_prompt_learning: True
+# prompt_learning_token_num: 1
+
+# is_image_augmentation: True
+
+## tta layers
+text_encoder_no_tta_layer: [0,6]
+
+## optimizer
+# optimizer: {opt: adamW, lr: 1e-3, weight_decay: 0.01, lr_mult: 2}
+# num_epoch: 20 #60 # num_samples = 6156
+optimizer: Adam
+# momentum: 0.9
+alpha: 0.9
+beta: 0.999
+# lr: 1.0e-05
+weight_decay: 4.0e-05
+weight_decay_bias: 0.0
+bias_lr_factor: 2.0
+lr_factor: 5.0
+
+## scheduler
+# schedular: {sched: step, lr: 1e-3, epochs: 30, num_warmup_steps: 100}
+lrscheduler: cosine
+milestones: !!python/tuple
+- 20
+- 50
+gamma: 0.1
+warmup_factor: 0.1
+warmup_epochs: 5
+warmup_method: linear
+target_lr: 0
+power: 0.9
+
+
+
+### IRRA configuration for CUHK-PEDES dataset
+MLM: true
+batch_size: 64
+cmt_depth: 4
+dataset_name: CUHK-PEDES
+distributed: false
+eval_period: 1
+id_loss_weight: 1.0
+img_aug: true
+img_size: !!python/tuple
+- 384
+- 128
+local_rank: 0
+loss_names: sdm+id+mlm
+masked_token_rate: 0.8
+masked_token_unchanged_rate: 0.1
+mlm_loss_weight: 1.0
+name: irra_fx
+num_instance: 4
+num_workers: 8
+# output_dir: output_rerun/ham_rstp
+pretrain_choice: ViT-B/16
+resume: false
+resume_ckpt_file: ''
+root_dir: ./input/images
+sampler: random
+stride_size: 16
+test_batch_size: 512
+text_length: 77
+training: true
+val_dataset: test
+vocab_size: 49408
+
+
+
+### HAM configuration for CUHK-PEDES dataset
+ckpt_dir: checkpoints/HAM_checkpoint/random100w_2HAMcaptions/best0.pth

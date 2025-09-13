@@ -28,13 +28,29 @@ def sample_selection_itc(sims_matrix_t2i, sims_matrix_i2t):
     return ss_idxs_list
 
 
+def sample_selection_topk_itc(sims_matrix_t2i, sims_matrix_i2t, k_sample_selection):
+    # find_inter_top1_sample_selection
+    ss_idxs_list = []
+    for i, sims_t2i in enumerate(sims_matrix_t2i):
+        topk_sim_t2i, topk_idx_t2i = sims_t2i.topk(k=k_sample_selection, dim=-1) # 获取t2i topk的相似度(topk_sim_t2i)和索引(topk_idx_t2i)
+        topk_sim_i2t, topk_idx_i2t  = sims_matrix_i2t[topk_idx_t2i].topk(k=k_sample_selection, dim=-1) # 获取top1_idx_t2i对应的i2t相似度和索引
+        if i in topk_idx_i2t.reshape(-1).tolist(): # 只保留t2i和i2t互为topk的样本
+            ss_idxs_list.append(i)
+        # else:
+        #     print(f"t2i & i2t do not have inter top1 sample: i2t_idx={i}, t2i_idx={top1_idx_t2i}, top1_sim_i2t={top1_sim_i2t}, top1_sim_t2i={top1_sim_t2i}")
+
+    return ss_idxs_list
+
+
 def compute_uncertainty_itc(config, sims_matrix_t2i, sims_matrix_i2t):
     k_test = config['k_test']
     uncertainty_temper = config.get('uncertainty_temper', 1.0)
     uncertainty_t2i_temper = config.get('uncertainty_t2i_temper', 1.0)
     uncertainty_i2t_temper = config.get('uncertainty_i2t_temper', 1.0)
 
-    uncertaintys_list = []
+    uncertaintys1_list = []
+    uncertaintys2_list = []
+    uncertaintys3_list = []
     proba_top1_sim_list = []
     proba_inversed_sim_list = []
     for i, sims_t2i in enumerate(sims_matrix_t2i):
@@ -48,12 +64,16 @@ def compute_uncertainty_itc(config, sims_matrix_t2i, sims_matrix_i2t):
             idx_i_in_topk_idx_i2t_top1_idx_t2i = torch.where(topk_idx_i2t_top1_idx_t2i == i)[0][0]
             proba_inversed_sim_i2t_top1_idx_t2i = F.softmax(topk_sim_i2t_top1_idx_t2i * uncertainty_i2t_temper, dim=0)[idx_i_in_topk_idx_i2t_top1_idx_t2i]
 
-        uncertainty = torch.exp( (1 - (proba_top1_sim_t2i + proba_inversed_sim_i2t_top1_idx_t2i) / 2) * uncertainty_temper )
+        uncertainty1 = torch.exp( (1 - (proba_top1_sim_t2i + proba_inversed_sim_i2t_top1_idx_t2i) / 2) * uncertainty_temper )
+        uncertainty2 = torch.exp( torch.abs(proba_top1_sim_t2i - proba_inversed_sim_i2t_top1_idx_t2i) / ( (proba_top1_sim_t2i + proba_inversed_sim_i2t_top1_idx_t2i) / 2 ) * uncertainty_temper )
+        uncertainty3 = torch.abs( torch.log(proba_top1_sim_t2i + 1e-2) - torch.log( proba_inversed_sim_i2t_top1_idx_t2i + 1e-2) )
 
-        uncertaintys_list.append(uncertainty)
+        uncertaintys1_list.append(uncertainty1)
+        uncertaintys2_list.append(uncertainty2)
+        uncertaintys3_list.append(uncertainty3)
         proba_top1_sim_list.append(proba_top1_sim_t2i)
         proba_inversed_sim_list.append(proba_inversed_sim_i2t_top1_idx_t2i)
-    return uncertaintys_list, proba_top1_sim_list, proba_inversed_sim_list
+    return uncertaintys1_list, uncertaintys2_list, uncertaintys3_list, proba_top1_sim_list, proba_inversed_sim_list
 
 
 def sample_neg_idxs(sims_matrix_i2t, k_tta, k_test, neg_sample_range=[32, 128]):
@@ -91,14 +111,24 @@ def preprocess_tta_coefficients(config, sims_matrix_t2i):
     print(f"     sample selection ...")
     if config.get('sample_selection', 'all') == 'top1':
         ss_idxs_list = sample_selection_itc(sims_matrix_t2i, sims_matrix_t2i.t()) # 找到i2t和t2i互为top1的样本索引
+    if config.get('sample_selection', 'all') == 'topk':
+        k_sample_selection = config.get('k_sample_selection', 5)
+        ss_idxs_list = sample_selection_topk_itc(sims_matrix_t2i, sims_matrix_t2i.t(), k_sample_selection) # 找到i2t和t2i互为top1的样本索引
     else:
         ss_idxs_list = torch.arange(0, sims_matrix_t2i.size(0)) # 全部样本
     print("     number of sample after sample_selection: {}".format(len(ss_idxs_list)))
 
     print(f"     uncertainty ...")
     ## tta coeffis
+    if config.get('uncertainty', None) is not None:
+        uncertaintys1_list, uncertaintys2_list, uncertaintys3_list, proba_top1_sim_list, proba_inversed_sim_list = compute_uncertainty_itc(config, sims_matrix_t2i, sims_matrix_t2i.t())
+
     if config.get('uncertainty', None) == 'inversed_recall_proba':
-        uncertaintys_list, proba_top1_sim_list, proba_inversed_sim_list = compute_uncertainty_itc(config, sims_matrix_t2i, sims_matrix_t2i.t())
+        uncertaintys_list = uncertaintys1_list
+    elif config.get('uncertainty', None) == 'diff_div_mean':
+        uncertaintys_list = uncertaintys2_list
+    elif config.get('uncertainty', None) == 'abs_diff_log':
+        uncertaintys_list = uncertaintys3_list
     else:
         uncertaintys_list, proba_top1_sim_list, proba_inversed_sim_list = torch.ones(sims_matrix_t2i.size(0)) , torch.ones(sims_matrix_t2i.size(0)), torch.ones(sims_matrix_t2i.size(0))
 
