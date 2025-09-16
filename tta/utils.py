@@ -51,6 +51,8 @@ def compute_uncertainty_itc(config, sims_matrix_t2i, sims_matrix_i2t):
     uncertaintys1_list = []
     uncertaintys2_list = []
     uncertaintys3_list = []
+    uncertaintys4_list = []
+    uncertaintys5_list = []
     proba_top1_sim_list = []
     proba_inversed_sim_list = []
     for i, sims_t2i in enumerate(sims_matrix_t2i):
@@ -67,13 +69,18 @@ def compute_uncertainty_itc(config, sims_matrix_t2i, sims_matrix_i2t):
         uncertainty1 = torch.exp( (1 - (proba_top1_sim_t2i + proba_inversed_sim_i2t_top1_idx_t2i) / 2) * uncertainty_temper )
         uncertainty2 = torch.exp( torch.abs(proba_top1_sim_t2i - proba_inversed_sim_i2t_top1_idx_t2i) / ( (proba_top1_sim_t2i + proba_inversed_sim_i2t_top1_idx_t2i) / 2 ) * uncertainty_temper )
         uncertainty3 = torch.abs( torch.log(proba_top1_sim_t2i + 1e-2) - torch.log( proba_inversed_sim_i2t_top1_idx_t2i + 1e-2) )
+        uncertainty4 = torch.exp( torch.abs(proba_top1_sim_t2i*config['N_t2i'] - proba_inversed_sim_i2t_top1_idx_t2i*config['N_i2t']) / ((proba_top1_sim_t2i*config['N_t2i'] + proba_inversed_sim_i2t_top1_idx_t2i*config['N_i2t'])/2) * uncertainty_temper )
+        uncertainty5 = torch.exp( torch.abs(proba_top1_sim_t2i - proba_inversed_sim_i2t_top1_idx_t2i*2) / ( (proba_top1_sim_t2i + proba_inversed_sim_i2t_top1_idx_t2i*2) / 2 ) * uncertainty_temper )
 
         uncertaintys1_list.append(uncertainty1)
         uncertaintys2_list.append(uncertainty2)
         uncertaintys3_list.append(uncertainty3)
+        uncertaintys4_list.append(uncertainty4)
+        uncertaintys5_list.append(uncertainty5)
+
         proba_top1_sim_list.append(proba_top1_sim_t2i)
         proba_inversed_sim_list.append(proba_inversed_sim_i2t_top1_idx_t2i)
-    return uncertaintys1_list, uncertaintys2_list, uncertaintys3_list, proba_top1_sim_list, proba_inversed_sim_list
+    return uncertaintys1_list, uncertaintys2_list, uncertaintys3_list, uncertaintys4_list, uncertaintys5_list, proba_top1_sim_list, proba_inversed_sim_list
 
 
 def sample_neg_idxs(sims_matrix_i2t, k_tta, k_test, neg_sample_range=[32, 128]):
@@ -121,7 +128,7 @@ def preprocess_tta_coefficients(config, sims_matrix_t2i):
     print(f"     uncertainty ...")
     ## tta coeffis
     if config.get('uncertainty', None) is not None:
-        uncertaintys1_list, uncertaintys2_list, uncertaintys3_list, proba_top1_sim_list, proba_inversed_sim_list = compute_uncertainty_itc(config, sims_matrix_t2i, sims_matrix_t2i.t())
+        uncertaintys1_list, uncertaintys2_list, uncertaintys3_list, uncertaintys4_list, uncertaintys5_list, proba_top1_sim_list, proba_inversed_sim_list = compute_uncertainty_itc(config, sims_matrix_t2i, sims_matrix_t2i.t())
 
     if config.get('uncertainty', None) == 'inversed_recall_proba':
         uncertaintys_list = uncertaintys1_list
@@ -129,6 +136,10 @@ def preprocess_tta_coefficients(config, sims_matrix_t2i):
         uncertaintys_list = uncertaintys2_list
     elif config.get('uncertainty', None) == 'abs_diff_log':
         uncertaintys_list = uncertaintys3_list
+    elif config.get('uncertainty', None) == 'scaled_diff_div_mean':
+        uncertaintys_list = uncertaintys4_list
+    elif config.get('uncertainty', None) == 'doublei2t_diff_div_mean':
+        uncertaintys_list = uncertaintys5_list
     else:
         uncertaintys_list, proba_top1_sim_list, proba_inversed_sim_list = torch.ones(sims_matrix_t2i.size(0)) , torch.ones(sims_matrix_t2i.size(0)), torch.ones(sims_matrix_t2i.size(0))
 
