@@ -69,7 +69,7 @@ def compute_uncertainty_itc(config, sims_matrix_t2i, sims_matrix_i2t):
         uncertainty1 = torch.exp( (1 - (proba_top1_sim_t2i + proba_inversed_sim_i2t_top1_idx_t2i) / 2) * uncertainty_temper )
         uncertainty2 = torch.exp( torch.abs(proba_top1_sim_t2i - proba_inversed_sim_i2t_top1_idx_t2i) / ( (proba_top1_sim_t2i + proba_inversed_sim_i2t_top1_idx_t2i) / 2 ) * uncertainty_temper )
         uncertainty3 = torch.abs( torch.log(proba_top1_sim_t2i + 1e-2) - torch.log( proba_inversed_sim_i2t_top1_idx_t2i + 1e-2) )
-        uncertainty4 = torch.exp( torch.abs(proba_top1_sim_t2i*config['N_t2i'] - proba_inversed_sim_i2t_top1_idx_t2i*config['N_i2t']) / ((proba_top1_sim_t2i*config['N_t2i'] + proba_inversed_sim_i2t_top1_idx_t2i*config['N_i2t'])/2) * uncertainty_temper )
+        uncertainty4 = torch.exp( torch.abs(proba_top1_sim_t2i*config.get('N_t2i', 1.0) - proba_inversed_sim_i2t_top1_idx_t2i*config.get('N_i2t', 1.0)) / ((proba_top1_sim_t2i*config.get('N_t2i', 1.0) + proba_inversed_sim_i2t_top1_idx_t2i*config.get('N_i2t', 1.0))/2) * uncertainty_temper )
         uncertainty5 = torch.exp( torch.abs(proba_top1_sim_t2i - proba_inversed_sim_i2t_top1_idx_t2i*2) / ( (proba_top1_sim_t2i + proba_inversed_sim_i2t_top1_idx_t2i*2) / 2 ) * uncertainty_temper )
 
         uncertaintys1_list.append(uncertainty1)
