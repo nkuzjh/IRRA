@@ -910,6 +910,9 @@ pip install tqdm tensorboard pyyaml matplotlib regex ftfy
 - uncertainty: |a-b|/(a+b)  and  |log(a)-log(b)|
 - sample_selection: 放宽到互为topk
 
+## exp_debug
+nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_rerun2/ham_rstp_tta/exp12/exp0.yaml > logs_rerun2/ham_rstp_tta/exp12/exp0.log 2>&1 &
+
 
 
 
