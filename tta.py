@@ -82,7 +82,7 @@ def do_tta(args, config, model, tta_loader, optimizer, scaler, epoch, device, sc
             cos_sims_inter = cos_sims / args.temperature
 
             if config.get('entropy_type', None) == 'sigmoid_cos_diff_mean':
-                entropy = torch.sigmoid( ( cos_sims_inter - np.mean(cos_sims_inter) ) * config.get('entropy_sigmoid_temper', 1.0) )
+                entropy = torch.sigmoid( ( cos_sims_inter - cos_sims_inter.mean(dim=-1) ) * config.get('entropy_sigmoid_temper', 1.0) )
             else:
                 entropy = -(F.softmax(cos_sims_inter, dim=-1) * F.log_softmax(cos_sims_inter, dim=-1)).sum(-1)
             if config.get('uncertainty_temper_is_learnable', False):
