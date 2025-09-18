@@ -1,0 +1,76 @@
+Not using distributed mode
+### Hyper-parameters:
+     output_dir: output_rerun2/ham_cuhk_tta/exp11/exp11.3.4/2025091823081
+     seed: 42
+     device: cuda
+     batch_size_tta: 32
+     epochs: 20
+     lr: 0.001
+### Creating test dataset
+     test_txt_set: 6156    test_img_set: 3074
+     test_txt_loader: 13    test_img_loader: 7
+### Creating model
+Training Model with ['sdm', 'id', 'mlm'] tasks
+Resized position embedding from size:torch.Size([1, 197, 768]) to size: torch.Size([1, 193, 768]) with height:24 width: 8
+     Total Params Sum:  194535419
+### Zero-Shot Score: 
+/home/jiahao/task/IRRA/tta.py:284: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler()  # bf16
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 70.647 | 86.940 | 91.797 | 63.400 | 47.058 |
++-------+--------+--------+--------+--------+--------+
+### TTA:
+### Compute Cos Similarity Uncertainty
+     preprocess_tta_coefficients  start
+     sample selection ...
+     number of sample after sample_selection: 5168
+     uncertainty ...
+     pos/neg sampling ...
+      number of sample after pos/neg sampling: torch.Size([6156, 4])
+     preprocess_tta_coefficients  end
+### Creating TTA dataset
+     tta_dataset: 5168
+### Creating tta dataloader
+### be careful: func create_loader returns a list length of 1
+     tta_loader: 161
+### Configure adapted weights
+     TTA Dropout Modules: 
+ []
+     TTA Require Gradient Params: 
+ [('base_model.transformer.resblocks.1.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.1.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.1.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.1.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.2.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.2.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.2.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.2.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.3.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.3.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.3.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.3.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.4.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.4.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.4.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.4.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.5.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.5.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.5.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.5.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.7.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.7.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.7.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.7.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.8.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.8.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.8.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.8.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.9.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.9.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.9.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.9.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.10.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.10.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.10.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.10.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.11.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.11.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.11.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.11.ln_2.bias', torch.Size([512])), ('base_model.ln_final.weight', torch.Size([512])), ('base_model.ln_final.bias', torch.Size([512]))]
+     TTA Dropout Modules Number: 
+ 0
+     TTA Require Gradient Params Sum: 
+ 21504
+Using 5.0 times learning rate for random init module 
+### Start Test Time Adaptation : num_epoch = 20
+/home/jiahao/task/IRRA/tta.py:67: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=True):
+     Epoch[0] Iteration[10/161], entropy: 0.2039, uncertainty: 3.2455, uncertainty_coeffi: 0.0100, loss: 0.0925, lr: 7.50e-04
+     Epoch[0] Iteration[20/161], entropy: 0.1020, uncertainty: 3.0244, uncertainty_coeffi: 0.0100, loss: 0.0731, lr: 0.00e+00
+     Epoch[0] Iteration[30/161], entropy: 0.1879, uncertainty: 2.9301, uncertainty_coeffi: 0.0100, loss: 0.0990, lr: 7.50e-04
+     Epoch[0] Iteration[40/161], entropy: 0.1124, uncertainty: 2.8619, uncertainty_coeffi: 0.0100, loss: 0.0799, lr: 7.50e-04
+     Epoch[0] Iteration[50/161], entropy: 0.2151, uncertainty: 2.9993, uncertainty_coeffi: 0.0100, loss: 0.0969, lr: 0.00e+00
+     Epoch[0] Iteration[60/161], entropy: 0.1323, uncertainty: 2.7635, uncertainty_coeffi: 0.0100, loss: 0.0740, lr: 7.50e-04
+     Epoch[0] Iteration[70/161], entropy: 0.1230, uncertainty: 3.0001, uncertainty_coeffi: 0.0100, loss: 0.0725, lr: 7.50e-04
+     Epoch[0] Iteration[80/161], entropy: 0.1906, uncertainty: 2.9923, uncertainty_coeffi: 0.0100, loss: 0.1018, lr: 0.00e+00
+     Epoch[0] Iteration[90/161], entropy: 0.1616, uncertainty: 2.8551, uncertainty_coeffi: 0.0100, loss: 0.1005, lr: 7.50e-04
+     Epoch[0] Iteration[100/161], entropy: 0.1200, uncertainty: 2.6950, uncertainty_coeffi: 0.0100, loss: 0.0694, lr: 7.50e-04
+     Epoch[0] Iteration[110/161], entropy: 0.2444, uncertainty: 3.1626, uncertainty_coeffi: 0.0100, loss: 0.1267, lr: 0.00e+00
+     Epoch[0] Iteration[120/161], entropy: 0.2130, uncertainty: 3.0675, uncertainty_coeffi: 0.0100, loss: 0.1032, lr: 7.50e-04
+     Epoch[0] Iteration[130/161], entropy: 0.2730, uncertainty: 3.2701, uncertainty_coeffi: 0.0100, loss: 0.1160, lr: 7.50e-04
+     Epoch[0] Iteration[140/161], entropy: 0.2069, uncertainty: 3.3497, uncertainty_coeffi: 0.0100, loss: 0.1053, lr: 0.00e+00
+     Epoch[0] Iteration[150/161], entropy: 0.3397, uncertainty: 3.1433, uncertainty_coeffi: 0.0100, loss: 0.1896, lr: 7.50e-04
+     Epoch[0] Iteration[160/161], entropy: 0.2134, uncertainty: 3.0712, uncertainty_coeffi: 0.0100, loss: 0.1155, lr: 7.50e-04
+     Averaged stats: entropy_avg: 0.1899, uncertainty_avg: 3.0270, uncertainty_coeffi_avg: 0.0100, loss_avg: 0.1010, lr_avg: 5.16e-04
+     itm tta time 0:00:31
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 70.647 | 86.940 | 91.797 | 63.400 | 47.058 |
+|   0   | 70.663 | 86.940 | 91.910 | 63.535 | 47.304 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 0, 'R1': np.float32(70.663), 'R5': np.float32(86.94), 'R10': np.float32(91.91), 'mAP': np.float32(63.535), 'mINP': np.float32(47.304), 'entropy': 0.1899499441497028, 'uncertainty': 3.026988759636879, 'uncertainty_coeffi': 0.009999999776482582, 'loss': 0.10100603150203824, 'lr': 0.000515625}
