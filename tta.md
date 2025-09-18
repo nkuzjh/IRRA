@@ -913,9 +913,6 @@ pip install tqdm tensorboard pyyaml matplotlib regex ftfy
 ## exp_debug
 nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_rerun2/ham_rstp_tta/exp12/exp0.yaml > logs_rerun2/ham_rstp_tta/exp12/exp0.log 2>&1 &
 
-
-
-
 ## exp0
 - sample selection: 'all'
 - uncertainty: 'diff_div_mean'
@@ -938,48 +935,90 @@ nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_rerun2/ham
 - sample selection: 'all'
 ## exp7
 - sample selection: 'topk'
-## exp8 参数错误
+
+## 以RSTP为例记录exp8-13
+
+### exp8 参数错误
 **N_t2i和N_i2t取反了**
 - sample selection: 'all'
 - uncertainty: 'scaled_diff_div_mean', N_t2i: 10, N_i2t: 5
-## exp9 参数错误
+### exp9 参数错误
 **N_t2i和N_i2t取反了**
 - sample selection: 'topk'
 - uncertainty: 'scaled_diff_div_mean', N_t2i: 10, N_i2t: 5
-## exp10
+### exp10
 - sample selection: 'all'
 - uncertainty: 'doublei2t_diff_div_mean'
-## exp11
+### exp11
 - sample selection: 'topk'
 - uncertainty: 'doublei2t_diff_div_mean'
-## exp12 理解错误
+### exp12 理解错误
 **理解错误，sigmoid不是用来计算entropy的**
 - sample selection: 'topk'
 - uncertainty: 'doublei2t_diff_div_mean'
 - entropy_type: 'sigmoid_cos_diff_mean', entropy_sigmoid_temper: 10
-## exp13 理解错误
+### exp13 理解错误
 **理解错误，sigmoid不是用来计算entropy的**
 - sample selection: 'topk'
 - uncertainty: 'doublei2t_diff_div_mean'
 - entropy_type: 'sigmoid_cos_diff_mean', entropy_sigmoid_temper: 2
 
 
-## exp14
+
+## RSTPReid
+
+### exp14
 - sample selection: 'topk'
 - uncertainty: 'scaled_diff_div_mean', N_t2i: 5, N_i2t: 10
 
-
-## exp15 = exp11 doublei2t_diff_div_mean
+### exp15 = exp11 doublei2t_diff_div_mean
 - sample selection: 'topk'
 - uncertainty: 'scaledi2t_diff_div_mean' # scaledi2t=N_i2t/N_t2i, N_t2i: 5, N_i2t: 10,
 
-
-## exp16
+### exp16
 - sample selection: 'topk'
 - uncertainty: 'scaled_diff_div_mean', N_t2i: 1, N_i2t: 1, uncertainty_t2i_temper: 5, uncertainty_i2t_temper: 10
 
-
-
-## exp17
+### exp17
 - sample selection: 'topk'
 - uncertainty: 'scaled_diff_div_mean', N_t2i: 1, N_i2t: 1, uncertainty_t2i_temper: 1/5, uncertainty_i2t_temper: 1/10
+
+
+
+## CUHK-PEDES
+
+### exp14
+- sample selection: 'topk'
+- uncertainty: 'scaled_diff_div_mean', N_t2i: 3.09, N_i2t: 6.18
+
+### exp15 = exp11 doublei2t_diff_div_mean
+- sample selection: 'topk'
+- uncertainty: 'scaledi2t_diff_div_mean' # scaledi2t=N_i2t/N_t2i, N_t2i: 3.09, N_i2t: 6.18
+
+### exp16
+- sample selection: 'topk'
+- uncertainty: 'scaled_diff_div_mean', N_t2i: 1, N_i2t: 1, uncertainty_t2i_temper: 3.09, uncertainty_i2t_temper: 6.18
+
+### exp17
+- sample selection: 'topk'
+- uncertainty: 'scaled_diff_div_mean', N_t2i: 1, N_i2t: 1, uncertainty_t2i_temper: 1/3.09, uncertainty_i2t_temper: 1/6.18
+
+
+
+## ICFG-PEDES
+
+### exp14
+- sample selection: 'topk'
+- uncertainty: 'scaled_diff_div_mean', N_t2i: 13.29, N_i2t: 13.29
+
+### exp15 = exp11 doublei2t_diff_div_mean
+- sample selection: 'topk'
+- uncertainty: 'scaledi2t_diff_div_mean' # scaledi2t=N_i2t/N_t2i, N_t2i: 13.29, N_i2t: 13.29,
+
+### exp16
+- sample selection: 'topk'
+- uncertainty: 'scaled_diff_div_mean', N_t2i: 1, N_i2t: 1, uncertainty_t2i_temper: 13.29, uncertainty_i2t_temper: 13.29
+
+### exp17
+- sample selection: 'topk'
+- uncertainty: 'scaled_diff_div_mean', N_t2i: 1, N_i2t: 1, uncertainty_t2i_temper: 1/13.29, uncertainty_i2t_temper: 1/13.29

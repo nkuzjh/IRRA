@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# 设置基础参数
+task_name="ham_cuhk_tta/exp14"
+log_dir="./logs_rerun2"
+mkdir -p $log_dir/$task_name
+
+# 定义实验名
+exp_names=(
+    "exp0.0"
+    "exp0.1"
+    "exp0.2"
+    "exp0.3"
+)
+
+# 按顺序执行每个训练任务
+for i in "${!exp_names[@]}"
+do
+    exp_name=${exp_names[$i]}
+    echo " "
+    echo "Starting Training: $task_name $exp_name ..."
+    start_time=$(date +%s)
+    echo "Start Time: $(date +"%Y-%m-%d %T")"
+
+    CUDA_VISIBLE_DEVICES=0 nohup python3 tta.py --config_file tta_configs_rerun2/$task_name/$exp_name.yaml > $log_dir/$task_name/$exp_name.log 2>&1 &
+
+    # 等待当前任务完成
+    wait
+    # 记录结束时间
+    end_time=$(date +%s)
+    duration=$(( end_time - start_time ))
+    # 格式化时间（分钟和秒）
+    minutes=$(( duration / 60 ))
+    seconds=$(( duration % 60 ))
+    # 结束时间和运行时长
+    echo "End Time: $(date +"%Y-%m-%d %T")"
+    echo "Duration: ${minutes}m${seconds}s"
+    echo "Finsh Training $task_name $exp_name ."
+done
