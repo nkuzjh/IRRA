@@ -127,7 +127,7 @@ def preprocess_tta_coefficients(config, sims_matrix_t2i):
     print(f"     sample selection ...")
     if config.get('sample_selection', 'all') == 'top1':
         ss_idxs_list = sample_selection_itc(sims_matrix_t2i, sims_matrix_t2i.t()) # 找到i2t和t2i互为top1的样本索引
-    if config.get('sample_selection', 'all') == 'topk':
+    elif config.get('sample_selection', 'all') == 'topk':
         k_sample_selection = config.get('k_sample_selection', 5)
         ss_idxs_list = sample_selection_topk_itc(sims_matrix_t2i, sims_matrix_t2i.t(), k_sample_selection) # 找到i2t和t2i互为top1的样本索引
     else:
