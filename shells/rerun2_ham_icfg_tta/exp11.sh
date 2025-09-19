@@ -58,7 +58,7 @@ do
     echo "Start Time: $(date +"%Y-%m-%d %T")"
 
 
-    # nohup python3 tta.py --config_file tta_configs/ham_cuhk_tta/exp0.0.0.yaml > logs/ham_cuhk_tta/exp0.0.0.log 2>&1 &
+    # nohup python3 tta.py --config_file tta_configs/ham_rstp_tta/exp0.0.0.yaml > logs/ham_rstp_tta/exp0.0.0.log 2>&1 &
     #CUDA_VISIBLE_DEVICES=2
     CUDA_VISIBLE_DEVICES=0 nohup python3 tta.py --config_file tta_configs_rerun2/$task_name/$exp_name.yaml > $log_dir/$task_name/$exp_name.log 2>&1 &
 

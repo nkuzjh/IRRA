@@ -1,0 +1,555 @@
+Not using distributed mode
+### Hyper-parameters:
+     output_dir: output_rerun2/ham_rstp_tta/exp11/exp11.4/2025091805263
+     seed: 42
+     device: cuda
+     batch_size_tta: 32
+     epochs: 60
+     lr: 1e-05
+### Creating test dataset
+     test_txt_set: 2000    test_img_set: 1000
+     test_txt_loader: 4    test_img_loader: 2
+### Creating model
+Training Model with ['sdm', 'id', 'mlm'] tasks
+Resized position embedding from size:torch.Size([1, 197, 768]) to size: torch.Size([1, 193, 768]) with height:24 width: 8
+     Total Params Sum:  190789493
+### Zero-Shot Score: 
+/home/jiahao/task/IRRA/tta.py:284: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler()  # bf16
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 59.550 | 80.100 | 87.100 | 44.128 | 20.533 |
++-------+--------+--------+--------+--------+--------+
+### TTA:
+### Compute Cos Similarity Uncertainty
+     preprocess_tta_coefficients  start
+     sample selection ...
+     number of sample after sample_selection: 1378
+     uncertainty ...
+     pos/neg sampling ...
+      number of sample after pos/neg sampling: torch.Size([2000, 4])
+     preprocess_tta_coefficients  end
+### Creating TTA dataset
+     tta_dataset: 1378
+### Creating tta dataloader
+### be careful: func create_loader returns a list length of 1
+     tta_loader: 43
+### Configure adapted weights
+     TTA Dropout Modules: 
+ []
+     TTA Require Gradient Params: 
+ [('base_model.transformer.resblocks.1.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.1.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.1.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.1.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.2.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.2.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.2.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.2.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.3.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.3.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.3.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.3.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.4.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.4.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.4.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.4.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.5.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.5.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.5.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.5.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.7.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.7.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.7.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.7.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.8.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.8.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.8.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.8.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.9.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.9.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.9.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.9.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.10.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.10.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.10.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.10.ln_2.bias', torch.Size([512])), ('base_model.transformer.resblocks.11.ln_1.weight', torch.Size([512])), ('base_model.transformer.resblocks.11.ln_1.bias', torch.Size([512])), ('base_model.transformer.resblocks.11.ln_2.weight', torch.Size([512])), ('base_model.transformer.resblocks.11.ln_2.bias', torch.Size([512])), ('base_model.ln_final.weight', torch.Size([512])), ('base_model.ln_final.bias', torch.Size([512]))]
+     TTA Dropout Modules Number: 
+ 0
+     TTA Require Gradient Params Sum: 
+ 21504
+Using 5.0 times learning rate for random init module 
+### Start Test Time Adaptation : num_epoch = 60
+/home/jiahao/task/IRRA/tta.py:67: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast(enabled=True):
+     Epoch[0] Iteration[10/43], entropy: 0.2933, uncertainty: 2.8686, uncertainty_coeffi: 0.0010, loss: 0.1863, lr: 9.80e-06
+     Epoch[0] Iteration[20/43], entropy: 0.2556, uncertainty: 3.2343, uncertainty_coeffi: 0.0010, loss: 0.0825, lr: 8.27e-06
+     Epoch[0] Iteration[30/43], entropy: 0.2220, uncertainty: 3.5050, uncertainty_coeffi: 0.0010, loss: 0.0619, lr: 5.71e-06
+     Epoch[0] Iteration[40/43], entropy: 0.1623, uncertainty: 2.9641, uncertainty_coeffi: 0.0010, loss: 0.0811, lr: 2.92e-06
+     Averaged stats: entropy_avg: 0.2333, uncertainty_avg: 3.1430, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1030, lr_avg: 6.68e-06
+     itm tta time 0:00:06
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 59.550 | 80.100 | 87.100 | 44.128 | 20.533 |
+|   0   | 59.650 | 80.100 | 87.050 | 44.148 | 20.558 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 0, 'R1': np.float32(59.65), 'R5': np.float32(80.1), 'R10': np.float32(87.05), 'mAP': np.float32(44.148), 'mINP': np.float32(20.558), 'entropy': 0.23329921811819077, 'uncertainty': 3.1429999470710754, 'uncertainty_coeffi': 0.0010000000474974513, 'loss': 0.10296525806188583, 'lr': 6.6765669160389775e-06}
+     Epoch[1] Iteration[10/43], entropy: 0.2842, uncertainty: 3.7811, uncertainty_coeffi: 0.0010, loss: 0.0894, lr: 3.94e-07
+     Epoch[1] Iteration[20/43], entropy: 0.3346, uncertainty: 2.9691, uncertainty_coeffi: 0.0010, loss: 0.1562, lr: 7.32e-08
+     Epoch[1] Iteration[30/43], entropy: 0.2658, uncertainty: 3.0514, uncertainty_coeffi: 0.0010, loss: 0.1014, lr: 1.32e-06
+     Epoch[1] Iteration[40/43], entropy: 0.2151, uncertainty: 3.1386, uncertainty_coeffi: 0.0010, loss: 0.0885, lr: 3.73e-06
+     Averaged stats: entropy_avg: 0.2749, uncertainty_avg: 3.2350, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1089, lr_avg: 1.38e-06
+     itm tta time 0:00:06
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 59.550 | 80.100 | 87.100 | 44.128 | 20.533 |
+|   0   | 59.650 | 80.100 | 87.050 | 44.148 | 20.558 |
+|   1   | 59.650 | 80.100 | 87.050 | 44.157 | 20.567 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 1, 'R1': np.float32(59.65), 'R5': np.float32(80.1), 'R10': np.float32(87.05), 'mAP': np.float32(44.157), 'mINP': np.float32(20.567), 'entropy': 0.2749134451150894, 'uncertainty': 3.2350475788116455, 'uncertainty_coeffi': 0.0010000000474974513, 'loss': 0.10885307379066944, 'lr': 1.3782037987094564e-06}
+     Epoch[2] Iteration[10/43], entropy: 0.2003, uncertainty: 3.4422, uncertainty_coeffi: 0.0010, loss: 0.0541, lr: 7.33e-06
+     Epoch[2] Iteration[20/43], entropy: 0.3401, uncertainty: 3.1173, uncertainty_coeffi: 0.0010, loss: 0.1530, lr: 9.35e-06
+     Epoch[2] Iteration[30/43], entropy: 0.2104, uncertainty: 2.9092, uncertainty_coeffi: 0.0010, loss: 0.0912, lr: 9.99e-06
+     Epoch[2] Iteration[40/43], entropy: 0.1857, uncertainty: 3.3132, uncertainty_coeffi: 0.0010, loss: 0.0706, lr: 9.05e-06
+     Averaged stats: entropy_avg: 0.2341, uncertainty_avg: 3.1955, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0922, lr_avg: 8.93e-06
+     itm tta time 0:00:06
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 59.550 | 80.100 | 87.100 | 44.128 | 20.533 |
+|   0   | 59.650 | 80.100 | 87.050 | 44.148 | 20.558 |
+|   1   | 59.650 | 80.100 | 87.050 | 44.157 | 20.567 |
+|   2   | 59.650 | 80.100 | 87.050 | 44.193 | 20.607 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 2, 'R1': np.float32(59.65), 'R5': np.float32(80.1), 'R10': np.float32(87.05), 'mAP': np.float32(44.193), 'mINP': np.float32(20.607), 'entropy': 0.23413552343845367, 'uncertainty': 3.1954718232154846, 'uncertainty_coeffi': 0.0010000000474974513, 'loss': 0.09219284169375896, 'lr': 8.930999373308167e-06}
+     Epoch[3] Iteration[10/43], entropy: 0.2984, uncertainty: 3.6047, uncertainty_coeffi: 0.0010, loss: 0.1035, lr: 5.99e-06
+     Epoch[3] Iteration[20/43], entropy: 0.3191, uncertainty: 3.1829, uncertainty_coeffi: 0.0010, loss: 0.1369, lr: 3.19e-06
+     Epoch[3] Iteration[30/43], entropy: 0.3421, uncertainty: 3.0022, uncertainty_coeffi: 0.0010, loss: 0.1452, lr: 9.55e-07
+     Epoch[3] Iteration[40/43], entropy: 0.1719, uncertainty: 2.5748, uncertainty_coeffi: 0.0010, loss: 0.0655, lr: 8.15e-09
+     Averaged stats: entropy_avg: 0.2829, uncertainty_avg: 3.0911, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1128, lr_avg: 2.54e-06
+     itm tta time 0:00:06
+     Epoch[4] Iteration[10/43], entropy: 0.2918, uncertainty: 2.9744, uncertainty_coeffi: 0.0010, loss: 0.1550, lr: 1.13e-06
+     Epoch[4] Iteration[20/43], entropy: 0.2587, uncertainty: 2.8720, uncertainty_coeffi: 0.0010, loss: 0.1069, lr: 3.45e-06
+     Epoch[4] Iteration[30/43], entropy: 0.1919, uncertainty: 3.5720, uncertainty_coeffi: 0.0010, loss: 0.0696, lr: 6.27e-06
+     Epoch[4] Iteration[40/43], entropy: 0.2591, uncertainty: 2.9277, uncertainty_coeffi: 0.0010, loss: 0.0967, lr: 8.68e-06
+     Averaged stats: entropy_avg: 0.2504, uncertainty_avg: 3.0865, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1070, lr_avg: 4.88e-06
+     itm tta time 0:00:06
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 59.550 | 80.100 | 87.100 | 44.128 | 20.533 |
+|   0   | 59.650 | 80.100 | 87.050 | 44.148 | 20.558 |
+|   1   | 59.650 | 80.100 | 87.050 | 44.157 | 20.567 |
+|   2   | 59.650 | 80.100 | 87.050 | 44.193 | 20.607 |
+|   4   | 59.700 | 80.100 | 87.150 | 44.216 | 20.632 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 4, 'R1': np.float32(59.7), 'R5': np.float32(80.1), 'R10': np.float32(87.15), 'mAP': np.float32(44.216), 'mINP': np.float32(20.632), 'entropy': 0.25039246305823326, 'uncertainty': 3.0865209102630615, 'uncertainty_coeffi': 0.0010000000474974513, 'loss': 0.10704798623919487, 'lr': 4.884751083819828e-06}
+     Epoch[5] Iteration[10/43], entropy: 0.2750, uncertainty: 3.0229, uncertainty_coeffi: 0.0010, loss: 0.1091, lr: 1.00e-05
+     Epoch[5] Iteration[20/43], entropy: 0.2870, uncertainty: 3.8951, uncertainty_coeffi: 0.0010, loss: 0.0787, lr: 9.21e-06
+     Epoch[5] Iteration[30/43], entropy: 0.3238, uncertainty: 2.9873, uncertainty_coeffi: 0.0010, loss: 0.1379, lr: 7.08e-06
+     Epoch[5] Iteration[40/43], entropy: 0.2002, uncertainty: 3.1529, uncertainty_coeffi: 0.0010, loss: 0.0799, lr: 4.29e-06
+     Averaged stats: entropy_avg: 0.2715, uncertainty_avg: 3.2645, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1014, lr_avg: 7.64e-06
+     itm tta time 0:00:06
+     Epoch[6] Iteration[10/43], entropy: 0.2613, uncertainty: 3.2626, uncertainty_coeffi: 0.0010, loss: 0.1047, lr: 1.13e-06
+     Epoch[6] Iteration[20/43], entropy: 0.2628, uncertainty: 2.9615, uncertainty_coeffi: 0.0010, loss: 0.1130, lr: 3.26e-08
+     Epoch[6] Iteration[30/43], entropy: 0.1772, uncertainty: 3.5495, uncertainty_coeffi: 0.0010, loss: 0.0458, lr: 5.13e-07
+     Epoch[6] Iteration[40/43], entropy: 0.4122, uncertainty: 3.0534, uncertainty_coeffi: 0.0010, loss: 0.1875, lr: 2.42e-06
+     Averaged stats: entropy_avg: 0.2784, uncertainty_avg: 3.2067, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1127, lr_avg: 1.02e-06
+     itm tta time 0:00:06
+     Epoch[7] Iteration[10/43], entropy: 0.1756, uncertainty: 3.3629, uncertainty_coeffi: 0.0010, loss: 0.0547, lr: 5.99e-06
+     Epoch[7] Iteration[20/43], entropy: 0.2206, uncertainty: 3.1528, uncertainty_coeffi: 0.0010, loss: 0.0817, lr: 8.48e-06
+     Epoch[7] Iteration[30/43], entropy: 0.2567, uncertainty: 3.7230, uncertainty_coeffi: 0.0010, loss: 0.0809, lr: 9.87e-06
+     Epoch[7] Iteration[40/43], entropy: 0.2795, uncertainty: 3.0802, uncertainty_coeffi: 0.0010, loss: 0.1228, lr: 9.71e-06
+     Averaged stats: entropy_avg: 0.2331, uncertainty_avg: 3.3297, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0851, lr_avg: 8.51e-06
+     itm tta time 0:00:05
+     Epoch[8] Iteration[10/43], entropy: 0.2363, uncertainty: 3.2968, uncertainty_coeffi: 0.0010, loss: 0.0965, lr: 7.33e-06
+     Epoch[8] Iteration[20/43], entropy: 0.2665, uncertainty: 3.7335, uncertainty_coeffi: 0.0010, loss: 0.0972, lr: 4.57e-06
+     Epoch[8] Iteration[30/43], entropy: 0.3031, uncertainty: 3.1844, uncertainty_coeffi: 0.0010, loss: 0.1224, lr: 1.95e-06
+     Epoch[8] Iteration[40/43], entropy: 0.2813, uncertainty: 3.5404, uncertainty_coeffi: 0.0010, loss: 0.0961, lr: 2.91e-07
+     Averaged stats: entropy_avg: 0.2718, uncertainty_avg: 3.4388, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1031, lr_avg: 3.54e-06
+     itm tta time 0:00:06
+     Epoch[9] Iteration[10/43], entropy: 0.2744, uncertainty: 3.4179, uncertainty_coeffi: 0.0010, loss: 0.1128, lr: 3.94e-07
+     Epoch[9] Iteration[20/43], entropy: 0.2688, uncertainty: 3.4043, uncertainty_coeffi: 0.0010, loss: 0.1083, lr: 2.18e-06
+     Epoch[9] Iteration[30/43], entropy: 0.2795, uncertainty: 2.7776, uncertainty_coeffi: 0.0010, loss: 0.1098, lr: 4.86e-06
+     Epoch[9] Iteration[40/43], entropy: 0.2232, uncertainty: 3.7506, uncertainty_coeffi: 0.0010, loss: 0.0678, lr: 7.58e-06
+     Averaged stats: entropy_avg: 0.2615, uncertainty_avg: 3.3376, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0997, lr_avg: 3.75e-06
+     itm tta time 0:00:06
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 59.550 | 80.100 | 87.100 | 44.128 | 20.533 |
+|   0   | 59.650 | 80.100 | 87.050 | 44.148 | 20.558 |
+|   1   | 59.650 | 80.100 | 87.050 | 44.157 | 20.567 |
+|   2   | 59.650 | 80.100 | 87.050 | 44.193 | 20.607 |
+|   4   | 59.700 | 80.100 | 87.150 | 44.216 | 20.632 |
+|   9   | 59.800 | 80.050 | 87.150 | 44.294 | 20.686 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 9, 'R1': np.float32(59.8), 'R5': np.float32(80.05), 'R10': np.float32(87.15), 'mAP': np.float32(44.294), 'mINP': np.float32(20.686), 'entropy': 0.2614618055522442, 'uncertainty': 3.3375900983810425, 'uncertainty_coeffi': 0.0010000000474974513, 'loss': 0.09967273101210594, 'lr': 3.752843173579559e-06}
+     Epoch[10] Iteration[10/43], entropy: 0.3648, uncertainty: 3.3168, uncertainty_coeffi: 0.0010, loss: 0.1347, lr: 9.80e-06
+     Epoch[10] Iteration[20/43], entropy: 0.1844, uncertainty: 2.9222, uncertainty_coeffi: 0.0010, loss: 0.0708, lr: 9.80e-06
+     Epoch[10] Iteration[30/43], entropy: 0.2330, uncertainty: 2.6321, uncertainty_coeffi: 0.0010, loss: 0.0792, lr: 8.27e-06
+     Epoch[10] Iteration[40/43], entropy: 0.2961, uncertainty: 3.1597, uncertainty_coeffi: 0.0010, loss: 0.1323, lr: 5.71e-06
+     Averaged stats: entropy_avg: 0.2696, uncertainty_avg: 3.0077, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1043, lr_avg: 8.40e-06
+     itm tta time 0:00:06
+     Epoch[11] Iteration[10/43], entropy: 0.3146, uncertainty: 3.4169, uncertainty_coeffi: 0.0010, loss: 0.1116, lr: 2.18e-06
+     Epoch[11] Iteration[20/43], entropy: 0.2482, uncertainty: 2.7664, uncertainty_coeffi: 0.0010, loss: 0.1228, lr: 3.94e-07
+     Epoch[11] Iteration[30/43], entropy: 0.2871, uncertainty: 3.4451, uncertainty_coeffi: 0.0010, loss: 0.1271, lr: 7.32e-08
+     Epoch[11] Iteration[40/43], entropy: 0.2022, uncertainty: 3.0233, uncertainty_coeffi: 0.0010, loss: 0.0842, lr: 1.32e-06
+     Averaged stats: entropy_avg: 0.2630, uncertainty_avg: 3.1629, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1114, lr_avg: 9.90e-07
+     itm tta time 0:00:06
+     Epoch[12] Iteration[10/43], entropy: 0.3186, uncertainty: 3.6207, uncertainty_coeffi: 0.0010, loss: 0.1275, lr: 4.57e-06
+     Epoch[12] Iteration[20/43], entropy: 0.2026, uncertainty: 2.8476, uncertainty_coeffi: 0.0010, loss: 0.0850, lr: 7.33e-06
+     Epoch[12] Iteration[30/43], entropy: 0.2201, uncertainty: 3.4111, uncertainty_coeffi: 0.0010, loss: 0.0912, lr: 9.35e-06
+     Epoch[12] Iteration[40/43], entropy: 0.1726, uncertainty: 2.8903, uncertainty_coeffi: 0.0010, loss: 0.0755, lr: 9.99e-06
+     Averaged stats: entropy_avg: 0.2285, uncertainty_avg: 3.1924, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0948, lr_avg: 7.81e-06
+     itm tta time 0:00:06
+     Epoch[13] Iteration[10/43], entropy: 0.2974, uncertainty: 3.8281, uncertainty_coeffi: 0.0010, loss: 0.0762, lr: 8.48e-06
+     Epoch[13] Iteration[20/43], entropy: 0.1957, uncertainty: 2.9771, uncertainty_coeffi: 0.0010, loss: 0.0968, lr: 5.99e-06
+     Epoch[13] Iteration[30/43], entropy: 0.1799, uncertainty: 3.0927, uncertainty_coeffi: 0.0010, loss: 0.0836, lr: 3.19e-06
+     Epoch[13] Iteration[40/43], entropy: 0.2047, uncertainty: 3.8069, uncertainty_coeffi: 0.0010, loss: 0.0658, lr: 9.55e-07
+     Averaged stats: entropy_avg: 0.2194, uncertainty_avg: 3.4262, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0806, lr_avg: 4.65e-06
+     itm tta time 0:00:06
+     Epoch[14] Iteration[10/43], entropy: 0.1819, uncertainty: 3.1720, uncertainty_coeffi: 0.0010, loss: 0.0837, lr: 3.26e-08
+     Epoch[14] Iteration[20/43], entropy: 0.2266, uncertainty: 3.4428, uncertainty_coeffi: 0.0010, loss: 0.0891, lr: 1.13e-06
+     Epoch[14] Iteration[30/43], entropy: 0.2652, uncertainty: 3.2539, uncertainty_coeffi: 0.0010, loss: 0.1190, lr: 3.45e-06
+     Epoch[14] Iteration[40/43], entropy: 0.1346, uncertainty: 2.6531, uncertainty_coeffi: 0.0010, loss: 0.0605, lr: 6.27e-06
+     Averaged stats: entropy_avg: 0.2021, uncertainty_avg: 3.1304, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0881, lr_avg: 2.72e-06
+     itm tta time 0:00:06
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 59.550 | 80.100 | 87.100 | 44.128 | 20.533 |
+|   0   | 59.650 | 80.100 | 87.050 | 44.148 | 20.558 |
+|   1   | 59.650 | 80.100 | 87.050 | 44.157 | 20.567 |
+|   2   | 59.650 | 80.100 | 87.050 | 44.193 | 20.607 |
+|   4   | 59.700 | 80.100 | 87.150 | 44.216 | 20.632 |
+|   9   | 59.800 | 80.050 | 87.150 | 44.294 | 20.686 |
+|   14  | 59.850 | 80.150 | 87.200 | 44.336 | 20.724 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 14, 'R1': np.float32(59.85), 'R5': np.float32(80.15), 'R10': np.float32(87.2), 'mAP': np.float32(44.336), 'mINP': np.float32(20.724), 'entropy': 0.20208200812339783, 'uncertainty': 3.1304346919059753, 'uncertainty_coeffi': 0.0010000000474974513, 'loss': 0.08805850334465504, 'lr': 2.7219724922886334e-06}
+     Epoch[15] Iteration[10/43], entropy: 0.2298, uncertainty: 3.2326, uncertainty_coeffi: 0.0010, loss: 0.1021, lr: 9.21e-06
+     Epoch[15] Iteration[20/43], entropy: 0.2310, uncertainty: 3.4296, uncertainty_coeffi: 0.0010, loss: 0.0881, lr: 1.00e-05
+     Epoch[15] Iteration[30/43], entropy: 0.2101, uncertainty: 3.4695, uncertainty_coeffi: 0.0010, loss: 0.0765, lr: 9.21e-06
+     Epoch[15] Iteration[40/43], entropy: 0.2525, uncertainty: 3.5594, uncertainty_coeffi: 0.0010, loss: 0.0671, lr: 7.08e-06
+     Averaged stats: entropy_avg: 0.2308, uncertainty_avg: 3.4228, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0834, lr_avg: 8.87e-06
+     itm tta time 0:00:06
+     Epoch[16] Iteration[10/43], entropy: 0.1452, uncertainty: 2.4079, uncertainty_coeffi: 0.0010, loss: 0.0675, lr: 3.45e-06
+     Epoch[16] Iteration[20/43], entropy: 0.2376, uncertainty: 2.6021, uncertainty_coeffi: 0.0010, loss: 0.1261, lr: 1.13e-06
+     Epoch[16] Iteration[30/43], entropy: 0.2279, uncertainty: 3.8013, uncertainty_coeffi: 0.0010, loss: 0.0753, lr: 3.26e-08
+     Epoch[16] Iteration[40/43], entropy: 0.2581, uncertainty: 3.3608, uncertainty_coeffi: 0.0010, loss: 0.1043, lr: 5.13e-07
+     Averaged stats: entropy_avg: 0.2172, uncertainty_avg: 3.0430, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0933, lr_avg: 1.28e-06
+     itm tta time 0:00:06
+     Epoch[17] Iteration[10/43], entropy: 0.2329, uncertainty: 3.4881, uncertainty_coeffi: 0.0010, loss: 0.1164, lr: 3.19e-06
+     Epoch[17] Iteration[20/43], entropy: 0.1821, uncertainty: 3.0920, uncertainty_coeffi: 0.0010, loss: 0.0798, lr: 5.99e-06
+     Epoch[17] Iteration[30/43], entropy: 0.2559, uncertainty: 3.3292, uncertainty_coeffi: 0.0010, loss: 0.0920, lr: 8.48e-06
+     Epoch[17] Iteration[40/43], entropy: 0.2296, uncertainty: 3.5703, uncertainty_coeffi: 0.0010, loss: 0.0647, lr: 9.87e-06
+     Averaged stats: entropy_avg: 0.2251, uncertainty_avg: 3.3699, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0882, lr_avg: 6.88e-06
+     itm tta time 0:00:05
+     Epoch[18] Iteration[10/43], entropy: 0.2900, uncertainty: 3.4365, uncertainty_coeffi: 0.0010, loss: 0.1041, lr: 9.35e-06
+     Epoch[18] Iteration[20/43], entropy: 0.1665, uncertainty: 2.8365, uncertainty_coeffi: 0.0010, loss: 0.0604, lr: 7.33e-06
+     Epoch[18] Iteration[30/43], entropy: 0.2395, uncertainty: 3.6029, uncertainty_coeffi: 0.0010, loss: 0.1007, lr: 4.57e-06
+     Epoch[18] Iteration[40/43], entropy: 0.2189, uncertainty: 3.2686, uncertainty_coeffi: 0.0010, loss: 0.0928, lr: 1.95e-06
+     Averaged stats: entropy_avg: 0.2287, uncertainty_avg: 3.2861, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0895, lr_avg: 5.80e-06
+     itm tta time 0:00:06
+     Epoch[19] Iteration[10/43], entropy: 0.1960, uncertainty: 3.6992, uncertainty_coeffi: 0.0010, loss: 0.0588, lr: 7.32e-08
+     Epoch[19] Iteration[20/43], entropy: 0.2263, uncertainty: 3.4831, uncertainty_coeffi: 0.0010, loss: 0.0708, lr: 3.94e-07
+     Epoch[19] Iteration[30/43], entropy: 0.1504, uncertainty: 3.5626, uncertainty_coeffi: 0.0010, loss: 0.0582, lr: 2.18e-06
+     Epoch[19] Iteration[40/43], entropy: 0.2648, uncertainty: 2.9815, uncertainty_coeffi: 0.0010, loss: 0.1030, lr: 4.86e-06
+     Averaged stats: entropy_avg: 0.2094, uncertainty_avg: 3.4316, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0727, lr_avg: 1.88e-06
+     itm tta time 0:00:06
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 59.550 | 80.100 | 87.100 | 44.128 | 20.533 |
+|   0   | 59.650 | 80.100 | 87.050 | 44.148 | 20.558 |
+|   1   | 59.650 | 80.100 | 87.050 | 44.157 | 20.567 |
+|   2   | 59.650 | 80.100 | 87.050 | 44.193 | 20.607 |
+|   4   | 59.700 | 80.100 | 87.150 | 44.216 | 20.632 |
+|   9   | 59.800 | 80.050 | 87.150 | 44.294 | 20.686 |
+|   14  | 59.850 | 80.150 | 87.200 | 44.336 | 20.724 |
+|   19  | 59.900 | 80.150 | 87.200 | 44.390 | 20.753 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 19, 'R1': np.float32(59.9), 'R5': np.float32(80.15), 'R10': np.float32(87.2), 'mAP': np.float32(44.39), 'mINP': np.float32(20.753), 'entropy': 0.20937851443886757, 'uncertainty': 3.4316055178642273, 'uncertainty_coeffi': 0.0010000000474974513, 'loss': 0.07268267497420311, 'lr': 1.8756540517212333e-06}
+     Epoch[20] Iteration[10/43], entropy: 0.1964, uncertainty: 2.9154, uncertainty_coeffi: 0.0010, loss: 0.0855, lr: 8.27e-06
+     Epoch[20] Iteration[20/43], entropy: 0.2418, uncertainty: 2.9821, uncertainty_coeffi: 0.0010, loss: 0.1252, lr: 9.80e-06
+     Epoch[20] Iteration[30/43], entropy: 0.2597, uncertainty: 3.4390, uncertainty_coeffi: 0.0010, loss: 0.0840, lr: 9.80e-06
+     Epoch[20] Iteration[40/43], entropy: 0.2022, uncertainty: 3.3354, uncertainty_coeffi: 0.0010, loss: 0.0983, lr: 8.27e-06
+     Averaged stats: entropy_avg: 0.2250, uncertainty_avg: 3.1680, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0983, lr_avg: 9.04e-06
+     itm tta time 0:00:06
+     Epoch[21] Iteration[10/43], entropy: 0.2029, uncertainty: 2.4651, uncertainty_coeffi: 0.0010, loss: 0.1048, lr: 4.86e-06
+     Epoch[21] Iteration[20/43], entropy: 0.2749, uncertainty: 3.1082, uncertainty_coeffi: 0.0010, loss: 0.1047, lr: 2.18e-06
+     Epoch[21] Iteration[30/43], entropy: 0.2647, uncertainty: 3.1406, uncertainty_coeffi: 0.0010, loss: 0.0954, lr: 3.94e-07
+     Epoch[21] Iteration[40/43], entropy: 0.3250, uncertainty: 3.0760, uncertainty_coeffi: 0.0010, loss: 0.1587, lr: 7.32e-08
+     Averaged stats: entropy_avg: 0.2669, uncertainty_avg: 2.9475, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1159, lr_avg: 1.88e-06
+     itm tta time 0:00:06
+     Epoch[22] Iteration[10/43], entropy: 0.2020, uncertainty: 3.1517, uncertainty_coeffi: 0.0010, loss: 0.1011, lr: 1.95e-06
+     Epoch[22] Iteration[20/43], entropy: 0.2077, uncertainty: 3.8013, uncertainty_coeffi: 0.0010, loss: 0.0608, lr: 4.57e-06
+     Epoch[22] Iteration[30/43], entropy: 0.2352, uncertainty: 3.2063, uncertainty_coeffi: 0.0010, loss: 0.0984, lr: 7.33e-06
+     Epoch[22] Iteration[40/43], entropy: 0.2374, uncertainty: 2.9115, uncertainty_coeffi: 0.0010, loss: 0.0963, lr: 9.35e-06
+     Averaged stats: entropy_avg: 0.2206, uncertainty_avg: 3.2677, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0891, lr_avg: 5.80e-06
+     itm tta time 0:00:06
+     Epoch[23] Iteration[10/43], entropy: 0.4030, uncertainty: 3.7091, uncertainty_coeffi: 0.0010, loss: 0.1551, lr: 9.87e-06
+     Epoch[23] Iteration[20/43], entropy: 0.2491, uncertainty: 3.3369, uncertainty_coeffi: 0.0010, loss: 0.1085, lr: 8.48e-06
+     Epoch[23] Iteration[30/43], entropy: 0.1769, uncertainty: 2.8054, uncertainty_coeffi: 0.0010, loss: 0.0592, lr: 5.99e-06
+     Epoch[23] Iteration[40/43], entropy: 0.2821, uncertainty: 3.2327, uncertainty_coeffi: 0.0010, loss: 0.1074, lr: 3.19e-06
+     Averaged stats: entropy_avg: 0.2778, uncertainty_avg: 3.2710, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1076, lr_avg: 6.88e-06
+     itm tta time 0:00:06
+     Epoch[24] Iteration[10/43], entropy: 0.3479, uncertainty: 3.0750, uncertainty_coeffi: 0.0010, loss: 0.1584, lr: 5.13e-07
+     Epoch[24] Iteration[20/43], entropy: 0.2004, uncertainty: 3.0120, uncertainty_coeffi: 0.0010, loss: 0.1013, lr: 3.26e-08
+     Epoch[24] Iteration[30/43], entropy: 0.2092, uncertainty: 2.9395, uncertainty_coeffi: 0.0010, loss: 0.0974, lr: 1.13e-06
+     Epoch[24] Iteration[40/43], entropy: 0.1693, uncertainty: 2.9606, uncertainty_coeffi: 0.0010, loss: 0.0657, lr: 3.45e-06
+     Averaged stats: entropy_avg: 0.2317, uncertainty_avg: 2.9968, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1057, lr_avg: 1.28e-06
+     itm tta time 0:00:06
+     Epoch[25] Iteration[10/43], entropy: 0.2482, uncertainty: 3.0468, uncertainty_coeffi: 0.0010, loss: 0.0951, lr: 7.08e-06
+     Epoch[25] Iteration[20/43], entropy: 0.3050, uncertainty: 3.7387, uncertainty_coeffi: 0.0010, loss: 0.1146, lr: 9.21e-06
+     Epoch[25] Iteration[30/43], entropy: 0.1675, uncertainty: 2.9002, uncertainty_coeffi: 0.0010, loss: 0.0767, lr: 1.00e-05
+     Epoch[25] Iteration[40/43], entropy: 0.1618, uncertainty: 2.7056, uncertainty_coeffi: 0.0010, loss: 0.0791, lr: 9.21e-06
+     Averaged stats: entropy_avg: 0.2206, uncertainty_avg: 3.0978, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0914, lr_avg: 8.87e-06
+     itm tta time 0:00:06
+     Epoch[26] Iteration[10/43], entropy: 0.2350, uncertainty: 2.7812, uncertainty_coeffi: 0.0010, loss: 0.1243, lr: 6.27e-06
+     Epoch[26] Iteration[20/43], entropy: 0.3142, uncertainty: 3.2161, uncertainty_coeffi: 0.0010, loss: 0.1448, lr: 3.45e-06
+     Epoch[26] Iteration[30/43], entropy: 0.3450, uncertainty: 3.0887, uncertainty_coeffi: 0.0010, loss: 0.1304, lr: 1.13e-06
+     Epoch[26] Iteration[40/43], entropy: 0.2303, uncertainty: 2.7615, uncertainty_coeffi: 0.0010, loss: 0.1104, lr: 3.26e-08
+     Averaged stats: entropy_avg: 0.2811, uncertainty_avg: 2.9619, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1275, lr_avg: 2.72e-06
+     itm tta time 0:00:06
+     Epoch[27] Iteration[10/43], entropy: 0.2516, uncertainty: 2.9567, uncertainty_coeffi: 0.0010, loss: 0.1046, lr: 9.55e-07
+     Epoch[27] Iteration[20/43], entropy: 0.1559, uncertainty: 2.7567, uncertainty_coeffi: 0.0010, loss: 0.0817, lr: 3.19e-06
+     Epoch[27] Iteration[30/43], entropy: 0.2173, uncertainty: 3.4192, uncertainty_coeffi: 0.0010, loss: 0.0578, lr: 5.99e-06
+     Epoch[27] Iteration[40/43], entropy: 0.3029, uncertainty: 3.5396, uncertainty_coeffi: 0.0010, loss: 0.1123, lr: 8.48e-06
+     Averaged stats: entropy_avg: 0.2319, uncertainty_avg: 3.1681, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0891, lr_avg: 4.65e-06
+     itm tta time 0:00:05
+     Epoch[28] Iteration[10/43], entropy: 0.1916, uncertainty: 3.2963, uncertainty_coeffi: 0.0010, loss: 0.0827, lr: 9.99e-06
+     Epoch[28] Iteration[20/43], entropy: 0.2389, uncertainty: 3.5796, uncertainty_coeffi: 0.0010, loss: 0.0861, lr: 9.35e-06
+     Epoch[28] Iteration[30/43], entropy: 0.2430, uncertainty: 3.5877, uncertainty_coeffi: 0.0010, loss: 0.1047, lr: 7.33e-06
+     Epoch[28] Iteration[40/43], entropy: 0.2155, uncertainty: 2.5071, uncertainty_coeffi: 0.0010, loss: 0.0972, lr: 4.57e-06
+     Averaged stats: entropy_avg: 0.2223, uncertainty_avg: 3.2427, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0927, lr_avg: 7.81e-06
+     itm tta time 0:00:06
+     Epoch[29] Iteration[10/43], entropy: 0.2917, uncertainty: 3.0825, uncertainty_coeffi: 0.0010, loss: 0.1381, lr: 1.32e-06
+     Epoch[29] Iteration[20/43], entropy: 0.2198, uncertainty: 2.7222, uncertainty_coeffi: 0.0010, loss: 0.0850, lr: 7.32e-08
+     Epoch[29] Iteration[30/43], entropy: 0.1524, uncertainty: 2.7730, uncertainty_coeffi: 0.0010, loss: 0.0602, lr: 3.94e-07
+     Epoch[29] Iteration[40/43], entropy: 0.2300, uncertainty: 2.8510, uncertainty_coeffi: 0.0010, loss: 0.0842, lr: 2.18e-06
+     Averaged stats: entropy_avg: 0.2235, uncertainty_avg: 2.8572, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0919, lr_avg: 9.90e-07
+     itm tta time 0:00:06
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 59.550 | 80.100 | 87.100 | 44.128 | 20.533 |
+|   0   | 59.650 | 80.100 | 87.050 | 44.148 | 20.558 |
+|   1   | 59.650 | 80.100 | 87.050 | 44.157 | 20.567 |
+|   2   | 59.650 | 80.100 | 87.050 | 44.193 | 20.607 |
+|   4   | 59.700 | 80.100 | 87.150 | 44.216 | 20.632 |
+|   9   | 59.800 | 80.050 | 87.150 | 44.294 | 20.686 |
+|   14  | 59.850 | 80.150 | 87.200 | 44.336 | 20.724 |
+|   19  | 59.900 | 80.150 | 87.200 | 44.390 | 20.753 |
+|   29  | 59.950 | 80.200 | 87.150 | 44.514 | 20.821 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 29, 'R1': np.float32(59.95), 'R5': np.float32(80.2), 'R10': np.float32(87.15), 'mAP': np.float32(44.514), 'mINP': np.float32(20.821), 'entropy': 0.223457932472229, 'uncertainty': 2.857172191143036, 'uncertainty_coeffi': 0.0010000000474974513, 'loss': 0.0918745556846261, 'lr': 9.90422692867861e-07}
+     Epoch[30] Iteration[10/43], entropy: 0.2130, uncertainty: 2.7423, uncertainty_coeffi: 0.0010, loss: 0.0929, lr: 5.71e-06
+     Epoch[30] Iteration[20/43], entropy: 0.2873, uncertainty: 2.6225, uncertainty_coeffi: 0.0010, loss: 0.1193, lr: 8.27e-06
+     Epoch[30] Iteration[30/43], entropy: 0.2318, uncertainty: 3.5788, uncertainty_coeffi: 0.0010, loss: 0.1003, lr: 9.80e-06
+     Epoch[30] Iteration[40/43], entropy: 0.2177, uncertainty: 3.1769, uncertainty_coeffi: 0.0010, loss: 0.0619, lr: 9.80e-06
+     Averaged stats: entropy_avg: 0.2375, uncertainty_avg: 3.0301, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0936, lr_avg: 8.40e-06
+     itm tta time 0:00:06
+     Epoch[31] Iteration[10/43], entropy: 0.3086, uncertainty: 3.1196, uncertainty_coeffi: 0.0010, loss: 0.1164, lr: 7.58e-06
+     Epoch[31] Iteration[20/43], entropy: 0.1563, uncertainty: 2.9646, uncertainty_coeffi: 0.0010, loss: 0.0754, lr: 4.86e-06
+     Epoch[31] Iteration[30/43], entropy: 0.2328, uncertainty: 2.7357, uncertainty_coeffi: 0.0010, loss: 0.1008, lr: 2.18e-06
+     Epoch[31] Iteration[40/43], entropy: 0.1952, uncertainty: 3.3332, uncertainty_coeffi: 0.0010, loss: 0.0488, lr: 3.94e-07
+     Averaged stats: entropy_avg: 0.2232, uncertainty_avg: 3.0383, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0854, lr_avg: 3.75e-06
+     itm tta time 0:00:05
+     Epoch[32] Iteration[10/43], entropy: 0.1696, uncertainty: 3.3041, uncertainty_coeffi: 0.0010, loss: 0.0712, lr: 2.91e-07
+     Epoch[32] Iteration[20/43], entropy: 0.2331, uncertainty: 3.2872, uncertainty_coeffi: 0.0010, loss: 0.0816, lr: 1.95e-06
+     Epoch[32] Iteration[30/43], entropy: 0.2536, uncertainty: 2.9660, uncertainty_coeffi: 0.0010, loss: 0.1292, lr: 4.57e-06
+     Epoch[32] Iteration[40/43], entropy: 0.2912, uncertainty: 3.5244, uncertainty_coeffi: 0.0010, loss: 0.1080, lr: 7.33e-06
+     Averaged stats: entropy_avg: 0.2369, uncertainty_avg: 3.2704, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0975, lr_avg: 3.54e-06
+     itm tta time 0:00:06
+     Epoch[33] Iteration[10/43], entropy: 0.2850, uncertainty: 3.5702, uncertainty_coeffi: 0.0010, loss: 0.1212, lr: 9.71e-06
+     Epoch[33] Iteration[20/43], entropy: 0.3446, uncertainty: 3.3607, uncertainty_coeffi: 0.0010, loss: 0.1279, lr: 9.87e-06
+     Epoch[33] Iteration[30/43], entropy: 0.2503, uncertainty: 3.0594, uncertainty_coeffi: 0.0010, loss: 0.0944, lr: 8.48e-06
+     Epoch[33] Iteration[40/43], entropy: 0.3586, uncertainty: 3.5493, uncertainty_coeffi: 0.0010, loss: 0.1277, lr: 5.99e-06
+     Averaged stats: entropy_avg: 0.3096, uncertainty_avg: 3.3849, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1178, lr_avg: 8.51e-06
+     itm tta time 0:00:06
+     Epoch[34] Iteration[10/43], entropy: 0.2188, uncertainty: 3.1845, uncertainty_coeffi: 0.0010, loss: 0.0965, lr: 2.42e-06
+     Epoch[34] Iteration[20/43], entropy: 0.1953, uncertainty: 2.7664, uncertainty_coeffi: 0.0010, loss: 0.1020, lr: 5.13e-07
+     Epoch[34] Iteration[30/43], entropy: 0.1444, uncertainty: 2.6772, uncertainty_coeffi: 0.0010, loss: 0.0698, lr: 3.26e-08
+     Epoch[34] Iteration[40/43], entropy: 0.2180, uncertainty: 3.4128, uncertainty_coeffi: 0.0010, loss: 0.0771, lr: 1.13e-06
+     Averaged stats: entropy_avg: 0.1941, uncertainty_avg: 3.0102, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0864, lr_avg: 1.02e-06
+     itm tta time 0:00:06
+     Epoch[35] Iteration[10/43], entropy: 0.1995, uncertainty: 3.2907, uncertainty_coeffi: 0.0010, loss: 0.0822, lr: 4.29e-06
+     Epoch[35] Iteration[20/43], entropy: 0.3622, uncertainty: 2.6529, uncertainty_coeffi: 0.0010, loss: 0.1816, lr: 7.08e-06
+     Epoch[35] Iteration[30/43], entropy: 0.1249, uncertainty: 3.3904, uncertainty_coeffi: 0.0010, loss: 0.0437, lr: 9.21e-06
+     Epoch[35] Iteration[40/43], entropy: 0.2786, uncertainty: 2.8578, uncertainty_coeffi: 0.0010, loss: 0.1287, lr: 1.00e-05
+     Averaged stats: entropy_avg: 0.2413, uncertainty_avg: 3.0479, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1090, lr_avg: 7.64e-06
+     itm tta time 0:00:06
+     Epoch[36] Iteration[10/43], entropy: 0.2613, uncertainty: 3.2663, uncertainty_coeffi: 0.0010, loss: 0.0944, lr: 8.68e-06
+     Epoch[36] Iteration[20/43], entropy: 0.2112, uncertainty: 3.2625, uncertainty_coeffi: 0.0010, loss: 0.0855, lr: 6.27e-06
+     Epoch[36] Iteration[30/43], entropy: 0.2794, uncertainty: 3.1920, uncertainty_coeffi: 0.0010, loss: 0.0888, lr: 3.45e-06
+     Epoch[36] Iteration[40/43], entropy: 0.2278, uncertainty: 2.9133, uncertainty_coeffi: 0.0010, loss: 0.0967, lr: 1.13e-06
+     Averaged stats: entropy_avg: 0.2449, uncertainty_avg: 3.1585, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0913, lr_avg: 4.88e-06
+     itm tta time 0:00:06
+     Epoch[37] Iteration[10/43], entropy: 0.2517, uncertainty: 3.3998, uncertainty_coeffi: 0.0010, loss: 0.0974, lr: 8.15e-09
+     Epoch[37] Iteration[20/43], entropy: 0.1852, uncertainty: 3.4961, uncertainty_coeffi: 0.0010, loss: 0.0841, lr: 9.55e-07
+     Epoch[37] Iteration[30/43], entropy: 0.2838, uncertainty: 3.1055, uncertainty_coeffi: 0.0010, loss: 0.1102, lr: 3.19e-06
+     Epoch[37] Iteration[40/43], entropy: 0.3010, uncertainty: 3.1344, uncertainty_coeffi: 0.0010, loss: 0.1239, lr: 5.99e-06
+     Averaged stats: entropy_avg: 0.2554, uncertainty_avg: 3.2840, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1039, lr_avg: 2.54e-06
+     itm tta time 0:00:05
+     Epoch[38] Iteration[10/43], entropy: 0.1468, uncertainty: 3.6010, uncertainty_coeffi: 0.0010, loss: 0.0553, lr: 9.05e-06
+     Epoch[38] Iteration[20/43], entropy: 0.2509, uncertainty: 2.8184, uncertainty_coeffi: 0.0010, loss: 0.1343, lr: 9.99e-06
+     Epoch[38] Iteration[30/43], entropy: 0.4501, uncertainty: 3.6465, uncertainty_coeffi: 0.0010, loss: 0.1652, lr: 9.35e-06
+     Epoch[38] Iteration[40/43], entropy: 0.2598, uncertainty: 3.1630, uncertainty_coeffi: 0.0010, loss: 0.0855, lr: 7.33e-06
+     Averaged stats: entropy_avg: 0.2769, uncertainty_avg: 3.3072, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1100, lr_avg: 8.93e-06
+     itm tta time 0:00:06
+     Epoch[39] Iteration[10/43], entropy: 0.3150, uncertainty: 2.7644, uncertainty_coeffi: 0.0010, loss: 0.1190, lr: 3.73e-06
+     Epoch[39] Iteration[20/43], entropy: 0.2277, uncertainty: 2.9593, uncertainty_coeffi: 0.0010, loss: 0.1030, lr: 1.32e-06
+     Epoch[39] Iteration[30/43], entropy: 0.1845, uncertainty: 3.2483, uncertainty_coeffi: 0.0010, loss: 0.0823, lr: 7.32e-08
+     Epoch[39] Iteration[40/43], entropy: 0.2519, uncertainty: 3.3898, uncertainty_coeffi: 0.0010, loss: 0.1163, lr: 3.94e-07
+     Averaged stats: entropy_avg: 0.2448, uncertainty_avg: 3.0904, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1052, lr_avg: 1.38e-06
+     itm tta time 0:00:06
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 59.550 | 80.100 | 87.100 | 44.128 | 20.533 |
+|   0   | 59.650 | 80.100 | 87.050 | 44.148 | 20.558 |
+|   1   | 59.650 | 80.100 | 87.050 | 44.157 | 20.567 |
+|   2   | 59.650 | 80.100 | 87.050 | 44.193 | 20.607 |
+|   4   | 59.700 | 80.100 | 87.150 | 44.216 | 20.632 |
+|   9   | 59.800 | 80.050 | 87.150 | 44.294 | 20.686 |
+|   14  | 59.850 | 80.150 | 87.200 | 44.336 | 20.724 |
+|   19  | 59.900 | 80.150 | 87.200 | 44.390 | 20.753 |
+|   29  | 59.950 | 80.200 | 87.150 | 44.514 | 20.821 |
+|   39  | 60.150 | 80.250 | 87.300 | 44.602 | 20.883 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 39, 'R1': np.float32(60.15), 'R5': np.float32(80.25), 'R10': np.float32(87.3), 'mAP': np.float32(44.602), 'mINP': np.float32(20.883), 'entropy': 0.2447642721235752, 'uncertainty': 3.090424656867981, 'uncertainty_coeffi': 0.0010000000474974513, 'loss': 0.10516484081745148, 'lr': 1.3782037987094657e-06}
+     Epoch[40] Iteration[10/43], entropy: 0.2686, uncertainty: 3.6241, uncertainty_coeffi: 0.0010, loss: 0.0885, lr: 2.92e-06
+     Epoch[40] Iteration[20/43], entropy: 0.3427, uncertainty: 2.6539, uncertainty_coeffi: 0.0010, loss: 0.1744, lr: 5.71e-06
+     Epoch[40] Iteration[30/43], entropy: 0.2603, uncertainty: 3.2391, uncertainty_coeffi: 0.0010, loss: 0.0986, lr: 8.27e-06
+     Epoch[40] Iteration[40/43], entropy: 0.3063, uncertainty: 3.0256, uncertainty_coeffi: 0.0010, loss: 0.1451, lr: 9.80e-06
+     Averaged stats: entropy_avg: 0.2945, uncertainty_avg: 3.1357, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1266, lr_avg: 6.68e-06
+     itm tta time 0:00:06
+     Epoch[41] Iteration[10/43], entropy: 0.2731, uncertainty: 2.8028, uncertainty_coeffi: 0.0010, loss: 0.1230, lr: 9.49e-06
+     Epoch[41] Iteration[20/43], entropy: 0.2754, uncertainty: 2.6984, uncertainty_coeffi: 0.0010, loss: 0.1468, lr: 7.58e-06
+     Epoch[41] Iteration[30/43], entropy: 0.2890, uncertainty: 3.1094, uncertainty_coeffi: 0.0010, loss: 0.1192, lr: 4.86e-06
+     Epoch[41] Iteration[40/43], entropy: 0.1617, uncertainty: 3.0080, uncertainty_coeffi: 0.0010, loss: 0.0862, lr: 2.18e-06
+     Averaged stats: entropy_avg: 0.2498, uncertainty_avg: 2.9047, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1188, lr_avg: 6.03e-06
+     itm tta time 0:00:06
+     Epoch[42] Iteration[10/43], entropy: 0.1918, uncertainty: 2.7525, uncertainty_coeffi: 0.0010, loss: 0.0833, lr: 1.30e-07
+     Epoch[42] Iteration[20/43], entropy: 0.2997, uncertainty: 3.2321, uncertainty_coeffi: 0.0010, loss: 0.1273, lr: 2.91e-07
+     Epoch[42] Iteration[30/43], entropy: 0.3017, uncertainty: 3.3320, uncertainty_coeffi: 0.0010, loss: 0.0932, lr: 1.95e-06
+     Epoch[42] Iteration[40/43], entropy: 0.2360, uncertainty: 3.1667, uncertainty_coeffi: 0.0010, loss: 0.1134, lr: 4.57e-06
+     Averaged stats: entropy_avg: 0.2573, uncertainty_avg: 3.1208, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1043, lr_avg: 1.73e-06
+     itm tta time 0:00:06
+     Epoch[43] Iteration[10/43], entropy: 0.2251, uncertainty: 2.7176, uncertainty_coeffi: 0.0010, loss: 0.0920, lr: 8.05e-06
+     Epoch[43] Iteration[20/43], entropy: 0.2900, uncertainty: 3.3376, uncertainty_coeffi: 0.0010, loss: 0.0956, lr: 9.71e-06
+     Epoch[43] Iteration[30/43], entropy: 0.1652, uncertainty: 3.7345, uncertainty_coeffi: 0.0010, loss: 0.0486, lr: 9.87e-06
+     Epoch[43] Iteration[40/43], entropy: 0.1826, uncertainty: 2.4290, uncertainty_coeffi: 0.0010, loss: 0.0930, lr: 8.48e-06
+     Averaged stats: entropy_avg: 0.2157, uncertainty_avg: 3.0547, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0823, lr_avg: 9.03e-06
+     itm tta time 0:00:06
+     Epoch[44] Iteration[10/43], entropy: 0.2235, uncertainty: 2.8526, uncertainty_coeffi: 0.0010, loss: 0.1037, lr: 5.14e-06
+     Epoch[44] Iteration[20/43], entropy: 0.3092, uncertainty: 3.1094, uncertainty_coeffi: 0.0010, loss: 0.1345, lr: 2.42e-06
+     Epoch[44] Iteration[30/43], entropy: 0.2397, uncertainty: 3.3481, uncertainty_coeffi: 0.0010, loss: 0.0942, lr: 5.13e-07
+     Epoch[44] Iteration[40/43], entropy: 0.2838, uncertainty: 3.1759, uncertainty_coeffi: 0.0010, loss: 0.1060, lr: 3.26e-08
+     Averaged stats: entropy_avg: 0.2640, uncertainty_avg: 3.1215, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1096, lr_avg: 2.03e-06
+     itm tta time 0:00:06
+     Epoch[45] Iteration[10/43], entropy: 0.2088, uncertainty: 3.4805, uncertainty_coeffi: 0.0010, loss: 0.0746, lr: 1.73e-06
+     Epoch[45] Iteration[20/43], entropy: 0.2765, uncertainty: 3.5858, uncertainty_coeffi: 0.0010, loss: 0.1007, lr: 4.29e-06
+     Epoch[45] Iteration[30/43], entropy: 0.4194, uncertainty: 2.8432, uncertainty_coeffi: 0.0010, loss: 0.1830, lr: 7.08e-06
+     Epoch[45] Iteration[40/43], entropy: 0.2425, uncertainty: 3.6763, uncertainty_coeffi: 0.0010, loss: 0.0910, lr: 9.21e-06
+     Averaged stats: entropy_avg: 0.2868, uncertainty_avg: 3.3964, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1123, lr_avg: 5.57e-06
+     itm tta time 0:00:06
+     Epoch[46] Iteration[10/43], entropy: 0.1191, uncertainty: 2.1990, uncertainty_coeffi: 0.0010, loss: 0.0623, lr: 9.93e-06
+     Epoch[46] Iteration[20/43], entropy: 0.2968, uncertainty: 3.0549, uncertainty_coeffi: 0.0010, loss: 0.1485, lr: 8.68e-06
+     Epoch[46] Iteration[30/43], entropy: 0.2038, uncertainty: 3.4817, uncertainty_coeffi: 0.0010, loss: 0.0761, lr: 6.55e-06
+     Epoch[46] Iteration[40/43], entropy: 0.2819, uncertainty: 3.0571, uncertainty_coeffi: 0.0010, loss: 0.1081, lr: 3.73e-06
+     Averaged stats: entropy_avg: 0.2254, uncertainty_avg: 2.9482, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0988, lr_avg: 7.22e-06
+     itm tta time 0:00:06
+     Epoch[47] Iteration[10/43], entropy: 0.1817, uncertainty: 3.2688, uncertainty_coeffi: 0.0010, loss: 0.0836, lr: 7.94e-07
+     Epoch[47] Iteration[20/43], entropy: 0.1790, uncertainty: 3.2499, uncertainty_coeffi: 0.0010, loss: 0.0620, lr: 0.00e+00
+     Epoch[47] Iteration[30/43], entropy: 0.2341, uncertainty: 3.2821, uncertainty_coeffi: 0.0010, loss: 0.0862, lr: 7.94e-07
+     Epoch[47] Iteration[40/43], entropy: 0.1973, uncertainty: 2.8022, uncertainty_coeffi: 0.0010, loss: 0.1048, lr: 2.92e-06
+     Averaged stats: entropy_avg: 0.1980, uncertainty_avg: 3.1507, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0841, lr_avg: 1.13e-06
+     itm tta time 0:00:06
+     Epoch[48] Iteration[10/43], entropy: 0.2492, uncertainty: 3.0892, uncertainty_coeffi: 0.0010, loss: 0.0859, lr: 6.55e-06
+     Epoch[48] Iteration[20/43], entropy: 0.3206, uncertainty: 3.1065, uncertainty_coeffi: 0.0010, loss: 0.1307, lr: 8.87e-06
+     Epoch[48] Iteration[30/43], entropy: 0.2754, uncertainty: 3.6393, uncertainty_coeffi: 0.0010, loss: 0.0864, lr: 9.97e-06
+     Epoch[48] Iteration[40/43], entropy: 0.2557, uncertainty: 2.9948, uncertainty_coeffi: 0.0010, loss: 0.0886, lr: 9.49e-06
+     Averaged stats: entropy_avg: 0.2752, uncertainty_avg: 3.2075, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0979, lr_avg: 8.72e-06
+     itm tta time 0:00:06
+     Epoch[49] Iteration[10/43], entropy: 0.2239, uncertainty: 3.3954, uncertainty_coeffi: 0.0010, loss: 0.0821, lr: 6.81e-06
+     Epoch[49] Iteration[20/43], entropy: 0.2994, uncertainty: 3.2844, uncertainty_coeffi: 0.0010, loss: 0.0927, lr: 4.01e-06
+     Epoch[49] Iteration[30/43], entropy: 0.2009, uncertainty: 3.6275, uncertainty_coeffi: 0.0010, loss: 0.0599, lr: 1.52e-06
+     Epoch[49] Iteration[40/43], entropy: 0.2632, uncertainty: 3.0345, uncertainty_coeffi: 0.0010, loss: 0.0930, lr: 1.30e-07
+     Averaged stats: entropy_avg: 0.2468, uncertainty_avg: 3.3355, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0819, lr_avg: 3.12e-06
+     itm tta time 0:00:06
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 59.550 | 80.100 | 87.100 | 44.128 | 20.533 |
+|   0   | 59.650 | 80.100 | 87.050 | 44.148 | 20.558 |
+|   1   | 59.650 | 80.100 | 87.050 | 44.157 | 20.567 |
+|   2   | 59.650 | 80.100 | 87.050 | 44.193 | 20.607 |
+|   4   | 59.700 | 80.100 | 87.150 | 44.216 | 20.632 |
+|   9   | 59.800 | 80.050 | 87.150 | 44.294 | 20.686 |
+|   14  | 59.850 | 80.150 | 87.200 | 44.336 | 20.724 |
+|   19  | 59.900 | 80.150 | 87.200 | 44.390 | 20.753 |
+|   29  | 59.950 | 80.200 | 87.150 | 44.514 | 20.821 |
+|   39  | 60.150 | 80.250 | 87.300 | 44.602 | 20.883 |
+|   49  | 60.200 | 80.300 | 87.350 | 44.707 | 20.924 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 49, 'R1': np.float32(60.2), 'R5': np.float32(80.3), 'R10': np.float32(87.35), 'mAP': np.float32(44.707), 'mINP': np.float32(20.924), 'entropy': 0.24684825167059898, 'uncertainty': 3.335450053215027, 'uncertainty_coeffi': 0.0010000000474974513, 'loss': 0.08193261176347733, 'lr': 3.1165846913841044e-06}
+     Epoch[50] Iteration[10/43], entropy: 0.2246, uncertainty: 3.0612, uncertainty_coeffi: 0.0010, loss: 0.1055, lr: 6.46e-07
+     Epoch[50] Iteration[20/43], entropy: 0.2199, uncertainty: 3.5557, uncertainty_coeffi: 0.0010, loss: 0.0814, lr: 2.67e-06
+     Epoch[50] Iteration[30/43], entropy: 0.1938, uncertainty: 3.0027, uncertainty_coeffi: 0.0010, loss: 0.0696, lr: 5.43e-06
+     Epoch[50] Iteration[40/43], entropy: 0.2646, uncertainty: 3.3485, uncertainty_coeffi: 0.0010, loss: 0.0860, lr: 8.05e-06
+     Averaged stats: entropy_avg: 0.2257, uncertainty_avg: 3.2420, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0856, lr_avg: 4.20e-06
+     itm tta time 0:00:06
+     Epoch[51] Iteration[10/43], entropy: 0.2453, uncertainty: 3.7288, uncertainty_coeffi: 0.0010, loss: 0.0822, lr: 9.93e-06
+     Epoch[51] Iteration[20/43], entropy: 0.1221, uncertainty: 3.6014, uncertainty_coeffi: 0.0010, loss: 0.0473, lr: 9.61e-06
+     Epoch[51] Iteration[30/43], entropy: 0.3171, uncertainty: 2.7102, uncertainty_coeffi: 0.0010, loss: 0.1487, lr: 7.82e-06
+     Epoch[51] Iteration[40/43], entropy: 0.2964, uncertainty: 2.8415, uncertainty_coeffi: 0.0010, loss: 0.1105, lr: 5.14e-06
+     Averaged stats: entropy_avg: 0.2452, uncertainty_avg: 3.2205, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0972, lr_avg: 8.12e-06
+     itm tta time 0:00:06
+     Epoch[52] Iteration[10/43], entropy: 0.1709, uncertainty: 3.3107, uncertainty_coeffi: 0.0010, loss: 0.0864, lr: 1.73e-06
+     Epoch[52] Iteration[20/43], entropy: 0.1979, uncertainty: 3.0212, uncertainty_coeffi: 0.0010, loss: 0.0631, lr: 2.03e-07
+     Epoch[52] Iteration[30/43], entropy: 0.2478, uncertainty: 3.1033, uncertainty_coeffi: 0.0010, loss: 0.1020, lr: 2.03e-07
+     Epoch[52] Iteration[40/43], entropy: 0.2409, uncertainty: 3.6564, uncertainty_coeffi: 0.0010, loss: 0.0825, lr: 1.73e-06
+     Averaged stats: entropy_avg: 0.2144, uncertainty_avg: 3.2729, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0835, lr_avg: 9.64e-07
+     itm tta time 0:00:06
+     Epoch[53] Iteration[10/43], entropy: 0.2442, uncertainty: 3.5075, uncertainty_coeffi: 0.0010, loss: 0.0816, lr: 5.14e-06
+     Epoch[53] Iteration[20/43], entropy: 0.2086, uncertainty: 3.2520, uncertainty_coeffi: 0.0010, loss: 0.0982, lr: 7.82e-06
+     Epoch[53] Iteration[30/43], entropy: 0.2195, uncertainty: 3.5469, uncertainty_coeffi: 0.0010, loss: 0.0859, lr: 9.61e-06
+     Epoch[53] Iteration[40/43], entropy: 0.2644, uncertainty: 2.7386, uncertainty_coeffi: 0.0010, loss: 0.1037, lr: 9.93e-06
+     Averaged stats: entropy_avg: 0.2342, uncertainty_avg: 3.2613, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0923, lr_avg: 8.12e-06
+     itm tta time 0:00:06
+     Epoch[54] Iteration[10/43], entropy: 0.2409, uncertainty: 3.1016, uncertainty_coeffi: 0.0010, loss: 0.1033, lr: 8.05e-06
+     Epoch[54] Iteration[20/43], entropy: 0.2875, uncertainty: 3.2097, uncertainty_coeffi: 0.0010, loss: 0.1079, lr: 5.43e-06
+     Epoch[54] Iteration[30/43], entropy: 0.1919, uncertainty: 2.7638, uncertainty_coeffi: 0.0010, loss: 0.0787, lr: 2.67e-06
+     Epoch[54] Iteration[40/43], entropy: 0.1976, uncertainty: 3.1902, uncertainty_coeffi: 0.0010, loss: 0.0695, lr: 6.46e-07
+     Averaged stats: entropy_avg: 0.2295, uncertainty_avg: 3.0663, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0898, lr_avg: 4.20e-06
+     itm tta time 0:00:06
+     Epoch[55] Iteration[10/43], entropy: 0.2994, uncertainty: 3.4544, uncertainty_coeffi: 0.0010, loss: 0.1225, lr: 1.30e-07
+     Epoch[55] Iteration[20/43], entropy: 0.2624, uncertainty: 3.5142, uncertainty_coeffi: 0.0010, loss: 0.0994, lr: 1.52e-06
+     Epoch[55] Iteration[30/43], entropy: 0.1773, uncertainty: 2.9807, uncertainty_coeffi: 0.0010, loss: 0.0735, lr: 4.01e-06
+     Epoch[55] Iteration[40/43], entropy: 0.1806, uncertainty: 3.3427, uncertainty_coeffi: 0.0010, loss: 0.0714, lr: 6.81e-06
+     Averaged stats: entropy_avg: 0.2299, uncertainty_avg: 3.3230, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0917, lr_avg: 3.12e-06
+     itm tta time 0:00:06
+     Epoch[56] Iteration[10/43], entropy: 0.2497, uncertainty: 3.4977, uncertainty_coeffi: 0.0010, loss: 0.0808, lr: 9.49e-06
+     Epoch[56] Iteration[20/43], entropy: 0.2444, uncertainty: 2.8032, uncertainty_coeffi: 0.0010, loss: 0.1179, lr: 9.97e-06
+     Epoch[56] Iteration[30/43], entropy: 0.2707, uncertainty: 3.2893, uncertainty_coeffi: 0.0010, loss: 0.1023, lr: 8.87e-06
+     Epoch[56] Iteration[40/43], entropy: 0.2366, uncertainty: 3.1208, uncertainty_coeffi: 0.0010, loss: 0.0707, lr: 6.55e-06
+     Averaged stats: entropy_avg: 0.2504, uncertainty_avg: 3.1778, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0929, lr_avg: 8.72e-06
+     itm tta time 0:00:06
+     Epoch[57] Iteration[10/43], entropy: 0.2080, uncertainty: 3.3975, uncertainty_coeffi: 0.0010, loss: 0.0818, lr: 2.92e-06
+     Epoch[57] Iteration[20/43], entropy: 0.2460, uncertainty: 3.1660, uncertainty_coeffi: 0.0010, loss: 0.0895, lr: 7.94e-07
+     Epoch[57] Iteration[30/43], entropy: 0.2268, uncertainty: 3.0433, uncertainty_coeffi: 0.0010, loss: 0.0978, lr: 0.00e+00
+     Epoch[57] Iteration[40/43], entropy: 0.3366, uncertainty: 3.0573, uncertainty_coeffi: 0.0010, loss: 0.1502, lr: 7.94e-07
+     Averaged stats: entropy_avg: 0.2543, uncertainty_avg: 3.1660, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1048, lr_avg: 1.13e-06
+     itm tta time 0:00:06
+     Epoch[58] Iteration[10/43], entropy: 0.2145, uncertainty: 3.0845, uncertainty_coeffi: 0.0010, loss: 0.1049, lr: 3.73e-06
+     Epoch[58] Iteration[20/43], entropy: 0.3097, uncertainty: 3.1405, uncertainty_coeffi: 0.0010, loss: 0.1487, lr: 6.55e-06
+     Epoch[58] Iteration[30/43], entropy: 0.1892, uncertainty: 3.6631, uncertainty_coeffi: 0.0010, loss: 0.0855, lr: 8.87e-06
+     Epoch[58] Iteration[40/43], entropy: 0.2636, uncertainty: 3.1601, uncertainty_coeffi: 0.0010, loss: 0.0989, lr: 9.97e-06
+     Averaged stats: entropy_avg: 0.2443, uncertainty_avg: 3.2621, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.1095, lr_avg: 7.28e-06
+     itm tta time 0:00:06
+     Epoch[59] Iteration[10/43], entropy: 0.2404, uncertainty: 3.3658, uncertainty_coeffi: 0.0010, loss: 0.1070, lr: 9.05e-06
+     Epoch[59] Iteration[20/43], entropy: 0.2480, uncertainty: 3.8086, uncertainty_coeffi: 0.0010, loss: 0.0739, lr: 6.81e-06
+     Epoch[59] Iteration[30/43], entropy: 0.2732, uncertainty: 2.7950, uncertainty_coeffi: 0.0010, loss: 0.0988, lr: 4.01e-06
+     Epoch[59] Iteration[40/43], entropy: 0.1915, uncertainty: 3.1687, uncertainty_coeffi: 0.0010, loss: 0.0752, lr: 1.52e-06
+     Averaged stats: entropy_avg: 0.2383, uncertainty_avg: 3.2845, uncertainty_coeffi_avg: 0.0010, loss_avg: 0.0887, lr_avg: 5.35e-06
+     itm tta time 0:00:06
+### TTA Eval Score: 
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 59.550 | 80.100 | 87.100 | 44.128 | 20.533 |
+|   0   | 59.650 | 80.100 | 87.050 | 44.148 | 20.558 |
+|   1   | 59.650 | 80.100 | 87.050 | 44.157 | 20.567 |
+|   2   | 59.650 | 80.100 | 87.050 | 44.193 | 20.607 |
+|   4   | 59.700 | 80.100 | 87.150 | 44.216 | 20.632 |
+|   9   | 59.800 | 80.050 | 87.150 | 44.294 | 20.686 |
+|   14  | 59.850 | 80.150 | 87.200 | 44.336 | 20.724 |
+|   19  | 59.900 | 80.150 | 87.200 | 44.390 | 20.753 |
+|   29  | 59.950 | 80.200 | 87.150 | 44.514 | 20.821 |
+|   39  | 60.150 | 80.250 | 87.300 | 44.602 | 20.883 |
+|   49  | 60.200 | 80.300 | 87.350 | 44.707 | 20.924 |
+|   59  | 60.700 | 80.400 | 87.450 | 44.856 | 20.999 |
++-------+--------+--------+--------+--------+--------+
+     logs:  {'epo': 59, 'R1': np.float32(60.7), 'R5': np.float32(80.4), 'R10': np.float32(87.45), 'mAP': np.float32(44.856), 'mINP': np.float32(20.999), 'entropy': 0.23830071464180946, 'uncertainty': 3.2845085859298706, 'uncertainty_coeffi': 0.0010000000474974513, 'loss': 0.08873280882835388, 'lr': 5.3453708305307305e-06}
+### best epoch 59 : {'epo': '59', 'R1': '60.7', 'R5': '80.4', 'R10': '87.45', 'mAP': '44.856', 'mINP': '20.999', 'entropy': '0.23830071464180946', 'uncertainty': '3.2845085859298706', 'uncertainty_coeffi': '0.0010000000474974513', 'loss': '0.08873280882835388', 'lr': '5.3453708305307305e-06'}
+### Time 0:07:08
