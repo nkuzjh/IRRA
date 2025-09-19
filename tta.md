@@ -936,28 +936,65 @@ nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_rerun2/ham
 ## exp7
 - sample selection: 'topk'
 
-## 以RSTP为例记录exp8-13
 
-### exp8 参数错误
-**N_t2i和N_i2t取反了**
+## exp8 rstp&cuhk参数错误
+**N_t2i和N_i2t取反了，只有icfg两个N相等所以实验有效**
 - sample selection: 'all'
 - uncertainty: 'scaled_diff_div_mean', N_t2i: 10, N_i2t: 5
-### exp9 参数错误
-**N_t2i和N_i2t取反了**
+### rstp
+    R1  {'epo': '4', 'R1': '61.4', 'R5': '80.6', 'R10': '88.45', 'mAP': '45.545', 'mINP': '21.748'
+    mAP {'epo': '29', 'R1': '61.2', 'R5': '80.7', 'R10': '88.15', 'mAP': '45.698', 'mINP': '22.021'
+### cuhk
+    R1  {'epo': '4', 'R1': '70.955', 'R5': '86.907', 'R10': '91.862', 'mAP': '63.531', 'mINP': '47.259'
+    mAP {'epo': '4', 'R1': '70.955', 'R5': '86.907', 'R10': '91.862', 'mAP': '63.531', 'mINP': '47.259'
+### icfg
+    R1  {'epo': '4', 'R1': '62.026', 'R5': '77.222', 'R10': '82.754', 'mAP': '35.955', 'mINP': '5.906'
+    mAP {'epo': '9', 'R1': '61.85', 'R5': '77.509', 'R10': '83.117', 'mAP': '36.171', 'mINP': '6.084'
+
+## exp9 rstp&cuhk参数错误
+**N_t2i和N_i2t取反了，只有icfg两个N相等所以实验有效**
 - sample selection: 'topk'
 - uncertainty: 'scaled_diff_div_mean', N_t2i: 10, N_i2t: 5
-### exp10
+### rstp
+    R1  {'epo': '29', 'R1': '62.0', 'R5': '81.5', 'R10': '88.85', 'mAP': '46.449', 'mINP': '22.262'
+    mAP {'epo': '29', 'R1': '62.0', 'R5': '81.5', 'R10': '88.85', 'mAP': '46.449', 'mINP': '22.262'
+### cuhk
+    R1  {'epo': '14', 'R1': '70.841', 'R5': '86.826', 'R10': '91.845', 'mAP': '63.519', 'mINP': '47.278'
+    mAP {'epo': '1', 'R1': '70.679', 'R5': '86.826', 'R10': '91.764', 'mAP': '63.549', 'mINP': '47.296'
+### icfg
+    R1  {'epo': '4', 'R1': '62.137', 'R5': '77.252', 'R10': '82.945', 'mAP': '36.036', 'mINP': '5.844'
+    mAP {'epo': '2', 'R1': '61.85', 'R5': '77.524', 'R10': '83.147', 'mAP': '36.172', 'mINP': '6.089'
+
+## exp10
 - sample selection: 'all'
 - uncertainty: 'doublei2t_diff_div_mean'
-### exp11
+### rstp
+    R1  {'epo': '49', 'R1': '61.55', 'R5': '80.55', 'R10': '88.1', 'mAP': '45.963', 'mINP': '22.225'
+    mAP {'epo': '39', 'R1': '61.5', 'R5': '80.85', 'R10': '88.25', 'mAP': '46.129', 'mINP': '22.249'
+### cuhk
+    R1  {'epo': '2', 'R1': '70.89', 'R5': '86.777', 'R10': '91.992', 'mAP': '63.56', 'mINP': '47.332'
+    mAP {'epo': '4', 'R1': '70.874', 'R5': '86.842', 'R10': '91.975', 'mAP': '63.571', 'mINP': '47.324'
+### icfg running~
+    R1  {'epo': '9', 'R1': '62.001', 'R5': '77.277', 'R10': '82.824', 'mAP': '35.996', 'mINP': '5.942'
+    mAP {'epo': '9', 'R1': '61.79', 'R5': '77.469', 'R10': '83.071', 'mAP': '36.131', 'mINP': '6.049'
+
+## exp11
 - sample selection: 'topk'
 - uncertainty: 'doublei2t_diff_div_mean'
-### exp12 理解错误
+### rstp
+    R1  {'epo': '49', 'R1': '62.1', 'R5': '81.6', 'R10': '88.35', 'mAP': '46.457', 'mINP': '22.31'
+    mAP {'epo': '49', 'R1': '61.7', 'R5': '81.45', 'R10': '88.6', 'mAP': '46.57', 'mINP': '22.563'
+### cuhk
+    R1  {'epo': '1', 'R1': '70.825', 'R5': '86.858', 'R10': '91.943', 'mAP': '63.49', 'mINP': '47.201'
+    mAP {'epo': '1', 'R1': '70.809', 'R5': '86.793', 'R10': '92.024', 'mAP': '63.535', 'mINP': '47.296'
+### icfg running~
+
+## exp12 仅rstp，理解错误
 **理解错误，sigmoid不是用来计算entropy的**
 - sample selection: 'topk'
 - uncertainty: 'doublei2t_diff_div_mean'
 - entropy_type: 'sigmoid_cos_diff_mean', entropy_sigmoid_temper: 10
-### exp13 理解错误
+## exp13 仅rstp，理解错误
 **理解错误，sigmoid不是用来计算entropy的**
 - sample selection: 'topk'
 - uncertainty: 'doublei2t_diff_div_mean'
@@ -970,18 +1007,26 @@ nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_rerun2/ham
 ### exp14
 - sample selection: 'topk'
 - uncertainty: 'scaled_diff_div_mean', N_t2i: 5, N_i2t: 10
+    R1  {'epo': '49', 'R1': '61.75', 'R5': '81.35', 'R10': '88.6', 'mAP': '46.588', 'mINP': '22.567'
+    mAP {'epo': '49', 'R1': '61.75', 'R5': '81.35', 'R10': '88.6', 'mAP': '46.588', 'mINP': '22.567'
 
 ### exp15 = exp11 doublei2t_diff_div_mean
 - sample selection: 'topk'
 - uncertainty: 'scaledi2t_diff_div_mean' # scaledi2t=N_i2t/N_t2i, N_t2i: 5, N_i2t: 10,
+    R1  {'epo': '49', 'R1': '61.7', 'R5': '81.45', 'R10': '88.6', 'mAP': '46.57', 'mINP': '22.563'
+    mAP {'epo': '49', 'R1': '61.7', 'R5': '81.45', 'R10': '88.6', 'mAP': '46.57', 'mINP': '22.563'
 
 ### exp16
 - sample selection: 'topk'
 - uncertainty: 'scaled_diff_div_mean', N_t2i: 1, N_i2t: 1, uncertainty_t2i_temper: 5, uncertainty_i2t_temper: 10
+    R1  {'epo': '59', 'R1': '61.75', 'R5': '81.9', 'R10': '88.9', 'mAP': '46.476', 'mINP': '22.311'
+    mAP {'epo': '59', 'R1': '61.75', 'R5': '81.9', 'R10': '88.9', 'mAP': '46.476', 'mINP': '22.311'
 
 ### exp17
 - sample selection: 'topk'
 - uncertainty: 'scaled_diff_div_mean', N_t2i: 1, N_i2t: 1, uncertainty_t2i_temper: 1/5, uncertainty_i2t_temper: 1/10
+    R1  {'epo': '4', 'R1': '61.3', 'R5': '81.4', 'R10': '88.55', 'mAP': '46.043', 'mINP': '21.991'
+    mAP {'epo': '4', 'R1': '61.3', 'R5': '81.4', 'R10': '88.55', 'mAP': '46.043', 'mINP': '21.991'
 
 
 
@@ -990,35 +1035,52 @@ nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_rerun2/ham
 ### exp14
 - sample selection: 'topk'
 - uncertainty: 'scaled_diff_div_mean', N_t2i: 3.09, N_i2t: 6.18
+    R1  {'epo': '1', 'R1': '70.825', 'R5': '86.81', 'R10': '92.008', 'mAP': '63.537', 'mINP': '47.295'
+    mAP {'epo': '1', 'R1': '70.825', 'R5': '86.81', 'R10': '92.008', 'mAP': '63.537', 'mINP': '47.295'
 
 ### exp15 = exp11 doublei2t_diff_div_mean
 - sample selection: 'topk'
 - uncertainty: 'scaledi2t_diff_div_mean' # scaledi2t=N_i2t/N_t2i, N_t2i: 3.09, N_i2t: 6.18
+    R1  {'epo': '19', 'R1': '70.825', 'R5': '86.777', 'R10': '91.992', 'mAP': '63.528', 'mINP': '47.286'
+    mAP {'epo': '1', 'R1': '70.809', 'R5': '86.793', 'R10': '92.024', 'mAP': '63.535', 'mINP': '47.296'
 
 ### exp16
 - sample selection: 'topk'
 - uncertainty: 'scaled_diff_div_mean', N_t2i: 1, N_i2t: 1, uncertainty_t2i_temper: 3.09, uncertainty_i2t_temper: 6.18
+    R1  {'epo': '14', 'R1': '70.858', 'R5': '86.875', 'R10': '91.862', 'mAP': '63.505', 'mINP': '47.221'
+    mAP {'epo': '14', 'R1': '70.858', 'R5': '86.875', 'R10': '91.862', 'mAP': '63.505', 'mINP': '47.221'
 
 ### exp17
 - sample selection: 'topk'
 - uncertainty: 'scaled_diff_div_mean', N_t2i: 1, N_i2t: 1, uncertainty_t2i_temper: 1/3.09, uncertainty_i2t_temper: 1/6.18
+    R1  {'epo': '19', 'R1': '70.89', 'R5': '86.875', 'R10': '91.813', 'mAP': '63.503', 'mINP': '47.266'
+    mAP {'epo': '1', 'R1': '70.874', 'R5': '86.94', 'R10': '91.813', 'mAP': '63.496', 'mINP': '47.254'
 
 
-
-## ICFG-PEDES
+## ICFG-PEDES 正负样本采样错误，全部重新跑~
 
 ### exp14
 - sample selection: 'topk'
 - uncertainty: 'scaled_diff_div_mean', N_t2i: 13.29, N_i2t: 13.29
+    R1  {'epo': '0', 'R1': '61.109', 'R5': '77.57', 'R10': '83.222', 'mAP': '35.982', 'mINP': '6.075'
+    mAP {'epo': '0', 'R1': '61.109', 'R5': '77.57', 'R10': '83.222', 'mAP': '35.982', 'mINP': '6.075'
 
 ### exp15 = exp11 doublei2t_diff_div_mean
 - sample selection: 'topk'
-- uncertainty: 'scaledi2t_diff_div_mean' # scaledi2t=N_i2t/N_t2i, N_t2i: 13.29, N_i2t: 13.29,
+- uncertainty: 'scaledi2t_diff_div_mean' # scaledi2t=N_i2t/N_t2i, N_t2i: 13.29, N_i2t: 13.29
+    R1  {'epo': '0', 'R1': '61.114', 'R5': '77.559', 'R10': '83.217', 'mAP': '35.983', 'mINP': '6.075'
+    mAP {'epo': '0', 'R1': '61.114', 'R5': '77.559', 'R10': '83.217', 'mAP': '35.983', 'mINP': '6.075'
 
 ### exp16
 - sample selection: 'topk'
 - uncertainty: 'scaled_diff_div_mean', N_t2i: 1, N_i2t: 1, uncertainty_t2i_temper: 13.29, uncertainty_i2t_temper: 13.29
+- best result (exp14_17) :
+    R1  {'epo': '2', 'R1': '61.477', 'R5': '77.504', 'R10': '83.112', 'mAP': '36.057', 'mINP': '6.099'
+    mAP {'epo': '2', 'R1': '61.477', 'R5': '77.504', 'R10': '83.112', 'mAP': '36.057', 'mINP': '6.099'
 
 ### exp17
 - sample selection: 'topk'
 - uncertainty: 'scaled_diff_div_mean', N_t2i: 1, N_i2t: 1, uncertainty_t2i_temper: 1/13.29, uncertainty_i2t_temper: 1/13.29
+    R1  {'epo': '4', 'R1': '61.311', 'R5': '77.504', 'R10': '83.177', 'mAP': '36.002', 'mINP': '6.035'
+    mAP {'epo': '0', 'R1': '61.301', 'R5': '77.529', 'R10': '83.167', 'mAP': '36.003', 'mINP': '6.026'
+
