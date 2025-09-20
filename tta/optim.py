@@ -76,6 +76,7 @@ def configure_tta_model(config, model):
     if config.get("uncertainty_temper_is_learnable", False) == True:
         model.uncertainty_temper.requires_grad_(True)
     if config.get("is_prompt_learning", False) == True:
+        model.requires_grad_(False)
         model.prompt_learning_embedding.requires_grad_(True)
         model.is_prompt_learning=True
     # params, param_names = collect_params_aptm_itm(model)
