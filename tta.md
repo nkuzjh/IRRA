@@ -1094,3 +1094,25 @@ nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_rerun2/ham
     R1  {'epo': '9', 'R1': '62.042', 'R5': '77.287', 'R10': '82.95', 'mAP': '36.098', 'mINP': '6.061' 负样本=22
     mAP {'epo': '9', 'R1': '62.006', 'R5': '77.237', 'R10': '82.94', 'mAP': '36.099', 'mINP': '6.058' 负样本=22
 
+
+
+# other methods(RSTPReid)
+
+## exp18 prompt learning
+nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_rerun2/ham_rstp_tta/exp18/exp0.0.0.yaml > logs_rerun2/ham_rstp_tta/exp18/exp0.0.0.log 2>&1 &
+
+- is_prompt_learning: True
+- prompt_learning_token_num: 1,2,4,8,10
+
+
+## CTR
+## RLCF
+## EATA
+## EATA-C
+## DEYO
+
+
+
+# ablation study(RSTPReid)
+## 负样本采样范围：以ICFG为例从top2、top5、top15、top22开始？或者不同的百分比分位数？【todo】
+## cosine similarity temperature：0.01、0.02、0.03、0.04【todo】

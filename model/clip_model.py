@@ -301,7 +301,7 @@ class VisionTransformer(nn.Module):
 
         if self.proj is not None:
             x = x @ self.proj
-    
+
         return x
 
 
@@ -320,7 +320,9 @@ class CLIP(nn.Module):
                  vocab_size: int,
                  transformer_width: int,
                  transformer_heads: int,
-                 transformer_layers: int
+                 transformer_layers: int,
+                 is_prompt_learning,
+                 prompt_learning_token_num
                  ):
         super().__init__()
 
@@ -351,7 +353,7 @@ class CLIP(nn.Module):
             width=transformer_width,
             layers=transformer_layers,
             heads=transformer_heads,
-            attn_mask=self.build_attention_mask()
+            attn_mask=self.build_attention_mask(is_prompt_learning, prompt_learning_token_num)
         )
 
         self.vocab_size = vocab_size
@@ -393,10 +395,13 @@ class CLIP(nn.Module):
         if self.text_projection is not None:
             nn.init.normal_(self.text_projection, std=self.transformer.width ** -0.5)
 
-    def build_attention_mask(self):
+    def build_attention_mask(self, is_prompt_learning, prompt_learning_token_num):
         # lazily create causal attention mask, with full attention between the vision tokens
         # pytorch uses additive attention mask; fill with -inf
-        mask = torch.empty(self.context_length, self.context_length)
+        if is_prompt_learning:
+            mask = torch.empty(self.context_length+prompt_learning_token_num, self.context_length+prompt_learning_token_num)
+        else:
+            mask = torch.empty(self.context_length, self.context_length)
         mask.fill_(float("-inf"))
         mask.triu_(1)  # zero out the lower diagonal
         return mask
@@ -408,10 +413,13 @@ class CLIP(nn.Module):
     def encode_image(self, image):
         return self.visual(image.type(self.dtype))
 
-    def encode_text(self, text):
+    def encode_text(self, text, is_prompt_learning, prompt_learning_embedding):
         x = self.token_embedding(text).type(self.dtype)  # [batch_size, n_ctx, d_model]
-
         x = x + self.positional_embedding.type(self.dtype)
+
+        if is_prompt_learning:
+            x = torch.cat([prompt_learning_embedding, x], dim=1).type(self.dtype)
+
         x = x.permute(1, 0, 2)  # NLD -> LND
         x = self.transformer(x)
         x = x.permute(1, 0, 2)  # LND -> NLD
@@ -421,6 +429,7 @@ class CLIP(nn.Module):
         # take features from the eot embedding (eot_token is the highest number in each sequence)
         # x = x[torch.arange(x.shape[0]), text.argmax(dim=-1)] @ self.text_projection
         x = x @ self.text_projection
+
 
         return x
 
@@ -441,8 +450,8 @@ class CLIP(nn.Module):
         # return logits_per_image, logits_per_text
 
         return image_features, text_features
-    
-    
+
+
     def load_param(self, state_dict):
         # 将pretrained_dict里不属于model_dict的键剔除掉
         param_dict =  {k: v for k, v in state_dict.items() if k in self.state_dict()}
@@ -452,16 +461,17 @@ class CLIP(nn.Module):
         if 'state_dict' in param_dict:
             param_dict = param_dict['state_dict']
         for k, v in param_dict.items():
-            if k == 'visual.positional_embedding' and v.shape != self.visual.positional_embedding.shape:
-                v = resize_pos_embed(v, self.visual.positional_embedding, self.visual.num_y, self.visual.num_x)
-            elif k == 'positional_embedding' and v.shape != self.positional_embedding.shape:
-                v = resize_text_pos_embed(v, self.context_length)
+            # is_prompt_learning debugging
+            # if k == 'visual.positional_embedding' and v.shape != self.visual.positional_embedding.shape:
+            #     v = resize_pos_embed(v, self.visual.positional_embedding, self.visual.num_y, self.visual.num_x)
+            # elif k == 'positional_embedding' and v.shape != self.positional_embedding.shape:
+            #     v = resize_text_pos_embed(v, self.context_length)
             try:
                 self.state_dict()[k].copy_(v)
             except:
                 print(f'===========================ERROR occur in copy {k}, {v.shape}=========================')
                 print('shape do not match in k :{}: param_dict{} vs self.state_dict(){}'.format(k, v.shape, self.state_dict()[k].shape))
-    
+
 
 
 def resize_pos_embed(posemb, posemb_new, hight, width):
@@ -505,14 +515,14 @@ def convert_weights(model: nn.Module):
     model.apply(_convert_weights_to_fp16)
 
 
-def build_CLIP_from_openai_pretrained(name: str, image_size: Union[int, Tuple[int, int]], stride_size: int, jit: bool = False, download_root: str = None):
+def build_CLIP_from_openai_pretrained(is_prompt_learning, prompt_learning_token_num, name: str, image_size: Union[int, Tuple[int, int]], stride_size: int, jit: bool = False, download_root: str = None):
     """Load a CLIP model
 
     Parameters
     ----------
     name : str
         A model name listed by `clip.available_models()`, or the path to a model checkpoint containing the state_dict
-    
+
     image_size: Union[int, Tuple[int, int]]
         Input image size, in Re-ID task, image size commonly set to 384x128, instead of 224x224
 
@@ -574,14 +584,16 @@ def build_CLIP_from_openai_pretrained(name: str, image_size: Union[int, Tuple[in
     model_cfg = {
         'embed_dim': embed_dim,
         'image_resolution': image_resolution,
-        'vision_layers': vision_layers, 
-        'vision_width': vision_width, 
+        'vision_layers': vision_layers,
+        'vision_width': vision_width,
         'vision_patch_size': vision_patch_size,
-        'context_length': context_length, 
-        'vocab_size': vocab_size, 
-        'transformer_width': transformer_width, 
-        'transformer_heads': transformer_heads, 
-        'transformer_layers': transformer_layers
+        'context_length': context_length,
+        'vocab_size': vocab_size,
+        'transformer_width': transformer_width,
+        'transformer_heads': transformer_heads,
+        'transformer_layers': transformer_layers,
+        'prompt_learning_token_num': prompt_learning_token_num,
+        'is_prompt_learning': is_prompt_learning,
     }
 
 
