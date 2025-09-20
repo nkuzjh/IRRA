@@ -10,35 +10,35 @@ mkdir -p $log_dir/$task_name
 
 # 定义实验名
 exp_names=(
-    "exp0"
-    "exp0.0.1"
-    "exp0.0.2"
-    "exp0.0.3"
-    "exp0.0.4"
+    # "exp0"
+    # "exp0.0.1"
+    # "exp0.0.2"
+    # "exp0.0.3"
+    # "exp0.0.4"
 
-    "exp0.1"
-    "exp0.1.1"
-    "exp0.1.2"
-    "exp0.1.3"
-    "exp0.1.4"
+    # "exp0.1"
+    # "exp0.1.1"
+    # "exp0.1.2"
+    # "exp0.1.3"
+    # "exp0.1.4"
 
-    "exp0.2"
-    "exp0.2.1"
-    "exp0.2.2"
-    "exp0.2.3"
-    "exp0.2.4"
+    # "exp0.2"
+    # "exp0.2.1"
+    # "exp0.2.2"
+    # "exp0.2.3"
+    # "exp0.2.4"
 
-    "exp0.3"
-    "exp0.3.1"
-    "exp0.3.2"
-    "exp0.3.3"
-    "exp0.3.4"
+    # "exp0.3"
+    # "exp0.3.1"
+    # "exp0.3.2"
+    # "exp0.3.3"
+    # "exp0.3.4"
 
-    "exp0.4"
-    "exp0.4.1"
-    "exp0.4.2"
-    "exp0.4.3"
-    "exp0.4.4"
+    # "exp0.4"
+    # "exp0.4.1"
+    # "exp0.4.2"
+    # "exp0.4.3"
+    # "exp0.4.4"
 
     "exp0.5"
     "exp0.5.1"
@@ -60,7 +60,7 @@ do
 
     # nohup python3 tta.py --config_file tta_configs/ham_cuhk_tta/exp0.0.0.yaml > logs/ham_cuhk_tta/exp0.0.0.log 2>&1 &
     #CUDA_VISIBLE_DEVICES=2
-    CUDA_VISIBLE_DEVICES=0 nohup python3 tta.py --config_file tta_configs_rerun2/$task_name/$exp_name.yaml > $log_dir/$task_name/$exp_name.log 2>&1 &
+    CUDA_VISIBLE_DEVICES=2 nohup python3 tta.py --config_file tta_configs_rerun2/$task_name/$exp_name.yaml > $log_dir/$task_name/$exp_name.log 2>&1 &
 
 
     # 等待当前任务完成
