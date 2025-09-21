@@ -1095,9 +1095,10 @@ nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_rerun2/ham
 
 
 
-# other methods(RSTPReid)
+# other methods
 
 ## exp18 prompt learning
+### rstp
 nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_rerun2/ham_rstp_tta/exp18/exp0.0.0.yaml > logs_rerun2/ham_rstp_tta/exp18/exp0.0.0.log 2>&1 &
 - is_prompt_learning: True
 - prompt_learning_token_num: 1,2,4,8,10
@@ -1106,7 +1107,10 @@ nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_rerun2/ham
         {'epo': '1', 'R1': '59.7', 'R5': '80.8', 'R10': '87.6', 'mAP': '44.743', 'mINP': '21.332'
     - 只训练prompt_learning_token：
         {'epo': '0', 'R1': '58.6', 'R5': '79.65', 'R10': '87.5', 'mAP': '43.65', 'mINP': '20.601'
-
+### cuhk
+    {'epo': '0', 'R1': '70.094', 'R5': '86.485', 'R10': '91.326', 'mAP': '63.109', 'mINP': '46.914'
+### icfg
+    {'epo': '9', 'R1': '60.288', 'R5': '76.244', 'R10': '82.311', 'mAP': '35.168', 'mINP': '5.934'
 
 ## exp 19 TCR
 **已经在TCR源代码上实现**
