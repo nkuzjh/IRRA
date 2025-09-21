@@ -1102,7 +1102,10 @@ nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_rerun2/ham
 - is_prompt_learning: True
 - prompt_learning_token_num: 1,2,4,8,10
     - best: prompt_learning_token_num = 1
-    - {'epo': '1', 'R1': '59.7', 'R5': '80.8', 'R10': '87.6', 'mAP': '44.743', 'mINP': '21.332'
+    - entropy + prompt_learning_token：
+        {'epo': '1', 'R1': '59.7', 'R5': '80.8', 'R10': '87.6', 'mAP': '44.743', 'mINP': '21.332'
+    - 只训练prompt_learning_token：
+        {'epo': '0', 'R1': '58.6', 'R5': '79.65', 'R10': '87.5', 'mAP': '43.65', 'mINP': '20.601'
 
 
 ## exp 19 TCR

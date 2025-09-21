@@ -400,11 +400,11 @@ def main(args):
 
         scaler = GradScaler()  # bf16
 
-        if "tcr" in args.method:
-            queue_list = []
-            max_queue_size = 64 #config["batch_size_total"]
-            num_update_signal = 10
-            update_signal = True
+        # if "tcr" in args.method:
+        #     queue_list = []
+        #     max_queue_size = 64 #config["batch_size_total"]
+        #     num_update_signal = 10
+        #     update_signal = True
 
         print(f"### Start Test Time Adaptation : num_epoch = {args.num_epoch}")
         start_time = time.time()
@@ -412,10 +412,10 @@ def main(args):
         best_epoch = 0
         best_logs = {}
         for epoch in range(args.num_epoch):
-            # train_stats = do_tta(args, config, model, tta_loader, optimizer, scaler, epoch, device, scheduler)
-            if "tcr" in args.method and i >= num_update_signal:
-                update_signal = False
-            train_stats = do_tcr(args, config, model, tta_loader, optimizer, scaler, epoch, device, scheduler, queue_list, max_queue_size, update_signal)
+            train_stats = do_tta(args, config, model, tta_loader, optimizer, scaler, epoch, device, scheduler)
+            # if "tcr" in args.method and i >= num_update_signal:
+            #     update_signal = False
+            # train_stats = do_tcr(args, config, model, tta_loader, optimizer, scaler, epoch, device, scheduler, queue_list, max_queue_size, update_signal)
 
             if (epoch+1 in [1,2,3,5,10,15,20,30,40,50,60]) or (epoch+1 == args.num_epoch):
                 test_result, recall1, similarity, qfeats, gfeats, qids, gids, captions, imgs = do_inference(model, test_img_loader, test_txt_loader)

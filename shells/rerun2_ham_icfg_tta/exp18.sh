@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 设置基础参数
-task_name="ham_rstp_tta/exp18"
+task_name="ham_icfg_tta/exp18"
 log_dir="./logs_rerun2"
 mkdir -p $log_dir/$task_name
 
@@ -23,7 +23,7 @@ do
     start_time=$(date +%s)
     echo "Start Time: $(date +"%Y-%m-%d %T")"
 
-    CUDA_VISIBLE_DEVICES=0 nohup python3 tta.py --config_file tta_configs_rerun2/$task_name/$exp_name.yaml > $log_dir/$task_name/$exp_name.log 2>&1 &
+    CUDA_VISIBLE_DEVICES=1 nohup python3 tta.py --config_file tta_configs_rerun2/$task_name/$exp_name.yaml > $log_dir/$task_name/$exp_name.log 2>&1 &
 
     # 等待当前任务完成
     wait

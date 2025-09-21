@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 设置基础参数
-task_name="ham_rstp_tta/exp18"
+task_name="ham_cuhk_tta/exp18"
 log_dir="./logs_rerun2"
 mkdir -p $log_dir/$task_name
 
