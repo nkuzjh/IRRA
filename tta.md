@@ -3,7 +3,6 @@ conda create -n irra python=3.9
 conda activate irra
 pip install torch torchvision
 pip install easydict prettytable tqdm tensorboard pyyaml matplotlib regex ftfy
-pip install tqdm tensorboard pyyaml matplotlib regex ftfy
 
 
 # baseline score
@@ -1106,7 +1105,8 @@ nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_rerun2/ham
     - {'epo': '1', 'R1': '59.7', 'R5': '80.8', 'R10': '87.6', 'mAP': '44.743', 'mINP': '21.332'
 
 
-## TCR
+## exp 19 TCR
+**已经在TCR源代码上实现**
 
 ## RLCF
 

@@ -41,6 +41,111 @@ from solver import build_optimizer, build_lr_scheduler
 
 
 
+from tta.tcr import update_queue, get_current_value, entropy_loss_against_noisy, center_uniform_loss, compute_modality_gap
+
+
+
+@torch.enable_grad()
+def do_tcr(args, config, model, tta_loader, optimizer, scaler, epoch, device, scheduler, queue_list, max_queue_size, update_signal):
+    logger = logging.getLogger("IRRA.tta")
+    logger.info("Enter tta...")
+    model = model.train()
+
+    start_time = time.time()
+
+    entropy_iter_periods = []
+    uncertainty_iter_periods = []
+    uncertainty_coeffi_iter_periods = []
+    loss_iter_periods = []
+    lr_iter_periods = []
+    for iter, (gids_topk, imgs_topk, qids_repeatk, captions_repeatk, uncertainty, proba_top1_sim, proba_inversed_sim) in enumerate(tta_loader):
+        imgs_topk = imgs_topk.reshape(-1, imgs_topk.size(-3), imgs_topk.size(-2), imgs_topk.size(-1)).to(device)# [16, 8, 3, 384, 128]) -> [128, 3, 384, 128])
+        captions_repeatk = captions_repeatk.to(device)#16, 77 #.reshape(-1, captions_repeatk.size(-1)).#[16, 8, 77]) -> ([128, 77])
+        uncertainty = uncertainty.to(device)#([16])
+        if config.get('uncertainty', None) == 'inversed_recall_proba' and config.get('uncertainty_temper_is_learnable', False):
+            proba_top1_sim =  proba_top1_sim.to(device)#([16])
+            proba_inversed_sim = proba_inversed_sim.to(device)#([16])
+
+        with torch.no_grad():
+            gfeat = model.encode_image(imgs_topk) # image features
+        with torch.cuda.amp.autocast(enabled=True):
+            qfeat = model.encode_text(captions_repeatk) # text features
+            # if config.get('compute_entropy_with_norm_cos_sim', False):
+            gfeat = F.normalize(gfeat, p=2, dim=1)#[128, 512])
+            qfeat = F.normalize(qfeat, p=2, dim=1)#[16, 512])
+
+            gfeat = gfeat.reshape(-1,config['k_tta'], gfeat.size(-1))#16,512
+            # qfeat = qfeat.reshape(-1,config['k_tta'], gfeat.size(-1))
+            # cos_sims = []
+            # for qfeat_, gfeat_ in zip(qfeat, gfeat):
+            #     cos_sim = qfeat_ @ gfeat_.t()#[512]@[k_tta,512].t() = [k_tta]
+            #     cos_sims.append(cos_sim)
+            # cos_sims  = torch.stack(cos_sims)#16, k_tta
+            # # cos_sims = qfeat @ gfeat.t()#[128, 128])
+            # # cos_sims = cos_sims.reshape(-1, config['k_tta'], 1)
+            # cos_sims_inter = cos_sims / args.temperature
+
+            # entropy = -(F.softmax(cos_sims_inter, dim=-1) * F.log_softmax(cos_sims_inter, dim=-1)).sum(-1)
+            # loss = entropy
+            # loss = loss.mean()
+
+            modality_gallery_feat_all = gfeat
+            modality_query_feat = qfeat
+
+            sim_matrix = modality_query_feat @ modality_gallery_feat_all.t()
+            nearest_neighbors_indices = (sim_matrix).argmax(dim=1)
+            modality_gallery_feat = modality_gallery_feat_all[nearest_neighbors_indices]
+
+            if (iter==0 and update_signal):
+                queue_list=update_queue(modality_query_feat, modality_gallery_feat, queue_list, args.con_ratio, max_queue_size, args)
+
+            margin, entropy_queue=get_current_value(queue_list)
+            sim_inter = (modality_query_feat @ modality_gallery_feat.t()) /args.temperature
+
+            loss_REM=entropy_loss_against_noisy(sim_inter, entropy_queue)
+            loss_UNI=center_uniform_loss(modality_query_feat, t=args.t)
+
+            target_modality_gap=compute_modality_gap(modality_query_feat, modality_gallery_feat)
+            loss_EMG=(target_modality_gap-margin)**2
+
+            # return loss_REM, loss_UNI, loss_EMG, queue_list, sim_matrix
+            loss = loss_REM + loss_UNI + loss_EMG
+
+
+
+        scaler.scale(loss).backward()
+        scaler.step(optimizer)
+        scale = scaler.get_scale()
+        scaler.update()
+        skip_lr_sched = (scale > scaler.get_scale())
+        if not skip_lr_sched:
+            scheduler.step()
+        optimizer.zero_grad()
+
+        if (iter + 1) % args.log_period == 0:
+            print(f"     Epoch[{epoch}] Iteration[{iter + 1}/{len(tta_loader)}], entropy: {entropy.mean().item():.4f}, uncertainty: {uncertainty.mean().item():.4f}, uncertainty_coeffi: {uncertainty_coeffi.mean().item():.4f}, loss: {loss.item():.4f}, lr: {optimizer.param_groups[0]['lr']:.2e}")
+            entropy_iter_periods.append(entropy.mean().item())
+            uncertainty_iter_periods.append(uncertainty.mean().item())
+            uncertainty_coeffi_iter_periods.append(uncertainty_coeffi.mean().item())
+            loss_iter_periods.append(loss.item())
+            lr_iter_periods.append(optimizer.param_groups[0]["lr"])
+
+    # print(f"     Averaged stats: entropy: {entropy.mean().item():.4f}, loss: {loss.item():.4f}, lr: {optimizer.param_groups[0]['lr']:.2e}")
+    print(f"     Averaged stats: entropy_avg: {np.mean(entropy_iter_periods):.4f}, uncertainty_avg: {np.mean(uncertainty_iter_periods):.4f}, uncertainty_coeffi_avg: {np.mean(uncertainty_coeffi_iter_periods):.4f}, loss_avg: {np.mean(loss_iter_periods):.4f}, lr_avg: {np.mean(lr_iter_periods):.2e}")
+
+    total_time = time.time() - start_time
+    total_time_str = str(datetime.timedelta(seconds=int(total_time)))
+    print('     itm tta time {}'.format(total_time_str))
+    return {
+        'entropy': np.mean(entropy_iter_periods),
+        'uncertainty': np.mean(uncertainty_iter_periods),
+        'uncertainty_coeffi': np.mean(uncertainty_coeffi_iter_periods),
+        'loss': np.mean(loss_iter_periods),
+        'lr': np.mean(lr_iter_periods),
+    }
+
+
+
 @torch.enable_grad()
 def do_tta(args, config, model, tta_loader, optimizer, scaler, epoch, device, scheduler):
     logger = logging.getLogger("IRRA.tta")
@@ -81,7 +186,19 @@ def do_tta(args, config, model, tta_loader, optimizer, scaler, epoch, device, sc
             # cos_sims = cos_sims.reshape(-1, config['k_tta'], 1)
             cos_sims_inter = cos_sims / args.temperature
 
-            if config.get('entropy_type', None) == 'sigmoid_cos_diff_mean':
+            if config.get('entropy_type', None) == 'EATA':
+                entropy = -(F.softmax(cos_sims_inter, dim=-1) * F.log_softmax(cos_sims_inter, dim=-1)).sum(-1)
+            elif config.get('entropy_type', None) == 'EATA-C':
+                entropy = -(F.softmax(cos_sims_inter, dim=-1) * F.log_softmax(cos_sims_inter, dim=-1)).sum(-1)
+            elif config.get('entropy_type', None) == 'DEYO':
+                entropy = -(F.softmax(cos_sims_inter, dim=-1) * F.log_softmax(cos_sims_inter, dim=-1)).sum(-1)
+            elif config.get('entropy_type', None) == 'MEMO':
+                entropy = -(F.softmax(cos_sims_inter, dim=-1) * F.log_softmax(cos_sims_inter, dim=-1)).sum(-1)
+            elif config.get('entropy_type', None) == 'T3A':
+                entropy = -(F.softmax(cos_sims_inter, dim=-1) * F.log_softmax(cos_sims_inter, dim=-1)).sum(-1)
+            elif config.get('entropy_type', None) == 'SAR':
+                entropy = -(F.softmax(cos_sims_inter, dim=-1) * F.log_softmax(cos_sims_inter, dim=-1)).sum(-1)
+            elif config.get('entropy_type', None) == 'sigmoid_cos_diff_mean':
                 entropy = - ( torch.sigmoid( ( cos_sims_inter - cos_sims_inter.mean(dim=-1).unsqueeze(-1) ) * config.get('entropy_sigmoid_temper', 1.0) * torch.log(torch.sigmoid( ( cos_sims_inter - cos_sims_inter.mean(dim=-1).unsqueeze(-1) ) * config.get('entropy_sigmoid_temper', 1.0) )) ) ).sum(-1)
             else:
                 entropy = -(F.softmax(cos_sims_inter, dim=-1) * F.log_softmax(cos_sims_inter, dim=-1)).sum(-1)
@@ -283,6 +400,11 @@ def main(args):
 
         scaler = GradScaler()  # bf16
 
+        if "tcr" in args.method:
+            queue_list = []
+            max_queue_size = 64 #config["batch_size_total"]
+            num_update_signal = 10
+            update_signal = True
 
         print(f"### Start Test Time Adaptation : num_epoch = {args.num_epoch}")
         start_time = time.time()
@@ -290,7 +412,10 @@ def main(args):
         best_epoch = 0
         best_logs = {}
         for epoch in range(args.num_epoch):
-            train_stats = do_tta(args, config, model, tta_loader, optimizer, scaler, epoch, device, scheduler)
+            # train_stats = do_tta(args, config, model, tta_loader, optimizer, scaler, epoch, device, scheduler)
+            if "tcr" in args.method and i >= num_update_signal:
+                update_signal = False
+            train_stats = do_tcr(args, config, model, tta_loader, optimizer, scaler, epoch, device, scheduler, queue_list, max_queue_size, update_signal)
 
             if (epoch+1 in [1,2,3,5,10,15,20,30,40,50,60]) or (epoch+1 == args.num_epoch):
                 test_result, recall1, similarity, qfeats, gfeats, qids, gids, captions, imgs = do_inference(model, test_img_loader, test_txt_loader)
