@@ -154,6 +154,7 @@ def do_tta(args, config, model, tta_loader, optimizer, scaler, epoch, device, sc
 
     start_time = time.time()
 
+    cos_sims_list = []
     entropy_iter_periods = []
     uncertainty_iter_periods = []
     uncertainty_coeffi_iter_periods = []
@@ -182,6 +183,7 @@ def do_tta(args, config, model, tta_loader, optimizer, scaler, epoch, device, sc
                 cos_sim = qfeat_ @ gfeat_.t()#[512]@[k_tta,512].t() = [k_tta]
                 cos_sims.append(cos_sim)
             cos_sims  = torch.stack(cos_sims)#16, k_tta
+            cos_sims_list.append(cos_sims.detach().cpu().numpy())
             # cos_sims = qfeat @ gfeat.t()#[128, 128])
             # cos_sims = cos_sims.reshape(-1, config['k_tta'], 1)
             cos_sims_inter = cos_sims / args.temperature
@@ -237,6 +239,8 @@ def do_tta(args, config, model, tta_loader, optimizer, scaler, epoch, device, sc
             loss_iter_periods.append(loss.item())
             lr_iter_periods.append(optimizer.param_groups[0]["lr"])
 
+    cos_sims_npy = np.concat(cos_sims_list)
+
     # print(f"     Averaged stats: entropy: {entropy.mean().item():.4f}, loss: {loss.item():.4f}, lr: {optimizer.param_groups[0]['lr']:.2e}")
     print(f"     Averaged stats: entropy_avg: {np.mean(entropy_iter_periods):.4f}, uncertainty_avg: {np.mean(uncertainty_iter_periods):.4f}, uncertainty_coeffi_avg: {np.mean(uncertainty_coeffi_iter_periods):.4f}, loss_avg: {np.mean(loss_iter_periods):.4f}, lr_avg: {np.mean(lr_iter_periods):.2e}")
 
@@ -249,7 +253,7 @@ def do_tta(args, config, model, tta_loader, optimizer, scaler, epoch, device, sc
         'uncertainty_coeffi': np.mean(uncertainty_coeffi_iter_periods),
         'loss': np.mean(loss_iter_periods),
         'lr': np.mean(lr_iter_periods),
-    }
+    }, cos_sims_npy
 
 
 def main(args):
@@ -412,12 +416,15 @@ def main(args):
         best_epoch = 0
         best_logs = {}
         for epoch in range(args.num_epoch):
-            train_stats = do_tta(args, config, model, tta_loader, optimizer, scaler, epoch, device, scheduler)
+            train_stats, cos_sims_npy = do_tta(args, config, model, tta_loader, optimizer, scaler, epoch, device, scheduler)
             # if "tcr" in args.method and i >= num_update_signal:
             #     update_signal = False
             # train_stats = do_tcr(args, config, model, tta_loader, optimizer, scaler, epoch, device, scheduler, queue_list, max_queue_size, update_signal)
 
-            if (epoch+1 in [1,2,3,5,10,15,20,30,40,50,60]) or (epoch+1 == args.num_epoch):
+            np.save(f'figure_plot/cos_sims_npy_{epoch}.npy', cos_sims_npy)
+            # if (epoch+1 in [1,2,3,5,10,15,20,30,40,50,60]) or (epoch+1 == args.num_epoch):
+            if (epoch+1 in [0, 10,40,60]) or (epoch+1 == args.num_epoch):
+                print(cos_sims_npy.shape)
                 test_result, recall1, similarity, qfeats, gfeats, qids, gids, captions, imgs = do_inference(model, test_img_loader, test_txt_loader)
                 print("### TTA Eval Score: ")
                 table.add_row([

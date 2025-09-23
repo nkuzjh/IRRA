@@ -82,6 +82,10 @@ class Evaluator():
         qfeats_norm = F.normalize(qfeats, p=2, dim=1) # text features
         gfeats_norm = F.normalize(gfeats, p=2, dim=1) # image features
 
+# ss = qfeats @ gfeats.t()
+# np.save('figure_plot/cos_sims_wo_norm.npy' ,ss.cpu().numpy())
+# np.save('figure_plot/cos_sims_norm.npy' ,similarity.cpu().numpy())
+
         similarity = qfeats_norm @ gfeats_norm.t()#2000,1000
 
         t2i_cmc, t2i_mAP, t2i_mINP, _ = rank(similarity=similarity.cpu(), q_pids=qids.cpu(), g_pids=gids.cpu(), max_rank=10, get_mAP=True)

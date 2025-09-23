@@ -1099,6 +1099,7 @@ nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_rerun2/ham
 
 ## exp18 prompt learning
 ### rstp
+--config_file tta_configs_rerun2/ham_rstp_tta/exp1/exp0.0.2.yaml
 nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_rerun2/ham_rstp_tta/exp18/exp0.0.0.yaml > logs_rerun2/ham_rstp_tta/exp18/exp0.0.0.log 2>&1 &
 - is_prompt_learning: True
 - prompt_learning_token_num: 1,2,4,8,10

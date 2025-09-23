@@ -93,7 +93,9 @@ class IRRA(nn.Module):
             prompt_learning_embedding = self.prompt_learning_embedding.expand(text.size(0), -1, -1)
             # prompt_learning_atts = torch.ones((prompt_learning_embedding.size(0), prompt_learning_embedding.size(1))).to(text.device)
 
-        x = self.base_model.encode_text(text, self.is_prompt_learning, prompt_learning_embedding)
+            x = self.base_model.encode_text(text, self.is_prompt_learning, prompt_learning_embedding)
+        else:
+            x = self.base_model.encode_text(text,None,None)
 
         if self.is_prompt_learning:
             x = x[:, prompt_learning_embedding.size(1):, :]
