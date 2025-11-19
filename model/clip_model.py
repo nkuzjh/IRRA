@@ -251,15 +251,77 @@ class ResidualAttentionBlock(nn.Module):
         return x
 
 
+from transformers.configuration_utils import PretrainedConfig
+import torch # (确保 torch 和 Optional 已导入)
+from typing import Optional
+
 class Transformer(nn.Module):
+    def __init__(self, token_embedding, positional_embedding, dtype, ln_final, text_projection, width: int, layers: int, heads: int, attn_mask: torch.Tensor = None):
+        super().__init__()
+
+        config = {
+            "token_dim": width,
+            "num_layers": layers,
+            "num_attention_heads": heads,
+            "vocab_size": 49408,
+        }
+        self.config = PretrainedConfig(**config)
+
+        self.width = width
+        self.layers = layers
+        self.resblocks = nn.Sequential(*[ResidualAttentionBlock(width, heads, attn_mask) for _ in range(layers)])
+
+        self.token_embedding = token_embedding
+        self.positional_embedding = positional_embedding
+        self.dtype = dtype
+        self.ln_final = ln_final
+        self.text_projection = text_projection
+
+    # def forward(self, x: torch.Tensor):
+    #     return self.resblocks(x)
+
+    def forward(
+        self,
+        x: Optional[torch.Tensor] = None,
+        inputs_embeds: Optional[torch.Tensor] = None,
+        input_ids: Optional[torch.Tensor] = None,
+        attention_mask: Optional[torch.Tensor] = None,
+        output_attentions: Optional[bool] = None,
+        output_hidden_states: Optional[bool] = None,
+        return_dict: Optional[bool] = None,
+        **kwargs  # [!! 关键 !!] 接住所有其他参数 (例如 'past_key_values' 等)
+    ):
+        if inputs_embeds is None:
+            if input_ids is None:
+                raise ValueError("必须提供 input_ids 或 inputs_embeds")
+            # 原始逻辑
+            x = self.token_embedding(input_ids).type(self.dtype)
+        else:
+            # PEFT 将使用这个分支
+            x = inputs_embeds.type(self.dtype)
+
+        x = x + self.positional_embedding.type(self.dtype)
+
+        x = x.permute(1, 0, 2)  # NLD -> LND
+        x = self.resblocks(x)
+        x = x.permute(1, 0, 2)  # LND -> NLD
+
+        x = self.ln_final(x).type(self.dtype)
+        x = x @ self.text_projection
+
+        return x
+
+class TransformerVision(nn.Module):
     def __init__(self, width: int, layers: int, heads: int, attn_mask: torch.Tensor = None):
         super().__init__()
+
         self.width = width
         self.layers = layers
         self.resblocks = nn.Sequential(*[ResidualAttentionBlock(width, heads, attn_mask) for _ in range(layers)])
 
     def forward(self, x: torch.Tensor):
         return self.resblocks(x)
+
 
 
 class VisionTransformer(nn.Module):
@@ -278,7 +340,7 @@ class VisionTransformer(nn.Module):
         self.positional_embedding = nn.Parameter(scale * torch.randn(num_patches + 1, width))
         self.ln_pre = LayerNorm(width)
 
-        self.transformer = Transformer(width, layers, heads)
+        self.transformer = TransformerVision(width, layers, heads)
 
         self.ln_post = LayerNorm(width)
         self.proj = nn.Parameter(scale * torch.randn(width, output_dim))
@@ -349,20 +411,24 @@ class CLIP(nn.Module):
                 output_dim=embed_dim
             )
 
-        self.transformer = Transformer(
-            width=transformer_width,
-            layers=transformer_layers,
-            heads=transformer_heads,
-            attn_mask=self.build_attention_mask(is_prompt_learning, prompt_learning_token_num)
-        )
-
         self.vocab_size = vocab_size
         self.token_embedding = nn.Embedding(vocab_size, transformer_width)
         self.positional_embedding = nn.Parameter(torch.empty(self.context_length, transformer_width))
         self.ln_final = LayerNorm(transformer_width)
-
         self.text_projection = nn.Parameter(torch.empty(transformer_width, embed_dim))
         # self.logit_scale = nn.Parameter(torch.ones([]) * np.log(1 / 0.07))
+
+        self.transformer = Transformer(
+            width=transformer_width,
+            layers=transformer_layers,
+            heads=transformer_heads,
+            attn_mask=self.build_attention_mask(is_prompt_learning, prompt_learning_token_num),
+            token_embedding = self.token_embedding ,
+            positional_embedding=self.positional_embedding,
+            dtype=self.dtype,
+            ln_final=self.ln_final,
+            text_projection=self.text_projection,
+        )
 
         self.initialize_parameters()
 
@@ -413,25 +479,46 @@ class CLIP(nn.Module):
     def encode_image(self, image):
         return self.visual(image.type(self.dtype))
 
+    # def encode_text(self, text, is_prompt_learning, prompt_learning_embedding):
+    #     x = self.token_embedding(text).type(self.dtype)  # [batch_size, n_ctx, d_model]
+    #     x = x + self.positional_embedding.type(self.dtype)
+
+    #     if is_prompt_learning:
+    #         x = torch.cat([prompt_learning_embedding, x], dim=1).type(self.dtype)
+
+    #     x = x.permute(1, 0, 2)  # NLD -> LND
+    #     x = self.transformer(x)
+    #     x = x.permute(1, 0, 2)  # LND -> NLD
+    #     x = self.ln_final(x).type(self.dtype)
+
+    #     # x.shape = [batch_size, n_ctx, transformer.width]
+    #     # take features from the eot embedding (eot_token is the highest number in each sequence)
+    #     # x = x[torch.arange(x.shape[0]), text.argmax(dim=-1)] @ self.text_projection
+    #     x = x @ self.text_projection
+
+    #     return x
+
     def encode_text(self, text, is_prompt_learning, prompt_learning_embedding):
-        x = self.token_embedding(text).type(self.dtype)  # [batch_size, n_ctx, d_model]
-        x = x + self.positional_embedding.type(self.dtype)
+        # x = self.token_embedding(text).type(self.dtype)  # [batch_size, n_ctx, d_model]
+        # x = x + self.positional_embedding.type(self.dtype)
 
-        if is_prompt_learning:
-            x = torch.cat([prompt_learning_embedding, x], dim=1).type(self.dtype)
+        # if is_prompt_learning:
+        #     x = torch.cat([prompt_learning_embedding, x], dim=1).type(self.dtype)
 
-        x = x.permute(1, 0, 2)  # NLD -> LND
-        x = self.transformer(x)
-        x = x.permute(1, 0, 2)  # LND -> NLD
-        x = self.ln_final(x).type(self.dtype)
+        # x = x.permute(1, 0, 2)  # NLD -> LND
+        # # x = self.transformer(x)
+        x = self.transformer(input_ids=text)
+        # x = x.permute(1, 0, 2)  # LND -> NLD
+        # x = self.ln_final(x).type(self.dtype)
 
-        # x.shape = [batch_size, n_ctx, transformer.width]
-        # take features from the eot embedding (eot_token is the highest number in each sequence)
-        # x = x[torch.arange(x.shape[0]), text.argmax(dim=-1)] @ self.text_projection
-        x = x @ self.text_projection
-
-
+        # # x.shape = [batch_size, n_ctx, transformer.width]
+        # # take features from the eot embedding (eot_token is the highest number in each sequence)
+        # # x = x[torch.arange(x.shape[0]), text.argmax(dim=-1)] @ self.text_projection
+        # x = x @ self.text_projection
         return x
+
+
+
 
     def forward(self, image, text):
         image_features = self.encode_image(image)

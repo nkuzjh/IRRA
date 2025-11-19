@@ -1125,6 +1125,34 @@ nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_rerun2/ham
 ## DEYO
 
 
+## exp20 peft
+### rstp
+
+Zero-Shot Score:
++-------+--------+--------+--------+--------+--------+
+| epoch |   R1   |   R5   |  R10   |  mAP   |  mINP  |
++-------+--------+--------+--------+--------+--------+
+|  -999 | 59.500 | 80.050 | 87.050 | 44.116 | 20.549 |
++-------+--------+--------+--------+--------+--------+
+
+- lora
+CUDA_VISIBLE_DEVICES=1 nohup python3 tta.py --config_file tta_configs_rerun2/ham_rstp_tta/exp20/exp0.3.4.yaml > logs_rerun2/ham_rstp_tta/exp20/exp0.3.4.log 2>&1 &
+CUDA_VISIBLE_DEVICES=0 nohup python3 tta.py --config_file tta_configs_rerun2/ham_rstp_tta/exp20/exp0.0.1.yaml > logs_rerun2/ham_rstp_tta/exp20/exp0.0.1.log 2>&1 &
+|   59  | 49.800 | 73.800 | 82.700 | 38.619 | 17.045 |
+
+- prefix_tuning
+CUDA_VISIBLE_DEVICES=1 nohup python3 tta.py --config_file tta_configs_rerun2/ham_rstp_tta/exp21/exp0.0.0.yaml > logs_rerun2/ham_rstp_tta/exp21/exp0.0.0.log 2>&1 &
+CUDA_VISIBLE_DEVICES=1 nohup python3 tta.py --config_file tta_configs_rerun2/ham_rstp_tta/exp21/exp0.0.1.yaml > logs_rerun2/ham_rstp_tta/exp21/exp0.0.1.log 2>&1 &
+CUDA_VISIBLE_DEVICES=1 nohup python3 tta.py --config_file tta_configs_rerun2/ham_rstp_tta/exp21/exp0.0.2.yaml > logs_rerun2/ham_rstp_tta/exp21/exp0.0.2.log 2>&1 &
+CUDA_VISIBLE_DEVICES=1 nohup python3 tta.py --config_file tta_configs_rerun2/ham_rstp_tta/exp21/exp0.0.3.yaml > logs_rerun2/ham_rstp_tta/exp21/exp0.0.3.log 2>&1 &
+CUDA_VISIBLE_DEVICES=0 nohup python3 tta.py --config_file tta_configs_rerun2/ham_rstp_tta/exp21/exp0.0.4.yaml > logs_rerun2/ham_rstp_tta/exp21/exp0.0.4.log 2>&1 &
+ 59  | 26.250 | 51.450 | 63.750 | 23.149 | 10.524 |
+
+- prompt_tuning [使用peft库实现起来太麻烦,以exp18自己手写的prompt learning为准]
+CUDA_VISIBLE_DEVICES=1 nohup python3 tta.py --config_file tta_configs_rerun2/ham_rstp_tta/exp22/exp0.3.4.yaml > logs_rerun2/ham_rstp_tta/exp22/exp0.3.4.log 2>&1 &
+
+
+
 
 
 # ablation study(RSTPReid)

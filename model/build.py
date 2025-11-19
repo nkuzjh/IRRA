@@ -1,5 +1,5 @@
 from model import objectives
-from .clip_model import Transformer, QuickGELU, LayerNorm, build_CLIP_from_openai_pretrained, convert_weights
+from .clip_model import Transformer, TransformerVision, QuickGELU, LayerNorm, build_CLIP_from_openai_pretrained, convert_weights
 import numpy as np
 import torch
 import torch.nn as nn
@@ -14,6 +14,7 @@ class IRRA(nn.Module):
         self._set_task()
 
         self.base_model, base_cfg = build_CLIP_from_openai_pretrained(args.get('is_prompt_learning', False), args.get('prompt_learning_token_num', 1), args.pretrain_choice, args.img_size, args.stride_size)
+        self.config = base_cfg #{'embed_dim': 512, 'image_resolution': (384, 128), 'vision_layers': 12, 'vision_width': 768, 'vision_patch_size': 16, 'context_length': 77, 'vocab_size': 49408, 'transformer_width': 512, 'transformer_heads': 8, 'transformer_layers': 12, 'prompt_learning_token_num': 1, 'is_prompt_learning': False, 'stride_size': 16}
         self.embed_dim = base_cfg['embed_dim']
 
         self.logit_scale = torch.ones([]) * (1 / args.temperature)
@@ -27,7 +28,7 @@ class IRRA(nn.Module):
             self.cross_attn = nn.MultiheadAttention(self.embed_dim,
                                                     self.embed_dim // 64,
                                                     batch_first=True)
-            self.cross_modal_transformer = Transformer(width=self.embed_dim,
+            self.cross_modal_transformer = TransformerVision(width=self.embed_dim,
                                                        layers=args.cmt_depth,
                                                        heads=self.embed_dim //
                                                        64)
@@ -162,4 +163,156 @@ def build_model(args, num_classes=11003):
     model = IRRA(args, num_classes)
     # covert model to fp16
     convert_weights(model)
+    return model
+
+
+
+from peft import LoraConfig, get_peft_model, TaskType
+from peft import  PrefixTuningConfig, PromptTuningConfig, PromptEncoderConfig #AdapterConfig,
+
+def build_peft_model(args, config, num_classes=11003):
+    model = IRRA(args, num_classes)
+
+    print("     Applying LoRA configuration...")
+    if config.get('peft_type') == "lora":
+        peft_config = LoraConfig(
+            task_type=TaskType.FEATURE_EXTRACTION, # 使用 "FEATURE_EXTRACTION" 作为通用模型的安全默认值
+            r=args.get('lora_r', 8),                # LoRA 的秩 (rank)
+            lora_alpha=args.get('lora_alpha', 16), # LoRA alpha
+
+            # [!! 关键 !!] 告诉 LoRA 要修改哪些 *内部* 模块。
+            # 名字必须匹配 model.named_modules() 的输出。
+            # 根据您的 __init__ 代码，目标层可能包括：
+            target_modules=#["q_proj", "v_proj"],
+            [
+                # base_model (CLIP Text)
+                "base_model.transformer.resblocks.6.attn.in_proj_weight",
+                "base_model.transformer.resblocks.6.attn.out_proj",
+                "base_model.transformer.resblocks.6.mlp.c_fc",
+                "base_model.transformer.resblocks.6.mlp.c_proj",
+
+                "base_model.transformer.resblocks.7.attn.in_proj_weight",
+                "base_model.transformer.resblocks.7.attn.out_proj",
+                "base_model.transformer.resblocks.7.mlp.c_fc",
+                "base_model.transformer.resblocks.7.mlp.c_proj",
+
+                "base_model.transformer.resblocks.8.attn.in_proj_weight",
+                "base_model.transformer.resblocks.8.attn.out_proj",
+                "base_model.transformer.resblocks.8.mlp.c_fc",
+                "base_model.transformer.resblocks.8.mlp.c_proj",
+
+                "base_model.transformer.resblocks.9.attn.in_proj_weight",
+                "base_model.transformer.resblocks.9.attn.out_proj",
+                "base_model.transformer.resblocks.9.mlp.c_fc",
+                "base_model.transformer.resblocks.9.mlp.c_proj",
+
+                "base_model.transformer.resblocks.10.attn.in_proj_weight",
+                "base_model.transformer.resblocks.10.attn.out_proj",
+                "base_model.transformer.resblocks.10.mlp.c_fc",
+                "base_model.transformer.resblocks.10.mlp.c_proj",
+
+                "base_model.transformer.resblocks.11.attn.in_proj_weight",
+                "base_model.transformer.resblocks.11.attn.out_proj",
+                "base_model.transformer.resblocks.11.mlp.c_fc",
+                "base_model.transformer.resblocks.11.mlp.c_proj",
+
+            ],
+
+
+            # # [!! 关键 !!] 告诉 PEFT 哪些模块需要 *完全微调* (full-finetune)
+            # # 您的 `freeze_backbones` 逻辑想要解冻这些
+            # modules_to_save=[
+            #     "classifier",
+            #     "mlm_head",
+            #     "prompt_learning_embedding" # (如果可训练)
+            # ],
+
+
+            lora_dropout=0.05,
+        )
+
+        model = get_peft_model(model, peft_config, autocast_adapter_dtype=False)
+        model.print_trainable_parameters()
+    # elif config.get('peft_type') == "adapter":
+    #     peft_config = AdapterConfig(
+    #         task_type=TaskType.FEATURE_EXTRACTION,
+    #         adapter_name="my_adapter",
+    #         adapter_layers=True, # 在 Transformer 块中添加
+    #         adapter_act_fn="relu",
+    #         adapter_residual_before_ln=True,
+    #     )
+    elif config.get('peft_type') == "prefix_tuning":
+        peft_config = PrefixTuningConfig(
+            peft_type="PREFIX_TUNING",
+            task_type=TaskType.FEATURE_EXTRACTION,#CAUSAL_LM,
+            token_dim=512,
+            num_layers=12,
+            num_attention_heads=8,
+            num_virtual_tokens=30,# 您想学习的“前缀”的长度
+        )
+        if not hasattr(model.base_model.transformer, 'device'):
+            model.base_model.transformer.device = next(model.base_model.transformer.parameters()).device
+
+        model.requires_grad_(False)
+        model.base_model.transformer = get_peft_model(model.base_model.transformer, peft_config, autocast_adapter_dtype=False)
+        for m in model.base_model.ln_final.modules():
+            if isinstance(m, nn.BatchNorm2d) or isinstance(m, nn.LayerNorm):
+                m.requires_grad_(True)
+                m.track_running_stats = False
+                m.running_mean = None
+                m.running_var = None
+        for m in model.base_model.transformer.ln_final.modules():
+            if isinstance(m, nn.BatchNorm2d) or isinstance(m, nn.LayerNorm):
+                m.requires_grad_(True)
+                m.track_running_stats = False
+                m.running_mean = None
+                m.running_var = None
+
+        model.base_model.transformer.print_trainable_parameters()
+    elif config.get('peft_type') == "prompt_tuning":
+        peft_config = PromptTuningConfig(
+            task_type=TaskType.FEATURE_EXTRACTION,#CAUSAL_LM,
+            token_dim=512,
+            num_layers=12,
+            num_attention_heads=8,
+            num_virtual_tokens=20, # 您希望学习的“软提示”的长度
+            # (您还可以指定 prompt_init="TEXT", 用特定文本初始化)
+        )
+        if not hasattr(model.base_model.transformer, 'device'):
+            model.base_model.transformer.device = next(model.base_model.transformer.parameters()).device
+
+        model.requires_grad_(False)
+        model.base_model.transformer = get_peft_model(model.base_model.transformer, peft_config, autocast_adapter_dtype=False)
+        for m in model.base_model.ln_final.modules():
+            if isinstance(m, nn.BatchNorm2d) or isinstance(m, nn.LayerNorm):
+                m.requires_grad_(True)
+                m.track_running_stats = False
+                m.running_mean = None
+                m.running_var = None
+        for m in model.base_model.transformer.ln_final.modules():
+            if isinstance(m, nn.BatchNorm2d) or isinstance(m, nn.LayerNorm):
+                m.requires_grad_(True)
+                m.track_running_stats = False
+                m.running_mean = None
+                m.running_var = None
+
+        model.base_model.transformer.print_trainable_parameters()
+    # elif config.get('peft_type') == "p_tuning":
+    #     peft_config = PromptEncoderConfig(
+    #         task_type=TaskType.CAUSAL_LM,
+    #         num_virtual_tokens=20,
+    #         encoder_hidden_size=128 # 内部 MLP 的隐藏层大小
+    #     )
+    else:
+        raise ValueError(f"不支持的 PEFT 策略: {config.get('peft_type')}")
+
+    # if config.get('peft_type') == 'prompt_tuning':
+    #     if hasattr(model.base_model.model, 'classifier'):
+    #         model.base_model.model.classifier.requires_grad_(True)
+    #     if hasattr(model.base_model.model, 'mlm_head'):
+    #         model.base_model.model.mlm_head.requires_grad_(True)
+
+
+    # covert model to fp16
+    # convert_weights(model)
     return model

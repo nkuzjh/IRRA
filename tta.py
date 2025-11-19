@@ -10,7 +10,7 @@ from datasets import build_dataloader
 from processor.processor import do_inference
 from utils.checkpoint import Checkpointer
 from utils.logger import setup_logger
-from model import build_model
+from model import build_model, build_peft_model
 from utils.metrics import Evaluator
 import argparse
 from utils.iotools import load_train_configs
@@ -170,7 +170,8 @@ def do_tta(args, config, model, tta_loader, optimizer, scaler, epoch, device, sc
 
         with torch.no_grad():
             gfeat = model.encode_image(imgs_topk) # image features
-        with torch.cuda.amp.autocast(enabled=True):
+        # with torch.cuda.amp.autocast(enabled=True):
+        with torch.autocast(device_type='cuda', dtype=torch.bfloat16):
             qfeat = model.encode_text(captions_repeatk) # text features
             # if config.get('compute_entropy_with_norm_cos_sim', False):
             gfeat = F.normalize(gfeat, p=2, dim=1)#[128, 512])
@@ -183,7 +184,7 @@ def do_tta(args, config, model, tta_loader, optimizer, scaler, epoch, device, sc
                 cos_sim = qfeat_ @ gfeat_.t()#[512]@[k_tta,512].t() = [k_tta]
                 cos_sims.append(cos_sim)
             cos_sims  = torch.stack(cos_sims)#16, k_tta
-            cos_sims_list.append(cos_sims.detach().cpu().numpy())
+            cos_sims_list.append(cos_sims.detach().cpu().float().numpy())
             # cos_sims = qfeat @ gfeat.t()#[128, 128])
             # cos_sims = cos_sims.reshape(-1, config['k_tta'], 1)
             cos_sims_inter = cos_sims / args.temperature
@@ -223,6 +224,7 @@ def do_tta(args, config, model, tta_loader, optimizer, scaler, epoch, device, sc
             loss = loss.mean()
 
         scaler.scale(loss).backward()
+
         scaler.step(optimizer)
         scale = scaler.get_scale()
         scaler.update()
@@ -323,7 +325,15 @@ def main(args):
 
     print("### Creating model")
     num_classes = len(dataset.train_id_container)#train_id_container3701
-    model = build_model(args, num_classes=num_classes)
+    if config.get('use_peft', False):
+        model = build_peft_model(args, config, num_classes=num_classes)
+    else:
+        model = build_model(args, num_classes=num_classes)
+
+    for name, param in model.named_parameters():
+        if param.requires_grad:
+            print(f"        [TRAINABLE] {name} (shape: {param.shape})")
+
     checkpointer = Checkpointer(model)
     checkpointer.load(f=op.join(args.ckpt_dir))
     model.to(device)
@@ -388,7 +398,8 @@ def main(args):
 
         print("### Configure adapted weights")
         # arg_tm = AttrDict(config['tta_model'])
-        model = configure_tta_model(config, model)
+        if not config.get('use_peft', False):
+            model = configure_tta_model(config, model)
         print("     TTA Dropout Modules: \r\n", [(n,m,m.training) for n,m in model.named_modules() if isinstance(m, torch.nn.Dropout) and m.training==True] )
         print("     TTA Require Gradient Params: \r\n", [(n, p.shape) for n,p in model.named_parameters() if p.requires_grad] )
         print("     TTA Dropout Modules Number: \r\n", sum([ 1 for n,m in model.named_modules() if isinstance(m, torch.nn.Dropout) and m.training==True ]) )
