@@ -1158,3 +1158,6 @@ CUDA_VISIBLE_DEVICES=1 nohup python3 tta.py --config_file tta_configs_rerun2/ham
 # ablation study(RSTPReid)
 ## 负样本采样范围：以ICFG为例从top2、top5、top15、top22开始？或者不同的百分比分位数？【todo】
 ## cosine similarity temperature：0.01、0.02、0.03、0.04【todo】
+
+## 画两个模态经过tta前后的t-SNE图
+nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_rerun2/ham_rstp_tta/exp23/exp0.3.4.yaml > logs_rerun2/ham_rstp_tta/exp23/exp0.3.4.log 2>&1 &

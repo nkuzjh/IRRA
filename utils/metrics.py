@@ -55,7 +55,8 @@ class Evaluator():
         for pid, caption in self.txt_loader:
             caption = caption.to(device)
             with torch.no_grad():
-                text_feat = model.encode_text(caption)
+                with torch.cuda.amp.autocast():
+                    text_feat = model.encode_text(caption)
             qids.append(pid.view(-1)) # flatten
             qfeats.append(text_feat)
             captions.append(caption.cpu())
@@ -66,7 +67,8 @@ class Evaluator():
         for pid, img in self.img_loader:
             img = img.to(device)
             with torch.no_grad():
-                img_feat = model.encode_image(img)
+                with torch.cuda.amp.autocast():
+                    img_feat = model.encode_image(img)
             gids.append(pid.view(-1)) # flatten
             gfeats.append(img_feat)
             imgs.append(img.cpu())

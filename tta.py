@@ -348,6 +348,16 @@ def main(args):
     ])
     print(table)
 
+    np.save(f"{args.output_dir}/similarity_orig.npy", np.array(similarity.detach().cpu().numpy()))
+    np.save(f"{args.output_dir}/qfeats_orig.npy", np.array(qfeats.detach().cpu().numpy()))
+    np.save(f"{args.output_dir}/gfeats_orig.npy", gfeats.detach().cpu().numpy())
+    np.save(f"{args.output_dir}/qids.npy", np.array(qids.detach().cpu().numpy()))
+    np.save(f"{args.output_dir}/gids.npy", gids.detach().cpu().numpy())
+
+    similarity = torch.from_numpy(np.load(f"{args.output_dir}/similarity_orig.npy"))
+    qfeats = torch.from_numpy(np.load(f"{args.output_dir}/qfeats_orig.npy"))
+    gfeats = torch.from_numpy(np.load(f"{args.output_dir}/gfeats_orig.npy"))
+
 
     if args.tta:
         print("### TTA:")
@@ -461,6 +471,15 @@ def main(args):
                     best_logs = logs
 
             torch.cuda.empty_cache()
+
+
+        np.save(f"{args.output_dir}/similarity_tta.npy", np.array(similarity.detach().cpu().numpy()))
+        np.save(f"{args.output_dir}/qfeats_tta.npy", np.array(qfeats.detach().cpu().numpy()))
+        np.save(f"{args.output_dir}/gfeats_tta.npy", gfeats.detach().cpu().numpy())
+
+        similarity = torch.from_numpy(np.load(f"{args.output_dir}/similarity_tta.npy"))
+        qfeats = torch.from_numpy(np.load(f"{args.output_dir}/qfeats_tta.npy"))
+        gfeats = torch.from_numpy(np.load(f"{args.output_dir}/gfeats_tta.npy"))
 
         with open(os.path.join(args.output_dir, "log.txt"), "a") as f:
             f.write(f"best epoch {best_epoch} : {best_logs}")
