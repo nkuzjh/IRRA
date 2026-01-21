@@ -918,7 +918,7 @@ nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_rerun2/ham
 ## exp1
 - sample selection: 'topk'
 - uncertainty: 'diff_div_mean'
-### rstp
+### rstp best in iclr 2026
     {"epo": "59", "R1": "61.85", "R5": "81.4", "R10": "88.4", "mAP": "46.373", "mINP": "22.258"
 
 ## exp2
@@ -1157,7 +1157,7 @@ CUDA_VISIBLE_DEVICES=0 nohup python3 tta.py --config_file tta_configs_rerun2/ham
 CUDA_VISIBLE_DEVICES=1 nohup python3 tta.py --config_file tta_configs_rerun2/ham_rstp_tta/exp22/exp0.3.4.yaml > logs_rerun2/ham_rstp_tta/exp22/exp0.3.4.log 2>&1 &
 
 
-## exp22 iclr2026 rebuttal top-K=0,1,2,3,4,5,6,8,10,inf
+## exp23 iclr2026 rebuttal top-K=0,1,2,3,4,5,6,8,10,inf
 CUDA_VISIBLE_DEVICES=1 nohup python3 tta.py --config_file tta_configs_rerun2/ham_rstp_tta/exp23/exp0.yaml > logs_rerun2/ham_rstp_tta/exp23/exp0.log 2>&1 &
 CUDA_VISIBLE_DEVICES=1 nohup python3 tta.py --config_file tta_configs_rerun2/ham_rstp_tta/exp23/exp1.yaml > logs_rerun2/ham_rstp_tta/exp23/exp1.log 2>&1 &
 CUDA_VISIBLE_DEVICES=1 nohup python3 tta.py --config_file tta_configs_rerun2/ham_rstp_tta/exp23/exp2.yaml > logs_rerun2/ham_rstp_tta/exp23/exp2.log 2>&1 &
@@ -1174,3 +1174,18 @@ CUDA_VISIBLE_DEVICES=1 nohup python3 tta.py --config_file tta_configs_rerun2/ham
 
 ## 画两个模态经过tta前后的t-SNE图
 nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_rerun2/ham_rstp_tta/exp23/exp0.3.4.yaml > logs_rerun2/ham_rstp_tta/exp23/exp0.3.4.log 2>&1 &
+
+
+
+# sigir_quality_vis
+- 在之前iclr rebuttal pab的基础上再增加一个rstp的定性实验可视化
+- 使用 rstp exp1 0.3.4.yaml，复制到sigir rstp exp1 0.3.4.yaml
+<!--
+# exp rerun 2
+## exp1
+- sample selection: 'topk'
+- uncertainty: 'diff_div_mean'
+### rstp best in iclr 2026
+    {"epo": "59", "R1": "61.85", "R5": "81.4", "R10": "88.4", "mAP": "46.373", "mINP": "22.258" -->
+
+- nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_sigir_vis/ham_rstp_tta/exp1/exp0.3.4.yaml > logs_rerun2_sigir_vis/ham_rstp_tta/exp1/exp0.3.4.log 2>&1 &
