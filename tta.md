@@ -1188,4 +1188,4 @@ nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_rerun2/ham
 ### rstp best in iclr 2026
     {"epo": "59", "R1": "61.85", "R5": "81.4", "R10": "88.4", "mAP": "46.373", "mINP": "22.258" -->
 
-- nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_sigir_vis/ham_rstp_tta/exp1/exp0.3.4.yaml > logs_rerun2_sigir_vis/ham_rstp_tta/exp1/exp0.3.4.log 2>&1 &
+-  CUDA_VISIBLE_DEVICES=0 nohup python3 tta.py --config_file tta_configs_sigir_vis/ham_rstp_tta/exp1/exp0.3.4.yaml > logs_rerun2_sigir_vis/ham_rstp_tta/exp1/exp0.3.4.log 2>&1 &
