@@ -241,7 +241,7 @@ def do_tta(args, config, model, tta_loader, optimizer, scaler, epoch, device, sc
             loss_iter_periods.append(loss.item())
             lr_iter_periods.append(optimizer.param_groups[0]["lr"])
 
-    cos_sims_npy = np.concat(cos_sims_list)
+    cos_sims_npy = np.concatenate(cos_sims_list)
 
     # print(f"     Averaged stats: entropy: {entropy.mean().item():.4f}, loss: {loss.item():.4f}, lr: {optimizer.param_groups[0]['lr']:.2e}")
     print(f"     Averaged stats: entropy_avg: {np.mean(entropy_iter_periods):.4f}, uncertainty_avg: {np.mean(uncertainty_iter_periods):.4f}, uncertainty_coeffi_avg: {np.mean(uncertainty_coeffi_iter_periods):.4f}, loss_avg: {np.mean(loss_iter_periods):.4f}, lr_avg: {np.mean(lr_iter_periods):.2e}")
