@@ -920,6 +920,8 @@ nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_rerun2/ham
 - uncertainty: 'diff_div_mean'
 ### rstp best in iclr 2026
     {"epo": "59", "R1": "61.85", "R5": "81.4", "R10": "88.4", "mAP": "46.373", "mINP": "22.258"
+### icfg best in iclr 2026
+    {'epo': '9', 'R1': '62.152', 'R5': '77.318', 'R10': '82.95', 'mAP': '36.11', 'mINP': '5.934'
 
 ## exp2
 - sample selection: 'all'
@@ -930,6 +932,9 @@ nohup CUDA_VISIBLE_DEVICES=0 python3 tta.py --config_file tta_configs_rerun2/ham
 ## exp4
 - sample selection: 'all'
 - uncertainty: 'inversed_recall_proba'
+### cuhk best in iclr 2026
+    {'epo': '9', 'R1': '70.923', 'R5': '86.891', 'R10': '91.862', 'mAP': '63.503', 'mINP': '47.209'
+
 ## exp5
 - sample selection: 'topk'
 - uncertainty: 'inversed_recall_proba'
